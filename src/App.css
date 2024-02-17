@@ -78,69 +78,42 @@ form {
     .sidebar {
       background-color: #979494;
       flex: 1;
+      display: flex;
+      justify-content: flex-start;
+      flex-direction: column;
 
-      .nav-title {
+      .navbar {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 12%;
-      }
-
-      .preview {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
         flex-direction: column;
-        height: 75%;
-        border: 1px solid green;
-        overflow: scroll;
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
 
-        .chatPreview {
-          cursor: pointer;
+        .newMsg {
+          margin-top: 10px;
+          margin-left: 100px;
+          background-color: #6c757d;
+          color: white;
+          width: 15em;
+          height: 3em;
+          border-radius: 5px;
 
-          &:hover {
-            background-color: #5f5f5f;
-            color: white;
-          }
-
-          .userChat {
-            display: flex;
-            flex-direction: row;
-            gap: 15px;
-            height: 6vh;
-
-            span {
-              &:hover {
-                background-color: #b5b4b4;
-              }
-            }
-
-            img {
-              height: 3em;
-              width: 3em;
-              /* flex: 1; */
-              border-radius: 50%;
-              object-fit: cover;
-            }
-
-            .name-chat {
-              display: flex;
-              flex-direction: column;
-
-              h3 {
-                font-size: 24px;
-                font-weight: 500;
-              }
-
-              p {
-                font-size: 15px;
-              }
-            }
+          .newMsg:hover {
+            background-color: white;
+            color: #6c757d;
           }
         }
-        /* toggle switch */
+
+        .nav-title {
+          align-items: center;
+          justify-content: center;
+          height: auto;
+        }
+
         .toggle {
-          margin: 15px;
+          display: flex;
+          align-items: center;
+          margin-top: 10px;
 
           .toggle-label {
             font-weight: 900;
@@ -154,14 +127,12 @@ form {
             margin: 0 1em 0 1em;
           }
 
-          /* Hide default HTML checkbox */
           .switch input {
             opacity: 0;
             width: 0;
             height: 0;
           }
 
-          /* The slider */
           .slider {
             position: absolute;
             cursor: pointer;
@@ -204,6 +175,61 @@ form {
             border-radius: 50%;
           }
         }
+      }
+      .chatPreview {
+        cursor: pointer;
+        padding: 10px 10px 30px 10px;
+        overflow-y: scroll;
+
+        &:hover {
+          background-color: #00681f;
+          color: white;
+        }
+
+        .userChat {
+          display: flex;
+          flex-direction: row;
+          gap: 15px;
+          height: 6vh;
+
+          span {
+            &:hover {
+              background-color: #b5b4b4;
+            }
+          }
+
+          img {
+            height: 3em;
+            width: 3em;
+            /* flex: 1; */
+            border-radius: 50%;
+            object-fit: cover;
+          }
+
+          .name-chat {
+            display: flex;
+            flex-direction: column;
+
+            h3 {
+              font-size: 24px;
+              font-weight: 500;
+            }
+
+            p {
+              font-size: 15px;
+            }
+          }
+        }
+      }
+
+      .preview {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: column;
+        height: 75%;
+        border: 1px solid green;
+        overflow: scroll;
 
         .newChat {
           background-color: #9a9a9a;
@@ -222,34 +248,40 @@ form {
         }
       }
       /* User Info in Sidebar */
-      .user {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        height: 13%;
+      .footer {
+        position: static;
+        height: 15%;
 
-        img {
-          height: 5em;
-          width: 5em;
-          margin-left: 1em;
-          border-radius: 50%;
-          object-fit: cover;
-        }
+        .user {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          height: 35%;
 
-        .sign-out {
-          border-radius: 15px;
-          background-color: #6c757d;
-          color: white;
-          margin: 2em;
-          height: 5em;
-          width: 8em;
-        }
+          img {
+            height: 5em;
+            width: 5em;
+            margin-left: 1em;
+            border-radius: 50%;
+            object-fit: cover;
+          }
 
-        .sign-out:hover {
-          background-color: white;
-          color: #6c757d;
+          .sign-out {
+            border-radius: 15px;
+            background-color: #6c757d;
+            color: white;
+            margin: 2em;
+            height: 5em;
+            width: 8em;
+          }
+
+          .sign-out:hover {
+            background-color: white;
+            color: #6c757d;
+          }
         }
       }
+      
     }
     /* Chat Message Panel */
     .rightSection {
@@ -341,6 +373,7 @@ form {
             color: white;
             width: 5em;
             height: 3em;
+            border-radius: 5px;
           }
 
           .send:hover {
