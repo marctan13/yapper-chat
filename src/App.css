@@ -349,7 +349,7 @@ form {
           }
         }
       }
-      /* Header Panel */
+      /* Header Panel in Chat Page */
       .header {
         background-color: #21222a;
         display: flex;
@@ -380,6 +380,49 @@ form {
           flex-direction: column;
           margin-top: 2em;
           margin-bottom: 2em;
+
+          .dropdown-menu {
+            position: absolute;
+            background-color: white;
+            top: 100px;
+            right: 60px;
+            padding: 10px 20px;
+            width: 200px;
+
+            h3 {
+              width: 100%;
+              text-align: center;
+              font-size: 18px;
+              padding: 20px 0;
+              font-weight: 500;
+              line-height: 1.2rem;
+            }
+
+            &.active {
+              opacity: 1;
+              visibility: visible;
+            }
+
+            &.inactive {
+              opacity: 0;
+              visibility: hidden;
+            }
+
+            li {
+              padding: 10px 0;
+              border-top: 1px solid black;
+              color: white;
+
+              &:hover{
+                cursor: pointer;
+              }
+            }
+
+            .dropdownItem{
+              display: flex;
+              margin: 10px auto;
+            }
+          }
 
           h1 {
             font-size: 26px;

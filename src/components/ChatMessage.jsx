@@ -8,7 +8,7 @@ function ChatMessage() {
       <div className="chatMessages">
         {/* Conversation */}
         <div className="messageBlock">
-          <Message text="Want to meet up later?" />
+          <Message text="Want to meet up later?Want to meet up later?Want to meet up later?Want to meet up later?Want to meet up later?" />
           <Message text="Want to meet up later?" />
           <Message text="Want to meet up later?" />
         </div>

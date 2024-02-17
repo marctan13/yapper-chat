@@ -3,13 +3,13 @@ import "firebase/compat/firestore";
 import "firebase/compat/auth";
 
 firebase.initializeApp({
-    apiKey: "AIzaSyCBPB1QihtQKO284w3IrNoSbH8If9e801o",
-    authDomain: "yapper-app-bc90b.firebaseapp.com",
-    projectId: "yapper-app-bc90b",
-    storageBucket: "yapper-app-bc90b.appspot.com",
-    messagingSenderId: "738816601681",
-    appId: "1:738816601681:web:4e0cfd712fccdc224a9270",
-    measurementId: "G-6WLQG9E8RJ"
+    apiKey: "AIzaSyAkCDXQdHEhy3v4VTshG0jZGTJF6vVk4B0",
+    authDomain: "yapperchat-2c0f0.firebaseapp.com",
+    projectId: "yapperchat-2c0f0",
+    storageBucket: "yapperchat-2c0f0.appspot.com",
+    messagingSenderId: "795336669832",
+    appId: "1:795336669832:web:9dbe41d04889d31f74fd3d",
+    measurementId: "G-N4763EEYVH"
 });
 
 const auth = firebase.auth();

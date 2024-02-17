@@ -5,7 +5,7 @@ function Message(props) {
     <>
       <div className="chatMessage sender">
         <div className="userInfo">
-          <img src={'/avatar.png'} />
+          <img src={"/avatar.png"} />
           <span>10:52pm</span>
         </div>
         <div className="message">
@@ -18,7 +18,10 @@ function Message(props) {
           <span>10:54pm</span>
         </div>
         <div className="message">
-          <p>What time?</p>
+          <p>
+            What
+            time?time?time?time?time?time?time?time?time?time?time?time?time?time?time?
+          </p>
         </div>
       </div>
     </>
