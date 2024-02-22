@@ -1,6 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { db } from "../firebase.js";
+import { getDocs, collection } from "firebase/firestore";
 
 function Message(props) {
+  const [messageList, setMessageList] = useState([]);
+  const messageCollectionRef = collection(db, "messages");
+
+  useEffect(() => {
+    const getMessageList = async () => {
+      //Read the data
+      //set message list
+      try {
+        const data = await getDocs(messageCollectionRef);
+        // console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getMessageList();
+  }, []);
+
   return (
     <>
       <div className="chatMessage sender">
