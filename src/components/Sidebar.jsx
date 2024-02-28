@@ -5,9 +5,11 @@ import "bulma/css/bulma.css";
 import SignOut from "./SignOut.jsx";
 import Navbar from "./SideBar/Navbar.jsx";
 import ChannelPreview from "./SideBar/ChannelPreview.jsx";
+import { useAuth } from "../contexts/AuthContext.jsx";
 // import DmPreview from './Sidebar/DmPreview.jsx'
 
 function Sidebar() {
+
   const navigate = useNavigate();
   //*SETS SIDEBAR PREVIEW TO DM OR CHANNEL*
   // const [showChannelPreview, setShowChannelPreview] = useState(true)
@@ -42,7 +44,7 @@ function Sidebar() {
             }
             alt=""
           />
-          <SignOut />
+          <SignOut/>
         </div>
         {/* <div className="chats"></div> */}
       </div>

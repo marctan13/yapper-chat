@@ -1,27 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { db } from "../firebase.js";
+// import { db } from "../firebase.js";
 import { auth } from "../firebase.js";
-import { getDocs, addDoc, collection } from "firebase/firestore";
+import { useAuth } from "../contexts/AuthContext";
+// import { getDocs, addDoc, collection } from "firebase/firestore";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
-  const [displayName, setDisplayName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  // const [displayName, setDisplayName] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
 
-  const signUp = (e) => {
-    e.preventDefault();
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        userCredential.displayName = displayName;
-        console.log(userCredential);
-        console.log(userCredential.displayName);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  // const signUp = (e) => {
+  //   e.preventDefault();
+  //   createUserWithEmailAndPassword(auth, email, password)
+  //     .then((userCredential) => {
+  //       userCredential.displayName = displayName;
+  //       console.log(userCredential);
+  //       console.log(userCredential.displayName);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
   // const userCollectionRef = collection(db, "users");
 
@@ -42,8 +44,32 @@ function Register() {
 
   // };
 
-  console.log(displayName, email, password);
+  // console.log(displayName, email, password);
+  // const [displayName, setDisplayName] = useState('')
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const displayNameRef = useRef();
+  const navigate = useNavigate();
+  const { signUp } = useAuth();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  // const history = useHistory()
 
+  async function handleSubmit(e) {
+    e.preventDefault();
+    try {
+      setError("");
+      setLoading(true);
+      await signUp(emailRef.current.value, passwordRef.current.value);
+      // auth.currentUser.displayName = displayName;
+      auth.currentUser.displayName = displayNameRef.current.value;
+      navigate("/");
+      // history.push("/")
+    } catch (error) {
+      setError("Failed to create an account");
+    }
+    setLoading(false);
+  }
   //create user
 
   return (
@@ -53,25 +79,28 @@ function Register() {
           <h1 className="logo">🗣️</h1>
           <h1 className="title">Yapper Chat</h1>
         </div>
-        <form onSubmit={signUp} className="form">
+        <form onSubmit={handleSubmit} className="form">
           <h1>Register Account</h1>
           <input
             required
             type="text"
             placeholder="Display Name"
-            onChange={(e) => setDisplayName(e.target.value)}
+            ref={displayNameRef}
+            // onChange={(e) => setDisplayName(e.target.value)}
           />
           <input
             required
             type="email"
+            ref={emailRef}
             placeholder="Email"
-            onChange={(e) => setEmail(e.target.value)}
+            // onChange={(e) => setEmail(e.target.value)}
           />
           <input
             required
             type="password"
             placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
+            ref={passwordRef}
+            // onChange={(e) => setPassword(e.target.value)}
           />
           <button type="submit" onClick={signUp}>
             Sign up

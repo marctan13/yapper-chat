@@ -1,37 +1,48 @@
+import { useState, useRef, useEffect } from "react";
 import firebase from "firebase/compat/app";
 import { auth, googleProvider } from "../firebase.js";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext.jsx";
 
 function SignIn() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { signIn, signInWithGoogle, user } = useAuth();
+  // const [error, setError] = useState("");
+  const emailRef = useRef();
+  const passwordRef = useRef();
   const navigate = useNavigate();
 
-  //how to check if signed in
-  //auth.currentUser gets current user thats logged in
-  console.log(auth?.currentUser?.email);
-  console.log(auth.currentUser);
+  if (!user) {
+    console.log(user);
+  }
 
-  const signIn = (e) => {
+  // Normal Signin
+  const handleSignIn = async (e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log(userCredential);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const signInWithGoogle = async () => {
     try {
-      await signInWithPopup(auth, googleProvider);
-    } catch (err) {
-      console.log(err);
+      await signIn(emailRef.current.value, passwordRef.current.value);
+      navigate("/");
+      console.log("log in success!");
+    } catch (error) {
+      console.log("Failed to sign in");
     }
   };
+
+  // Google Signin
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithGoogle();
+    } catch (error) {
+      // setError("Failed to log in");
+      console.log("Failed to Log in");
+    }
+  };
+
+  useEffect(() => {
+    if (user != null) {
+      navigate("/");
+    }
+  }, [user]);
 
   return (
     <div className="formContainer">
@@ -40,34 +51,21 @@ function SignIn() {
           <h1 className="logo">🗣️</h1>
           <h1 className="title">Yapper Chat</h1>
         </div>
-        <form onSubmit={signIn} className="form" name="signIn">
-          <input
-            placeholder="Email..."
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+        <form onSubmit={handleSignIn} className="form" name="signIn">
+          <input type="email" placeholder="Email..." ref={emailRef} required />
           <input
             type="password"
             placeholder="Password..."
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            ref={passwordRef}
+            required
           />
-          {/* <Link to="/"> */}
-          <button
-            type="submit"
-            onClick={() => navigate("/")}
-            className="sign-in"
-            onChange={signIn}
-          >
+          <button type="submit" className="sign-in">
             Sign in
           </button>
-          {/* </Link> */}
         </form>
-        {/* <Link to="/"> */}
-        <button className="sign-in" onClick={signInWithGoogle}>
+        <button className="sign-in" onClick={handleGoogleSignIn}>
           Sign in with Google
         </button>
-        {/* </Link> */}
         <div className="links">
           <button className="link-btn">Forgot Password?</button>
           <p>
