@@ -8,44 +8,6 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 function Register() {
-  // const [displayName, setDisplayName] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-
-  // const signUp = (e) => {
-  //   e.preventDefault();
-  //   createUserWithEmailAndPassword(auth, email, password)
-  //     .then((userCredential) => {
-  //       userCredential.displayName = displayName;
-  //       console.log(userCredential);
-  //       console.log(userCredential.displayName);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
-
-  // const userCollectionRef = collection(db, "users");
-
-  // const getUserList = async() => {
-  //   try{
-  //     const data = await getDocs(userCollectionRef)
-
-  //   } catch(err) {
-  //     console.log(err)
-  //   }
-  // }
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setDisplayName(e.target[0].value);
-  //   setEmail(e.target[1].value);
-  //   setPassword(e.target[2].value);
-
-  // };
-
-  // console.log(displayName, email, password);
-  // const [displayName, setDisplayName] = useState('')
   const emailRef = useRef();
   const passwordRef = useRef();
   const displayNameRef = useRef();
@@ -53,7 +15,6 @@ function Register() {
   const { signUp } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  // const history = useHistory()
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -80,7 +41,9 @@ function Register() {
           <h1 className="title">Yapper Chat</h1>
         </div>
         <form onSubmit={handleSubmit} className="form">
-          <h1>Register Account</h1>
+          <h1>
+            <strong>Register Account</strong>
+          </h1>
           <input
             required
             type="text"

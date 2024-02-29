@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 // import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./firebase";
+// import { auth } from "./firebase";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Chatroom from "./pages/Chatroom";
@@ -9,6 +9,7 @@ import Register from "./pages/Register";
 import Settings from "./pages/Settings";
 import { AuthProvider } from "./contexts/AuthContext";
 import Protected from "./components/Protected.jsx";
+import ForgotPassword from "./pages/ForgotPassword.jsx";
 
 function App() {
   // const [authUser, setAuthUser] = useState(null);
@@ -28,6 +29,7 @@ function App() {
             />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route
               path="/settings"
               element={

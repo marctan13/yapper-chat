@@ -8,6 +8,7 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 
+//declare context
 const AuthContext = createContext();
 
 //to be used by other components

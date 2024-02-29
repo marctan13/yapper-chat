@@ -67,7 +67,7 @@ function SignIn() {
           Sign in with Google
         </button>
         <div className="links">
-          <button className="link-btn">Forgot Password?</button>
+          <button className="link-btn" onClick={() => navigate("/forgot-password")}>Forgot Password?</button>
           <p>
             No account yet?{" "}
             <button onClick={() => navigate("/register")} className="link-btn">
