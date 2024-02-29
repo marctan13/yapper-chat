@@ -1,6 +1,3 @@
-import { useEffect, useState } from "react";
-// import { onAuthStateChanged } from "firebase/auth";
-// import { auth } from "./firebase";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Chatroom from "./pages/Chatroom";
@@ -12,7 +9,6 @@ import Protected from "./components/Protected.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 
 function App() {
-  // const [authUser, setAuthUser] = useState(null);
 
   return (
     <div>

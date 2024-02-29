@@ -1,20 +1,13 @@
 import { useState, useRef, useEffect } from "react";
-import firebase from "firebase/compat/app";
-import { auth, googleProvider } from "../firebase.js";
-import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
 
 function SignIn() {
   const { signIn, signInWithGoogle, user } = useAuth();
-  // const [error, setError] = useState("");
+  const [error, setError] = useState("");
   const emailRef = useRef();
   const passwordRef = useRef();
   const navigate = useNavigate();
-
-  if (!user) {
-    console.log(user);
-  }
 
   // Normal Signin
   const handleSignIn = async (e) => {
@@ -23,7 +16,7 @@ function SignIn() {
       await signIn(emailRef.current.value, passwordRef.current.value);
       navigate("/");
     } catch (error) {
-      console.log("Failed to sign in");
+      setError("Failed to log in");
     }
   };
 
@@ -32,8 +25,7 @@ function SignIn() {
     try {
       await signInWithGoogle();
     } catch (error) {
-      // setError("Failed to log in");
-      console.log("Failed to Log in");
+      setError("Failed to log in");
     }
   };
 
@@ -51,6 +43,11 @@ function SignIn() {
           <h1 className="title">Yapper Chat</h1>
         </div>
         <form onSubmit={handleSignIn} className="form" name="signIn">
+          {error && (
+            <p>
+              <strong>{error}</strong>
+            </p>
+          )}
           <input type="email" placeholder="Email..." ref={emailRef} required />
           <input
             type="password"
@@ -66,7 +63,12 @@ function SignIn() {
           Sign in with Google
         </button>
         <div className="links">
-          <button className="link-btn" onClick={() => navigate("/forgot-password")}>Forgot Password?</button>
+          <button
+            className="link-btn"
+            onClick={() => navigate("/forgot-password")}
+          >
+            Forgot Password?
+          </button>
           <p>
             No account yet?{" "}
             <button onClick={() => navigate("/register")} className="link-btn">

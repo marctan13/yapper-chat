@@ -1,22 +1,23 @@
-import { useState, useRef, useEffect } from "react";
-import firebase from "firebase/compat/app";
-import { auth, googleProvider } from "../firebase.js";
-import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
 
 function ForgotPassword() {
-  const {forgotPassword, user } = useAuth();
-  // const [error, setError] = useState("");
-  const emailRef = useRef();
   const navigate = useNavigate();
+  const { resetPassword } = useAuth();
+  const emailRef = useRef();
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
-
-  useEffect(() => {
-    if (user != null) {
-      navigate("/");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await resetPassword(emailRef.current.value);
+      setMessage("Check inbox for further instructions");
+    } catch (error) {
+      setError("Failed to Reset Password");
     }
-  }, [user]);
+  };
 
   return (
     <div className="formContainer">
@@ -25,16 +26,29 @@ function ForgotPassword() {
           <h1 className="logo">🗣️</h1>
           <h1 className="title">Yapper Chat</h1>
         </div>
-        <form onSubmit={handleForgotPassword} className="form" name="forgotPassword">
+        <form onSubmit={handleSubmit} className="form" name="forgotPassword">
+          <h1>
+            <strong>Reset Password</strong>
+          </h1>
+          {message && (
+            <p>
+              <strong>{message}</strong>
+            </p>
+          )}
+          {error && (
+            <p>
+              <strong>{error}</strong>
+            </p>
+          )}
           <input type="email" placeholder="Email..." ref={emailRef} required />
           <button type="submit" className="sign-in">
             Reset Password
           </button>
         </form>
         <div className="links">
-            <button onClick={() => navigate("/sign")} className="link-btn">
-              Back
-            </button>
+          <button onClick={() => navigate("/signin")} className="link-btn">
+            Back
+          </button>
         </div>
       </div>
     </div>

@@ -27,9 +27,5 @@ function Navbar() {
   );
 }
 
-<<<<<<< HEAD
-export default Navbar;
-=======
-export default Navbar;
 
->>>>>>> fd258e5f1ac72de0683dcf2f4ff10d7ad345a517
+export default Navbar;
