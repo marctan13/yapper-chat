@@ -22,7 +22,6 @@ function SignIn() {
     try {
       await signIn(emailRef.current.value, passwordRef.current.value);
       navigate("/");
-      console.log("log in success!");
     } catch (error) {
       console.log("Failed to sign in");
     }
