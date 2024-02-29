@@ -1,4 +1,5 @@
 import React from "react";
+import { auth } from "../firebase.js";
 
 function Setting() {
   return (
@@ -8,10 +9,14 @@ function Setting() {
       </div>
       <div className="settingsWrapper">
         <div className="username">
-          <img src="./avatar.png" />
+          <img
+            src={
+              auth.currentUser.photoURL ? auth.currentUser.photoURL : "cup.jpg"
+            }
+          />
           <div className="username">
-            <h1>username</h1>
-            <span>email@gmail.com</span>
+            <h1>{auth.currentUser.displayName}</h1>
+            <span>{auth.currentUser.email}</span>
             <button className="editAccount">Edit Account</button>
           </div>
         </div>
@@ -22,8 +27,8 @@ function Setting() {
         <div className="notifications">
           <h1>Notifications</h1>
           <span>Do Not Disturb</span>
-          <input type='checkbox' name='dnd' id='dnd' />
-          <label htmlFor='dnd'>Do Not Disturb</label> 
+          <input type="checkbox" name="dnd" id="dnd" />
+          <label htmlFor="dnd">Do Not Disturb</label>
         </div>
       </div>
     </div>

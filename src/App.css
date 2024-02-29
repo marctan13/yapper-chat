@@ -1,3 +1,7 @@
+#root {
+  font-family: "Times New Roman", Times, serif;
+}
+
 .formContainer {
   background: url("signin-background.jpg");
   background: cover;
@@ -55,8 +59,14 @@ form {
   background-color: #838387;
 }
 
-.link-button {
+.link-btn {
   text-decoration: underline;
+  cursor: pointer;
+  outline: none;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: none;
+  color: black;
 }
 /* Main Page */
 .chatroom {
@@ -75,6 +85,7 @@ form {
     display: flex;
     overflow: hidden;
 
+    /* Sidebar */
     .sidebar {
       background-color: #979494;
       flex: 1;
@@ -83,9 +94,11 @@ form {
       flex-direction: column;
 
       .navbar {
+        background-color: #979494;
         display: flex;
         flex-direction: column;
         width: 100%;
+        height: 30%;
         padding: 10px;
         box-sizing: border-box;
 
@@ -95,7 +108,7 @@ form {
           background-color: #6c757d;
           color: white;
           width: 15em;
-          height: 3em;
+          height: 2em;
           border-radius: 5px;
 
           .newMsg:hover {
@@ -108,11 +121,16 @@ form {
           align-items: center;
           justify-content: center;
           height: auto;
-        }
 
+          .logo {
+            cursor: pointer;
+          }
+        }
+        /* Toggle Switch */
         .toggle {
           display: flex;
           align-items: center;
+          justify-content: center;
           margin-top: 10px;
 
           .toggle-label {
@@ -176,52 +194,55 @@ form {
           }
         }
       }
-      .chatPreview {
-        cursor: pointer;
-        padding: 10px 10px 30px 10px;
+      .previews {
+        height: 65%;
         overflow-y: scroll;
 
-        &:hover {
-          background-color: #00681f;
-          color: white;
-        }
+        .chatPreview {
+          cursor: pointer;
+          padding: 10px 10px 30px 10px;
 
-        .userChat {
-          display: flex;
-          flex-direction: row;
-          gap: 15px;
-          height: 6vh;
-
-          span {
-            &:hover {
-              background-color: #b5b4b4;
-            }
+          &:hover {
+            background-color: #00681f;
+            color: white;
           }
 
-          img {
-            height: 3em;
-            width: 3em;
-            /* flex: 1; */
-            border-radius: 50%;
-            object-fit: cover;
-          }
-
-          .name-chat {
+          .userChat {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
+            gap: 15px;
+            height: 6vh;
 
-            h3 {
-              font-size: 24px;
-              font-weight: 500;
+            span {
+              &:hover {
+                background-color: #b5b4b4;
+              }
             }
 
-            p {
-              font-size: 15px;
+            img {
+              height: 3em;
+              width: 3em;
+              /* flex: 1; */
+              border-radius: 50%;
+              object-fit: cover;
+            }
+
+            .name-chat {
+              display: flex;
+              flex-direction: column;
+
+              h3 {
+                font-size: 24px;
+                font-weight: 500;
+              }
+
+              p {
+                font-size: 15px;
+              }
             }
           }
         }
       }
-
       .preview {
         display: flex;
         align-items: center;
@@ -249,19 +270,28 @@ form {
       }
       /* User Info in Sidebar */
       .footer {
+        display: flex;
+        /* flex-direction: row; */
         position: static;
-        height: 15%;
+        background-color: #979494;
+        align-items: center;
+        height: 5%;
 
         .user {
           display: flex;
+          /* flex-direction: row; */
           align-items: center;
           justify-content: space-between;
-          height: 35%;
+          /* padding: 25px; */
+          /* align-items: center; */
+          /* height: 30%; */
+          /* margin-bottom: 50em; */
 
           img {
             height: 5em;
             width: 5em;
-            margin-left: 1em;
+            margin: 2em 7em 0 1em;
+            /* margin-right: 7em; */
             border-radius: 50%;
             object-fit: cover;
           }
@@ -270,7 +300,8 @@ form {
             border-radius: 15px;
             background-color: #6c757d;
             color: white;
-            margin: 2em;
+            /* margin: 2em; */
+            margin: 2em 0 0 2em;
             height: 5em;
             width: 8em;
           }
@@ -281,7 +312,6 @@ form {
           }
         }
       }
-      
     }
     /* Chat Message Panel */
     .rightSection {
@@ -290,7 +320,6 @@ form {
       .chatMessages {
         display: flex;
         flex-direction: column;
-        border: 1px solid red;
         height: 82%;
         background-color: #282d35;
 
@@ -446,12 +475,12 @@ form {
               border-top: 1px solid black;
               color: white;
 
-              &:hover{
+              &:hover {
                 cursor: pointer;
               }
             }
 
-            .dropdownItem{
+            .dropdownItem {
               display: flex;
               margin: 10px auto;
             }
@@ -476,7 +505,7 @@ form {
           }
         }
       }
-
+      /* settings page */
       .settingsWrapper {
         display: flex;
         /* align-items: center; */

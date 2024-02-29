@@ -1,36 +1,47 @@
+import { useState, useRef, useEffect } from "react";
 import firebase from "firebase/compat/app";
-import { auth } from "../firebase.js";
-import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { auth, googleProvider } from "../firebase.js";
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext.jsx";
 
 function SignIn() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { signIn, signInWithGoogle, user } = useAuth();
+  // const [error, setError] = useState("");
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const navigate = useNavigate();
 
-  //how to check if signed in
-  //auth.currentUser gets current user thats logged in
-  // console.log(auth?.currentUser?.email);
-  console.log(auth.currentUser);
+  if (!user) {
+    console.log(user);
+  }
 
-  const signIn = async () => {
+  // Normal Signin
+  const handleSignIn = async (e) => {
+    e.preventDefault();
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-    } catch (err) {
-      console.log(err);
+      await signIn(emailRef.current.value, passwordRef.current.value);
+      navigate("/");
+    } catch (error) {
+      console.log("Failed to sign in");
     }
   };
 
-  const signInWithGoogle = () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider);
+  // Google Signin
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithGoogle();
+    } catch (error) {
+      // setError("Failed to log in");
+      console.log("Failed to Log in");
+    }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const email = e.target[0].value;
-    const password = e.target[1].value;
-  };
+  useEffect(() => {
+    if (user != null) {
+      navigate("/");
+    }
+  }, [user]);
 
   return (
     <div className="formContainer">
@@ -39,34 +50,28 @@ function SignIn() {
           <h1 className="logo">🗣️</h1>
           <h1 className="title">Yapper Chat</h1>
         </div>
-        <form onSubmit={handleSubmit} className="form" name='signIn'>
-          <input
-            placeholder="Email..."
-            onChange={(e) => setEmail(e.target.value)}
-          />
+        <form onSubmit={handleSignIn} className="form" name="signIn">
+          <input type="email" placeholder="Email..." ref={emailRef} required />
           <input
             type="password"
             placeholder="Password..."
-            onChange={(e) => setPassword(e.target.value)}
+            ref={passwordRef}
+            required
           />
-          <Link to="/">
-            <button className="sign-in" onChange={signIn}>
-              Sign in
-            </button>
-          </Link>
-        </form>
-        <Link to="/">
-          <button className="sign-in" onClick={signInWithGoogle}>
-            Sign in with Google
+          <button type="submit" className="sign-in">
+            Sign in
           </button>
-        </Link>
+        </form>
+        <button className="sign-in" onClick={handleGoogleSignIn}>
+          Sign in with Google
+        </button>
         <div className="links">
-          <p className="link-btn">Forgot Password?</p>
+          <button className="link-btn" onClick={() => navigate("/forgot-password")}>Forgot Password?</button>
           <p>
             No account yet?{" "}
-            <Link to="/register">
-              <span className="link-btn">Register</span>
-            </Link>
+            <button onClick={() => navigate("/register")} className="link-btn">
+              Register
+            </button>
           </p>
         </div>
       </div>

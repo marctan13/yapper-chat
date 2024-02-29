@@ -1,13 +1,16 @@
 // import { useState } from "react";
-// import { auth } from "../firebase.js";
-import { Link } from "react-router-dom";
+import { auth } from "../firebase.js";
+import { useNavigate } from "react-router-dom";
 import "bulma/css/bulma.css";
 import SignOut from "./SignOut.jsx";
-import Navbar from './SideBar/Navbar.jsx'
+import Navbar from "./SideBar/Navbar.jsx";
 import ChannelPreview from "./SideBar/ChannelPreview.jsx";
+import { useAuth } from "../contexts/AuthContext.jsx";
 // import DmPreview from './Sidebar/DmPreview.jsx'
 
 function Sidebar() {
+
+  const navigate = useNavigate();
   //*SETS SIDEBAR PREVIEW TO DM OR CHANNEL*
   // const [showChannelPreview, setShowChannelPreview] = useState(true)
 
@@ -18,27 +21,34 @@ function Sidebar() {
   return (
     <div className="sidebar">
       <Navbar />
-      <section>
-        {/*To switch between gc and private dm*/}
-        {/* {showChannelPreview ? <ChannelPreview /> : <DmPreview />} */}
-      </section>
+      {/* <section> */}
+      {/*To switch between gc and private dm*/}
+      {/* {showChannelPreview ? <ChannelPreview /> : <DmPreview />} */}
+      {/* </section> */}
       {/*temp preview placement for layout*/}
-      <ChannelPreview />
-      <ChannelPreview />
-      <ChannelPreview />
-      <ChannelPreview />
+      <div className="previews">
+        <ChannelPreview />
+        <ChannelPreview />
+        <ChannelPreview />
+        <ChannelPreview />
+        <ChannelPreview />
+      </div>
+      {/* <hr /> */}
       <div className="footer">
         <div className="user">
-          <Link to="/settings">
-            <img className="userAvatar" src="/cup.jpg" />
-              </Link>
-                {/* <img src={auth.currentUser.photoURL} alt="" />
-                <span>{auth.currentUser.displayName}</span> */}
-                <SignOut />
-            </div>
-          <div className="chats"></div> 
+          {/* <img className="userAvatar" src={"/cup.jpg"} /> */}
+          <img
+            onClick={() => navigate("/settings")}
+            src={
+              auth.currentUser.photoURL ? auth.currentUser.photoURL : "cup.jpg"
+            }
+            alt=""
+          />
+          <SignOut/>
         </div>
+        {/* <div className="chats"></div> */}
       </div>
+    </div>
   );
 }
 
