@@ -7,6 +7,7 @@ import {
   onAuthStateChanged,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
+  updateEmail,
 } from "firebase/auth";
 
 //declare context
@@ -37,9 +38,12 @@ export function AuthProvider({ children }) {
   const logOut = () => {
     return signOut(auth);
   };
-  // Reset Password
-  const resetPassword = (email) =>{
-    return sendPasswordResetEmail(auth, email)
+  // update email
+  const changeEmail = (email) => {
+    return updateEmail(email);
+  };
+  const resetPassword = (email) => {
+    return sendPasswordResetEmail(auth, email);
   };
   // checks user validation
   useEffect(() => {
@@ -59,6 +63,7 @@ export function AuthProvider({ children }) {
     signInWithGoogle,
     logOut,
     resetPassword,
+    changeEmail,
   };
 
   return (

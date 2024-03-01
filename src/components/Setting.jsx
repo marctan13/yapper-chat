@@ -1,7 +1,26 @@
-import React from "react";
-import { auth } from "../firebase.js";
+import { useState, useRef } from "react";
+import { useAuth } from "../contexts/AuthContext.jsx";
 
 function Setting() {
+  const [isClicked, setIsClicked] = useState(false);
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const { user, changeEmail } = useAuth();
+  const emailRef = useRef();
+
+  const handleUpdateEmail = async (e) => {
+    e.preventDefault();
+    try {
+      setError("");
+      setMessage("");
+      await changeEmail(user, emailRef.current.value).then(() => {
+        setMessage("Check your email inbox for further instructions");
+      })
+    } catch (error) {
+      setError("Failed to Update Email");
+    }
+  };
+
   return (
     <div className="rightSection">
       <div className="header">
@@ -11,13 +30,33 @@ function Setting() {
         <div className="username">
           <img
             src={
-              auth.currentUser.photoURL ? auth.currentUser.photoURL : "cup.jpg"
+              user.photoURL ? user.photoURL : "cup.jpg"
             }
           />
           <div className="username">
-            <h1>{auth.currentUser.displayName}</h1>
-            <span>{auth.currentUser.email}</span>
-            <button className="editAccount">Edit Account</button>
+            <h1>{user.displayName}</h1>
+            <span>{user.email}</span>
+            <button
+              className="editAccount"
+              onClick={() => {
+                setIsClicked(!isClicked);
+                setError(!error);
+              }}
+            >
+              Edit Account
+            </button>
+            {error && <h1>{error}</h1>}
+            {message && <h1>{message}</h1>}
+            {isClicked && (
+              <form>
+                <input
+                  type="email"
+                  placeholder="Enter new email"
+                  ref={emailRef}
+                />
+                <button onClick={handleUpdateEmail}>Update Email</button>
+              </form>
+            )}
           </div>
         </div>
         <div className="changePassword">
