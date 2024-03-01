@@ -37,7 +37,6 @@ export function AuthProvider({ children }) {
   const logOut = () => {
     return signOut(auth);
   };
-  // Reset Password
   const resetPassword = (email) =>{
     return sendPasswordResetEmail(auth, email)
   };
