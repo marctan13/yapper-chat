@@ -30,7 +30,7 @@ function Setting() {
         <div className="username">
           <img
             src={
-              user.photoURL ? user.photoURL : "cup.jpg"
+              user.photoURL ? user.photoURL : "avatar.png"
             }
           />
           <div className="username">
