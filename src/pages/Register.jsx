@@ -1,27 +1,29 @@
 import React, { useState, useRef } from "react";
-import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-// import { db } from "../firebase.js";
 import { auth } from "../firebase.js";
 import { useAuth } from "../contexts/AuthContext";
-// import { getDocs, addDoc, collection } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 
 function Register() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const displayNameRef = useRef();
   const navigate = useNavigate();
+  // const history = useHistory();
   const { signUp } = useAuth();
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
     try {
       setError("");
+      setMessage("");
       setLoading(true);
       await signUp(emailRef.current.value, passwordRef.current.value);
+      setMessage("Account Register successful!");
       // auth.currentUser.displayName = displayName;
       auth.currentUser.displayName = displayNameRef.current.value;
       navigate("/");
@@ -44,26 +46,33 @@ function Register() {
           <h1>
             <strong>Register Account</strong>
           </h1>
+          {message && (
+            <p>
+              <strong>{message}</strong>
+            </p>
+          )}
+          {error && (
+            <p>
+              <strong>{error}</strong>
+            </p>
+          )}
           <input
             required
             type="text"
             placeholder="Display Name"
             ref={displayNameRef}
-            // onChange={(e) => setDisplayName(e.target.value)}
           />
           <input
             required
             type="email"
             ref={emailRef}
             placeholder="Email"
-            // onChange={(e) => setEmail(e.target.value)}
           />
           <input
             required
             type="password"
             placeholder="Password"
             ref={passwordRef}
-            // onChange={(e) => setPassword(e.target.value)}
           />
           <button type="submit" onClick={signUp}>
             Sign up
