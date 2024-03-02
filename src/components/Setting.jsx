@@ -3,10 +3,14 @@ import { useAuth } from "../contexts/AuthContext.jsx";
 
 function Setting() {
   const [isClicked, setIsClicked] = useState(false);
+  const [passwordIsClicked, setPasswordIsClicked] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const { user, changeEmail } = useAuth();
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordMessage, setPasswordMessage] = useState("");
+  const { user, changeEmail, changePassword } = useAuth();
   const emailRef = useRef();
+  const passwordRef = useRef();
 
   const handleUpdateEmail = async (e) => {
     e.preventDefault();
@@ -15,9 +19,22 @@ function Setting() {
       setMessage("");
       await changeEmail(user, emailRef.current.value).then(() => {
         setMessage("Check your email inbox for further instructions");
-      })
+      });
     } catch (error) {
       setError("Failed to Update Email");
+    }
+  };
+
+  const handleUpdatePassword = async (e) => {
+    e.preventDefault();
+    try {
+      setPasswordError("");
+      setPasswordMessage("");
+      await changePassword(user, passwordRef.current.value).then(() => {
+        setPasswordMessage("Password has been changed!");
+      });
+    } catch (error) {
+      setPasswordError("Failed to Update Email");
     }
   };
 
@@ -28,11 +45,7 @@ function Setting() {
       </div>
       <div className="settingsWrapper">
         <div className="username">
-          <img
-            src={
-              user.photoURL ? user.photoURL : "avatar.png"
-            }
-          />
+          <img src={user.photoURL ? user.photoURL : "avatar.png"} />
           <div className="username">
             <h1>{user.displayName}</h1>
             <span>{user.email}</span>
@@ -61,7 +74,27 @@ function Setting() {
         </div>
         <div className="changePassword">
           <h1>Password</h1>
-          <button>Change Password</button>
+          <button
+            onClick={() => {
+              setPasswordIsClicked(!passwordIsClicked);
+              setError(!error);
+            }}
+          >
+            Change Password
+          </button>
+          {passwordError && <h1>{passwordError}</h1>}
+          {passwordMessage && <h1>{passwordMessage}</h1>}
+          {passwordIsClicked && (
+            <form>
+              <input
+                type="text"
+                placeholder="Enter new password"
+                ref={passwordRef}
+                className="update-password"
+              />
+              <button onClick={handleUpdatePassword}>Update Password</button>
+            </form>
+          )}
         </div>
         <div className="notifications">
           <h1>Notifications</h1>

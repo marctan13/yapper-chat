@@ -8,6 +8,7 @@ import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   updateEmail,
+  updatePassword,
 } from "firebase/auth";
 
 //declare context
@@ -42,6 +43,10 @@ export function AuthProvider({ children }) {
   const changeEmail = (email) => {
     return updateEmail(email);
   };
+  //update password
+  const changePassword = (password) => {
+    return updatePassword(password)
+  }
   const resetPassword = (email) => {
     return sendPasswordResetEmail(auth, email);
   };
@@ -64,6 +69,7 @@ export function AuthProvider({ children }) {
     logOut,
     resetPassword,
     changeEmail,
+    changePassword
   };
 
   return (
