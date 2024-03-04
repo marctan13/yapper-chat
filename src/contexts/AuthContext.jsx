@@ -39,17 +39,21 @@ export function AuthProvider({ children }) {
   const logOut = () => {
     return signOut(auth);
   };
+
   // update email
   const changeEmail = (email) => {
     return updateEmail(email);
   };
+  
   //update password
   const changePassword = (password) => {
     return updatePassword(password)
-  }
+  };
+ 
   const resetPassword = (email) => {
     return sendPasswordResetEmail(auth, email);
   };
+ 
   // checks user validation
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
