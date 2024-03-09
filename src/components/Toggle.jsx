@@ -3,7 +3,6 @@ import ReactSwitch from "react-switch";
 
 function Toggle() {
   const [isChannel, setIsChannel] = useState(true);
-
   const handleChange = (val) => {
     setIsChannel(val);
   };
