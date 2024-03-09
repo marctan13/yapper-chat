@@ -1,5 +1,7 @@
 import { useState, useRef } from "react";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import { db } from "../firebase.js";
+import { doc, getDocs, collection } from "firebase/firestore";
 
 function Setting() {
   const [isClicked, setIsClicked] = useState(false);
@@ -11,6 +13,7 @@ function Setting() {
   const { user, changeEmail, changePassword } = useAuth();
   const emailRef = useRef();
   const passwordRef = useRef();
+
 
   const handleUpdateEmail = async (e) => {
     e.preventDefault();
@@ -61,13 +64,13 @@ function Setting() {
             {error && <h1>{error}</h1>}
             {message && <h1>{message}</h1>}
             {isClicked && (
-              <form>
+              <form onSubmit={handleUpdateEmail}>
                 <input
                   type="email"
                   placeholder="Enter new email"
                   ref={emailRef}
                 />
-                <button onClick={handleUpdateEmail}>Update Email</button>
+                <button type="submit">Update Email</button>
               </form>
             )}
           </div>
@@ -85,14 +88,14 @@ function Setting() {
           {passwordError && <h1>{passwordError}</h1>}
           {passwordMessage && <h1>{passwordMessage}</h1>}
           {passwordIsClicked && (
-            <form>
+            <form onClick={handleUpdatePassword}>
               <input
                 type="text"
                 placeholder="Enter new password"
                 ref={passwordRef}
                 className="update-password"
               />
-              <button onClick={handleUpdatePassword}>Update Password</button>
+              <button type="submit">Update Password</button>
             </form>
           )}
         </div>

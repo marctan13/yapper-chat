@@ -1,17 +1,17 @@
 import React, { useState, useRef } from "react";
-import { auth } from "../firebase.js";
+import { auth, db } from "../firebase.js";
+import { updateProfile } from "firebase/auth";
 import { useAuth } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-// import { useHistory } from "react-router-dom";
+import { serverTimestamp, collection, addDoc } from "firebase/firestore";
 
 function Register() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const displayNameRef = useRef();
   const navigate = useNavigate();
-  // const history = useHistory();
-  const { signUp } = useAuth();
+  const { signUp, user } = useAuth();
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,11 +23,19 @@ function Register() {
       setMessage("");
       setLoading(true);
       await signUp(emailRef.current.value, passwordRef.current.value);
+      await updateProfile(auth.currentUser, {
+        displayName: displayNameRef.current.value,
+      });
+      const res = await addDoc(collection(db, "users"), {
+        displayName: displayNameRef.current.value,
+        email: emailRef.current.value,
+        password: passwordRef.current.value,
+        photoURL: "",
+        timestamp: serverTimestamp(),
+      });
       setMessage("Account Register successful!");
-      // auth.currentUser.displayName = displayName;
-      auth.currentUser.displayName = displayNameRef.current.value;
+      console.log(auth.currentUser.displayName);
       navigate("/");
-      // history.push("/")
     } catch (error) {
       setError("Failed to create an account");
     }
@@ -62,12 +70,7 @@ function Register() {
             placeholder="Display Name"
             ref={displayNameRef}
           />
-          <input
-            required
-            type="email"
-            ref={emailRef}
-            placeholder="Email"
-          />
+          <input required type="email" ref={emailRef} placeholder="Email" />
           <input
             required
             type="password"
