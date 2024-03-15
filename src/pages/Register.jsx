@@ -30,7 +30,7 @@ function Register() {
         displayName: displayNameRef.current.value,
         email: emailRef.current.value,
         password: passwordRef.current.value,
-        photoURL: "",
+        photoURL: null,
         timestamp: serverTimestamp(),
       });
       setMessage("Account Register successful!");
@@ -41,7 +41,6 @@ function Register() {
     }
     setLoading(false);
   }
-  //create user
 
   return (
     <div className="formContainer">

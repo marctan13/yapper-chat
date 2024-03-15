@@ -111,13 +111,14 @@ form {
           height: 2em;
           border-radius: 5px;
 
-          .newMsg:hover {
+          &:hover {
             background-color: white;
             color: #6c757d;
           }
         }
 
         .nav-title {
+          display: flex;
           align-items: center;
           justify-content: center;
           height: auto;
@@ -193,7 +194,8 @@ form {
             border-radius: 50%;
           }
         }
-      }
+      } 
+
       .previews {
         height: 65%;
         overflow-y: scroll;
