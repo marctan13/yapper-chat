@@ -12,7 +12,6 @@ function Chatroom() {
   const messagesRef = collection(db, "messages");
   const { user } = useAuth();
 
-  // console.log(user);
   console.log(messagesRef.docs);
   // console.log(user.displayName);
 
