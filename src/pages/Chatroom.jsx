@@ -13,7 +13,6 @@ function Chatroom() {
   const { user } = useAuth();
 
   console.log(messagesRef.docs);
-  // console.log(user.displayName);
 
   //gets all users
   useEffect(() => {
