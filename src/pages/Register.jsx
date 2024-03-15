@@ -11,7 +11,7 @@ function Register() {
   const passwordRef = useRef();
   const displayNameRef = useRef();
   const navigate = useNavigate();
-  const { signUp, user } = useAuth();
+  const { signUp, sendVerificationEmail } = useAuth();
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,19 +25,20 @@ function Register() {
       await signUp(emailRef.current.value, passwordRef.current.value);
       await updateProfile(auth.currentUser, {
         displayName: displayNameRef.current.value,
-      });
+      }); //updates displayName of authenticated user upon registration
       const res = await addDoc(collection(db, "users"), {
         displayName: displayNameRef.current.value,
         email: emailRef.current.value,
-        password: passwordRef.current.value,
         photoURL: null,
         timestamp: serverTimestamp(),
-      });
+      }); //adds user to database
+      sendVerificationEmail(auth.currentUser); //sends verification email to user upon registration
       setMessage("Account Register successful!");
-      console.log(auth.currentUser.displayName);
       navigate("/");
     } catch (error) {
       setError("Failed to create an account");
+      console.error(error);
+      throw error;
     }
     setLoading(false);
   }

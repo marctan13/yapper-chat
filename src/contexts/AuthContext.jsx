@@ -8,9 +8,10 @@ import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   updateEmail,
+  sendEmailVerification,
   updatePassword,
 } from "firebase/auth";
-import {getDocs, collection} from "firebase/firestore"
+import { getDocs, collection } from "firebase/firestore";
 
 //declare context
 const AuthContext = createContext();
@@ -23,8 +24,8 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
-  const usersRef = collection(db, "users")
-  const [users, setUsers] = useState([])
+  const usersRef = collection(db, "users");
+  const [users, setUsers] = useState([]);
 
   //   Sign up
   const signUp = (email, password) => {
@@ -44,19 +45,51 @@ export function AuthProvider({ children }) {
   };
 
   // update email
-  const changeEmail = (email) => {
-    return updateEmail(email);
+  const changeEmail = async (user, newEmail) => {
+    await updateEmail(user, newEmail);
   };
-  
+
+  //verify email
+  const sendVerificationEmail = async (user) => {
+    try {
+      await sendEmailVerification(user);
+      console.log("Verification email sent");
+    } catch (error) {
+      console.error("Error sending verification email:", error);
+      throw error;
+    }
+  };
+
+  //verify new email
+  // const sendVerificationNewEmail = async (user, newEmail) => {
+  //   try{
+  //     await sendEmailVerification(user, newEmail)
+  //   } catch(error){
+  //     console.error("Error sending verification email:", error);
+  //     throw error;
+  //   }
+  // }
+
+  //Verify new email method 2
+  const sendVerificationNewEmail = async (user) => {
+    try {
+      await sendEmailVerification(user);
+      console.log("Verification email sent");
+    } catch (error) {
+      console.error("Error sending verification email:", error);
+      throw error;
+    }
+  };
+
   //update password
-  const changePassword = (password) => {
-    return updatePassword(password)
+  const changePassword = async (user, newPassword) => {
+    await updatePassword(user, newPassword);
   };
- 
+
   const resetPassword = (email) => {
     return sendPasswordResetEmail(auth, email);
   };
- 
+
   // checks user validation and grabs user collection
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -69,8 +102,8 @@ export function AuthProvider({ children }) {
         ...doc.data(),
         id: doc.id,
       }));
-      setUsers(usersData)
-    }
+      setUsers(usersData);
+    };
     getUsers();
     return () => {
       unsubscribe();
@@ -86,7 +119,9 @@ export function AuthProvider({ children }) {
     resetPassword,
     changeEmail,
     changePassword,
-    users
+    users,
+    sendVerificationEmail,
+    sendVerificationNewEmail,
   };
 
   return (

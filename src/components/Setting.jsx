@@ -1,7 +1,5 @@
 import { useState, useRef } from "react";
 import { useAuth } from "../contexts/AuthContext.jsx";
-import { db } from "../firebase.js";
-import { doc, getDocs, collection } from "firebase/firestore";
 
 function Setting() {
   const [isClicked, setIsClicked] = useState(false);
@@ -10,21 +8,20 @@ function Setting() {
   const [message, setMessage] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [passwordMessage, setPasswordMessage] = useState("");
-  const { user, changeEmail, changePassword } = useAuth();
+  const { user, changeEmail, changePassword, logOut } = useAuth();
   const emailRef = useRef();
   const passwordRef = useRef();
-
 
   const handleUpdateEmail = async (e) => {
     e.preventDefault();
     try {
       setError("");
       setMessage("");
-      await changeEmail(user, emailRef.current.value).then(() => {
-        setMessage("Check your email inbox for further instructions");
-      });
+      await changeEmail(user, emailRef.current.value);
+      setMessage("Check your email inbox for further instructions");
     } catch (error) {
       setError("Failed to Update Email");
+      console.error("Failed to update email:", error);
     }
   };
 
@@ -33,11 +30,13 @@ function Setting() {
     try {
       setPasswordError("");
       setPasswordMessage("");
-      await changePassword(user, passwordRef.current.value).then(() => {
-        setPasswordMessage("Password has been changed!");
-      });
+      await changePassword(user, passwordRef.current.value);
+      setPasswordMessage("Password has been changed! You will be signed out in 5 seconds");
+      setTimeout(() => {
+        logOut();
+      }, 5000);
     } catch (error) {
-      setPasswordError("Failed to Update Email");
+      setPasswordError("Failed to Update Password");
     }
   };
 
@@ -52,6 +51,7 @@ function Setting() {
           <div className="username">
             <h1>{user.displayName}</h1>
             <span>{user.email}</span>
+            <span>Email Verified: {user.emailVerified ? "Yes" : "No"}</span>
             <button
               className="editAccount"
               onClick={() => {
@@ -88,9 +88,9 @@ function Setting() {
           {passwordError && <h1>{passwordError}</h1>}
           {passwordMessage && <h1>{passwordMessage}</h1>}
           {passwordIsClicked && (
-            <form onClick={handleUpdatePassword}>
+            <form onSubmit={handleUpdatePassword}>
               <input
-                type="text"
+                type="password"
                 placeholder="Enter new password"
                 ref={passwordRef}
                 className="update-password"
