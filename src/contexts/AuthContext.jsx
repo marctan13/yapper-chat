@@ -10,6 +10,7 @@ import {
   updateEmail,
   sendEmailVerification,
   updatePassword,
+  updateProfile,
 } from "firebase/auth";
 import { getDocs, collection } from "firebase/firestore";
 
@@ -90,6 +91,13 @@ export function AuthProvider({ children }) {
     return sendPasswordResetEmail(auth, email);
   };
 
+  //update display name
+  const changeDisplayName = (newDisplayName) => {
+     updateProfile(user, {
+      displayName: newDisplayName,
+    })
+  }
+
   // checks user validation and grabs user collection
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -122,6 +130,7 @@ export function AuthProvider({ children }) {
     users,
     sendVerificationEmail,
     sendVerificationNewEmail,
+    changeDisplayName
   };
 
   return (

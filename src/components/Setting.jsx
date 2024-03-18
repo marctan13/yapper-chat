@@ -1,16 +1,23 @@
 import { useState, useRef } from "react";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
 
 function Setting() {
   const [isClicked, setIsClicked] = useState(false);
   const [passwordIsClicked, setPasswordIsClicked] = useState(false);
+  const [displayNameIsClicked, setDisplayNameIsClicked] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [passwordMessage, setPasswordMessage] = useState("");
-  const { user, changeEmail, changePassword, logOut } = useAuth();
+  const [displayNameError, setDisplayNameError] = useState("");
+  const [displayNameMessage, setDisplayNameMessage] = useState("");
+  const { user, changeEmail, changePassword, logOut, changeDisplayName } =
+    useAuth();
   const emailRef = useRef();
   const passwordRef = useRef();
+  const displayNameRef = useRef();
 
   const handleUpdateEmail = async (e) => {
     e.preventDefault();
@@ -31,12 +38,34 @@ function Setting() {
       setPasswordError("");
       setPasswordMessage("");
       await changePassword(user, passwordRef.current.value);
-      setPasswordMessage("Password has been changed! You will be signed out in 5 seconds");
+      setPasswordMessage(
+        "Password has been changed! You will be signed out in 5 seconds"
+      );
       setTimeout(() => {
         logOut();
       }, 5000);
     } catch (error) {
       setPasswordError("Failed to Update Password");
+      console.error(error);
+      throw error;
+    }
+  };
+
+  const handleUpdateDisplayName = async (e) => {
+    e.preventDefault();
+    if (displayNameRef !== "") {
+      try {
+        setDisplayNameError("");
+        setDisplayNameMessage("");
+        await changeDisplayName(displayNameRef.current.value);
+        setDisplayNameMessage(
+          "Display Name has been updated! Refresh to see changes"
+        );
+      } catch (error) {
+        console.log("failed to change name");
+      }
+    } else {
+      setDisplayNameMessage("Please enter a name");
     }
   };
 
@@ -49,18 +78,43 @@ function Setting() {
         <div className="username">
           <img src={user.photoURL ? user.photoURL : "avatar.png"} />
           <div className="username">
-            <h1>{user.displayName}</h1>
-            <span>{user.email}</span>
-            <span>Email Verified: {user.emailVerified ? "Yes" : "No"}</span>
-            <button
-              className="editAccount"
-              onClick={() => {
-                setIsClicked(!isClicked);
-                setError(!error);
-              }}
-            >
-              Edit Account
-            </button>
+            <div>
+              <div style={{ display: "flex" }}>
+                <h1>{user.displayName}</h1>
+                <button
+                  onClick={() => {
+                    setDisplayNameIsClicked(!displayNameIsClicked);
+                    setError(!error);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faEdit} />
+                </button>
+              </div>
+              {displayNameError && <h1>{displayNameError}</h1>}
+              {displayNameMessage && <h1>{displayNameMessage}</h1>}
+              {displayNameIsClicked && (
+                <form onSubmit={handleUpdateDisplayName}>
+                  <input
+                    type="text"
+                    placeholder="Enter new display name"
+                    ref={displayNameRef}
+                  />
+                  <button type="submit">Update Display Name</button>
+                </form>
+              )}
+            </div>
+            <div style={{ display: "flex" }}>
+              <span>{user.email}</span>
+              <button
+                className="editAccount"
+                onClick={() => {
+                  setIsClicked(!isClicked);
+                  setError(!error);
+                }}
+              >
+                <FontAwesomeIcon icon={faEdit} />
+              </button>
+            </div>
             {error && <h1>{error}</h1>}
             {message && <h1>{message}</h1>}
             {isClicked && (
@@ -73,6 +127,7 @@ function Setting() {
                 <button type="submit">Update Email</button>
               </form>
             )}
+            <span>Email Verified: {user.emailVerified ? "Yes" : "No"}</span>
           </div>
         </div>
         <div className="changePassword">
@@ -93,7 +148,6 @@ function Setting() {
                 type="password"
                 placeholder="Enter new password"
                 ref={passwordRef}
-                className="update-password"
               />
               <button type="submit">Update Password</button>
             </form>

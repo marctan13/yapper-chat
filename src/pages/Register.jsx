@@ -71,6 +71,9 @@ function Register() {
             ref={displayNameRef}
           />
           <input required type="email" ref={emailRef} placeholder="Email" />
+          <span>
+            <strong>Password has to be at least 6 characters</strong>
+          </span>
           <input
             required
             type="password"

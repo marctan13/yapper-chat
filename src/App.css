@@ -18,7 +18,7 @@
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  height: 50%;
+  height: 55%;
   margin-right: 5em;
   gap: 10px;
   align-items: center;
@@ -194,7 +194,7 @@ form {
             border-radius: 50%;
           }
         }
-      } 
+      }
 
       .previews {
         height: 65%;
@@ -530,6 +530,10 @@ form {
           color: white;
         }
 
+        input {
+          height: 2rem;
+        }
+
         span {
           color: white;
         }
@@ -542,6 +546,10 @@ form {
           .username {
             display: flex;
             flex-direction: column;
+
+            button {
+              margin: auto;
+            }
           }
 
           img {
@@ -556,13 +564,17 @@ form {
           background-color: #d9d9d9;
           max-width: 12em;
         }
-        .changePassword,
-        .notifications {
-          margin-top: 2em;
-          margin-left: 3em;
 
-          input {
-            margin: 2em;
+        .changePassword {
+          display: block;
+          margin-left: 3rem;
+
+          form {
+            display: block;
+          }
+
+          button {
+            max-width: 15rem;
           }
         }
       }
