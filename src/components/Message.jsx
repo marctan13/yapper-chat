@@ -1,40 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../firebase.js";
-import { getDocs, collection } from "firebase/firestore";
+import { onSnapshot, collection } from "firebase/firestore";
+import { useAuth } from "../contexts/AuthContext.jsx";
 
-function Message(props) {
-  const [messageList, setMessageList] = useState([]);
-  const messageCollectionRef = collection(db, "messages");
+function Message() {
+  const { user } = useAuth();
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    const getMessageList = async () => {
-      //Read the data
-      //set message list
-      try {
-        const data = await getDocs(messageCollectionRef);
-        // console.log(data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getMessageList();
+    onSnapshot(collection(db, "messages"), (snapshot) => {
+      setMessages(snapshot.docs.map((doc) => doc.data()));
+    });
   }, []);
 
+  console.log(messages);
+
   return (
-    <>
-      <div className="chatMessage sender">
-        <div className="userInfo">
-          <img src={"/avatar.png"} />
-          <span>10:52pm</span>
-        </div>
-        <div className="message">
-          <p>{props.text}</p>
-        </div>
-      </div>
+    <div className="messageBlock">
+      {messages.map((message) => {
+        <div className="chatMessage sender">
+          <div className="userInfo">
+            <img src={message.photoURL} />
+            <span>{message.createdAt}</span>
+          </div>
+          <div className="message">
+            <p>{message.text}</p>
+          </div>
+        </div>;
+      })}
       <div className="chatMessage">
         <div className="userInfo">
           <img src="/friend.png" />
-          <span>10:54pm</span>
+          <span>10:50am</span>
         </div>
         <div className="message">
           <p>
@@ -43,7 +40,7 @@ function Message(props) {
           </p>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

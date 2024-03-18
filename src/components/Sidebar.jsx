@@ -9,7 +9,7 @@ import { useAuth } from "../contexts/AuthContext.jsx";
 // import DmPreview from './Sidebar/DmPreview.jsx'
 
 function Sidebar() {
-
+  const { user } = useAuth();
   const navigate = useNavigate();
   //*SETS SIDEBAR PREVIEW TO DM OR CHANNEL*
   // const [showChannelPreview, setShowChannelPreview] = useState(true)
@@ -39,12 +39,10 @@ function Sidebar() {
           {/* <img className="userAvatar" src={"/cup.jpg"} /> */}
           <img
             onClick={() => navigate("/settings")}
-            src={
-              auth.currentUser.photoURL ? auth.currentUser.photoURL : "cup.jpg"
-            }
+            src={user.photoURL ? user.photoURL : "avatar.png"}
             alt=""
           />
-          <SignOut/>
+          <SignOut />
         </div>
         {/* <div className="chats"></div> */}
       </div>
