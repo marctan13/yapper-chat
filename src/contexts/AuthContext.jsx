@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { auth, googleProvider } from "../firebase.js";
+import { createContext, useContext, useState, useEffect } from "react";
+import { auth, googleProvider, db } from "../firebase.js";
 import {
   signOut,
   signInWithPopup,
@@ -8,6 +8,7 @@ import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
 } from "firebase/auth";
+import { getDocs, collection } from 'firebase/firestore'
 
 //declare context
 const AuthContext = createContext();
@@ -20,6 +21,8 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
+  const usersRef = collection(db, 'users');
+  const [users, setUsers] = useState([]);
 
   //   Sign up
   const signUp = (email, password) => {
@@ -46,6 +49,16 @@ export function AuthProvider({ children }) {
       setUser(currentUser);
       setLoading(false);
     });
+    const getUsers = async () => {
+      const data = await getDocs(usersRef);
+      const usersData = data.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      setUsers(usersData);
+      console.log(users);
+    }
+    getUsers();
     return () => {
       unsubscribe();
     };
@@ -58,6 +71,7 @@ export function AuthProvider({ children }) {
     signInWithGoogle,
     logOut,
     resetPassword,
+    users
   };
 
   return (

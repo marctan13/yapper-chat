@@ -1,4 +1,3 @@
-import React from 'react'
 import Sidebar from '../components/Sidebar'
 import Setting from '../components/Setting'
 
@@ -7,10 +6,10 @@ function Settings() {
     <div className="chatroom">
     <div className="container">
       <Sidebar />
-      <Setting/>
+      <Setting />
     </div>
   </div>
   )
 }
 
-export default Settings
+export default Settings;

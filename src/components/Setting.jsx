@@ -1,13 +1,16 @@
-import React from "react";
 import { auth } from "../firebase.js";
+import { useNavigate } from "react-router-dom";
 
 function Setting() {
+  const navigate = useNavigate();
+
   return (
     <div className="rightSection">
       <div className="header">
         <h1>Settings</h1>
       </div>
-      <div className="settingsWrapper">
+      <div className="chatWrapper">
+        <p onClick={() => navigate("/")}>&lt; Back</p>
         <div className="username">
           <img
             src={
