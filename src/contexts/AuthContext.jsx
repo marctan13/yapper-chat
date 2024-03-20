@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { auth, googleProvider, db } from "../firebase.js";
 import {
   signOut,
@@ -11,7 +11,7 @@ import {
   sendEmailVerification,
   updatePassword,
 } from "firebase/auth";
-import { getDocs, collection } from "firebase/firestore";
+import { getDocs, collection } from 'firebase/firestore'
 
 //declare context
 const AuthContext = createContext();
@@ -24,7 +24,7 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
-  const usersRef = collection(db, "users");
+  const usersRef = collection(db, 'users');
   const [users, setUsers] = useState([]);
 
   //   Sign up

@@ -1,7 +1,10 @@
+import { auth } from "../firebase.js";
+import { useNavigate } from "react-router-dom";
 import { useState, useRef } from "react";
 import { useAuth } from "../contexts/AuthContext.jsx";
 
 function Setting() {
+  const navigate = useNavigate();
   const [isClicked, setIsClicked] = useState(false);
   const [passwordIsClicked, setPasswordIsClicked] = useState(false);
   const [error, setError] = useState("");
@@ -45,7 +48,8 @@ function Setting() {
       <div className="header">
         <h1>Settings</h1>
       </div>
-      <div className="settingsWrapper">
+      <div className="chatWrapper">
+        <p onClick={() => navigate("/")}>&lt; Back</p>
         <div className="username">
           <img src={user.photoURL ? user.photoURL : "avatar.png"} />
           <div className="username">
