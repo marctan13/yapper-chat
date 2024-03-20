@@ -6,6 +6,9 @@ import SignOut from "./SignOut.jsx";
 import Navbar from "./SideBar/Navbar.jsx";
 import ChannelPreview from "./SideBar/ChannelPreview.jsx";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { collection } from "firebase/firestore";
+import { db } from "../firebase";
 // import DmPreview from './Sidebar/DmPreview.jsx'
 
 function Sidebar() {
@@ -18,6 +21,13 @@ function Sidebar() {
   //   setShowChannelPreview(prevState => !prevState)
   // }
 
+  const query = collection(db, "channels");
+  const [docs, loading, error] = useCollectionData(query);
+
+  docs?.map((doc) => {
+    console.log(doc.name);
+  });
+
   return (
     <div className="sidebar">
       <Navbar />
@@ -27,11 +37,14 @@ function Sidebar() {
       {/* </section> */}
       {/*temp preview placement for layout*/}
       <div className="previews">
+        {loading && <div>Loading...</div>}
+        {docs &&
+          docs.map((doc) => <ChannelPreview key={doc.id} name={doc.name} />)}
+        {/* <ChannelPreview />
         <ChannelPreview />
         <ChannelPreview />
         <ChannelPreview />
-        <ChannelPreview />
-        <ChannelPreview />
+        <ChannelPreview /> */}
       </div>
       {/* <hr /> */}
       <div className="footer">

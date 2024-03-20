@@ -27,7 +27,9 @@ function Setting() {
       await changeEmail(user, emailRef.current.value);
       setMessage("Check your email inbox for further instructions");
     } catch (error) {
-      setError("Failed to Update Email");
+      setError(
+        "Failed to Update Email. Check new email address to verify"
+      );
       console.error("Failed to update email:", error);
     }
   };
@@ -39,11 +41,11 @@ function Setting() {
       setPasswordMessage("");
       await changePassword(user, passwordRef.current.value);
       setPasswordMessage(
-        "Password has been changed! You will be signed out in 5 seconds"
+        "Password has been changed! You will be signed out in 3 seconds"
       );
       setTimeout(() => {
         logOut();
-      }, 5000);
+      }, 3000);
     } catch (error) {
       setPasswordError("Failed to Update Password");
       console.error(error);
@@ -152,12 +154,13 @@ function Setting() {
               <button type="submit">Update Password</button>
             </form>
           )}
-        </div>
-        <div className="notifications">
-          <h1>Notifications</h1>
-          <span>Do Not Disturb</span>
-          <input type="checkbox" name="dnd" id="dnd" />
-          <label htmlFor="dnd">Do Not Disturb</label>
+          <hr />
+          <div className="notifications">
+            <h1>Notifications</h1>
+            <span>Do Not Disturb</span>
+            <input type="checkbox" name="dnd" id="dnd" />
+            <label htmlFor="dnd">Do Not Disturb</label>
+          </div>
         </div>
       </div>
     </div>

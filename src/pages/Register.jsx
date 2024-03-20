@@ -11,7 +11,7 @@ function Register() {
   const passwordRef = useRef();
   const displayNameRef = useRef();
   const navigate = useNavigate();
-  const { signUp, sendVerificationEmail } = useAuth();
+  const { signUp, sendVerificationEmail} = useAuth();
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -31,6 +31,7 @@ function Register() {
         email: emailRef.current.value,
         photoURL: null,
         timestamp: serverTimestamp(),
+        uid
       }); //adds user to database
       sendVerificationEmail(auth.currentUser); //sends verification email to user upon registration
       setMessage("Account Register successful!");

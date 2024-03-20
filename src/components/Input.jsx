@@ -26,6 +26,23 @@ function Input() {
     }
   }
 
+  // const sendMessage = async (e) => {
+  //   e.preventDefault();
+  //   try{
+  //     const docRef = doc(db, path, messageRef.current.value)
+  //     const res = await addDoc(collection(db, "messages"), {
+  //       uid: user.uid,
+  //       text: formValue, 
+  //       photoURL: user.photoURL,
+  //       createdAt: serverTimestamp(), 
+  //     })
+  //     setFormValue('');
+  //     messageRef.current.scrollIntoView({behavior: 'smooth'});
+  //   } catch(error){
+  //     console.log('Failed to send')
+  //   }
+  // }
+
   return (
     <div className="inputMessage">
       <span ref={messageRef}></span>

@@ -3,37 +3,36 @@
 //import { db, onSnapshot, doc } from "./Firestore"
 import { Trash } from "react-bootstrap-icons";
 
-function ChannelPreview() {
-    //*BRINGS LATEST MESSAGE ON TOP*
-    // const [chats, setChats] = useState([])
+function ChannelPreview( props ) {
+  //*BRINGS LATEST MESSAGE ON TOP*
+  // const [chats, setChats] = useState([])
 
-    // const {currentUser} = useContext(AuthContext)
+  // const {currentUser} = useContext(AuthContext)
 
-    // useEffect(() => {
-    //     const getChats = () => {
-    //         const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
-    //                     if(dov.exists()) {
-    //                      setChats(doc.data())
-    //                     } else {
-    //                      console.log("No doc found")
-    //                     }
-    //                 })
+  // useEffect(() => {
+  //     const getChats = () => {
+  //         const unsub = onSnapshot(doc(db, "userChats", currentUser.uid), (doc) => {
+  //                     if(dov.exists()) {
+  //                      setChats(doc.data())
+  //                     } else {
+  //                      console.log("No doc found")
+  //                     }
+  //                 })
 
-    //         return () => {
-    //             ubsub()
-    //         }
-    //     }
-    //     if(currentUser && currentUser.uid) {
-    //        getChats()
-    //     }
-    // }, [currentUser.uid])
+  //         return () => {
+  //             ubsub()
+  //         }
+  //     }
+  //     if(currentUser && currentUser.uid) {
+  //        getChats()
+  //     }
+  // }, [currentUser.uid])
 
-    // console.log(Object.entries(chats))
+  // console.log(Object.entries(chats))
 
-    return (
-        <div className="chatPreview">
-            
-            {/*  LAYOUT FOR CHAT DISPLAY
+  return (
+    <div className="chatPreview">
+      {/*  LAYOUT FOR CHAT DISPLAY
             
                 {Object.entries(chats)?.map((chat) => (
                 <div className="userChat" key={chat[0]}>
@@ -44,19 +43,18 @@ function ChannelPreview() {
                 </div>
             </div>
             ))} */}
-            {/*TEMP LINE */}
-            <div className="userChat">
-                <img src="/avatar.png" alt="avatar" />
-                <div className="name-chat">
-                <h3 className="name">Team Junkies</h3>
-                <p>Message Preview Message Preview Message Preview </p>
-                </div>
-                <span>
-                    <Trash style={{ height: "100%" }} size={35} />
-                </span>
+      {/*TEMP LINE */}
+      <div className="userChat">
+        <img src="/avatar.png" alt="avatar" />
+        <div key={props.key} className="name-chat">
+          <h3>{props.name}</h3>
         </div>
-        </div>
-    )
+        <span>
+          <Trash style={{ height: "100%" }} size={35} />
+        </span>
+      </div>
+    </div>
+  );
 }
 
-export default ChannelPreview
+export default ChannelPreview;

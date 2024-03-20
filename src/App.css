@@ -514,6 +514,7 @@ form {
         margin-left: 5em;
         margin-top: 3em;
         flex-direction: column;
+        font-size: 1.2rem;
 
         button {
           border-radius: 5px;
@@ -568,6 +569,7 @@ form {
         .changePassword {
           display: block;
           margin-left: 3rem;
+          padding: 1rem;
 
           form {
             display: block;
