@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../firebase.js";
 import { onSnapshot, collection } from "firebase/firestore";
-import {useCollectionData} from "react-firebase-hooks/firestore"
+import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useAuth } from "../contexts/AuthContext.jsx";
 
 function Message() {
@@ -16,31 +16,38 @@ function Message() {
 
   // console.log(messages);
 
-  useEffect(() => {
-    onSnapshot(collection(db, "channels"), (snapshot) => {
-      setMessages(snapshot.docs.map((doc) => doc.data()));
-    });
-  }, []);
-
-  const query = collection(db, "channels");
-  const [docs, loading, error] = useCollectionData(query);
-
-  console.log(messages);
-  console.log(docs)
+  // useEffect(() => {
+  //   onSnapshot(collection(db, "channels"), (snapshot) => {
+  //     setMessages(snapshot.docs.map((doc) => doc.data()));
+  //   });
+  // }, []);
 
   return (
     <div className="messageBlock">
-      {messages.map((message) => {
-        <div className="chatMessage sender">
-          <div className="userInfo">
-            <img src={message.photoURL} />
-            <span>{message.createdAt}</span>
+      {/* {docs &&
+        docs.map((doc) => {
+          <div className="chatMessage sender">
+            <div className="userInfo">
+              <img src={doc.photoURL} />
+              <span>{doc.createdAt}</span>
+            </div>
+            <div className="message">
+              <p>{doc.text}</p>
+            </div>
+          </div>;
+        })} */}
+      {/* {docs &&
+        docs.map((doc) => (
+          <div className="chatMessage sender" key={doc.id}>
+            <div className="userInfo">
+              <img src={doc.photoURL} />
+              <span>{doc.createdAt}</span>
+            </div>
+            <div className="message">
+              <p>{doc.text}</p>
+            </div>
           </div>
-          <div className="message">
-            <p>{message.text}</p>
-          </div>
-        </div>;
-      })}
+        ))} */}
       <div className="chatMessage">
         <div className="userInfo">
           <img src="/friend.png" />
