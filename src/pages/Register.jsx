@@ -1,17 +1,17 @@
 import React, { useState, useRef } from "react";
-import { auth } from "../firebase.js";
+import { auth, db } from "../firebase.js";
+import { updateProfile } from "firebase/auth";
 import { useAuth } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-// import { useHistory } from "react-router-dom";
+import { serverTimestamp, collection, addDoc } from "firebase/firestore";
 
 function Register() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const displayNameRef = useRef();
   const navigate = useNavigate();
-  // const history = useHistory();
-  const { signUp } = useAuth();
+  const { signUp, sendVerificationEmail } = useAuth();
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,17 +23,25 @@ function Register() {
       setMessage("");
       setLoading(true);
       await signUp(emailRef.current.value, passwordRef.current.value);
+      await updateProfile(auth.currentUser, {
+        displayName: displayNameRef.current.value,
+      }); //updates displayName of authenticated user upon registration
+      const res = await addDoc(collection(db, "users"), {
+        displayName: displayNameRef.current.value,
+        email: emailRef.current.value,
+        photoURL: null,
+        timestamp: serverTimestamp(),
+      }); //adds user to database
+      sendVerificationEmail(auth.currentUser); //sends verification email to user upon registration
       setMessage("Account Register successful!");
-      // auth.currentUser.displayName = displayName;
-      auth.currentUser.displayName = displayNameRef.current.value;
       navigate("/");
-      // history.push("/")
     } catch (error) {
       setError("Failed to create an account");
+      console.error(error);
+      throw error;
     }
     setLoading(false);
   }
-  //create user
 
   return (
     <div className="formContainer">
@@ -62,12 +70,7 @@ function Register() {
             placeholder="Display Name"
             ref={displayNameRef}
           />
-          <input
-            required
-            type="email"
-            ref={emailRef}
-            placeholder="Email"
-          />
+          <input required type="email" ref={emailRef} placeholder="Email" />
           <input
             required
             type="password"

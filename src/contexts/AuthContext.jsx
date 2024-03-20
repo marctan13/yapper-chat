@@ -7,6 +7,9 @@ import {
   onAuthStateChanged,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
+  updateEmail,
+  sendEmailVerification,
+  updatePassword,
 } from "firebase/auth";
 import { getDocs, collection } from 'firebase/firestore'
 
@@ -40,10 +43,54 @@ export function AuthProvider({ children }) {
   const logOut = () => {
     return signOut(auth);
   };
-  const resetPassword = (email) =>{
-    return sendPasswordResetEmail(auth, email)
+
+  // update email
+  const changeEmail = async (user, newEmail) => {
+    await updateEmail(user, newEmail);
   };
-  // checks user validation
+
+  //verify email
+  const sendVerificationEmail = async (user) => {
+    try {
+      await sendEmailVerification(user);
+      console.log("Verification email sent");
+    } catch (error) {
+      console.error("Error sending verification email:", error);
+      throw error;
+    }
+  };
+
+  //verify new email
+  // const sendVerificationNewEmail = async (user, newEmail) => {
+  //   try{
+  //     await sendEmailVerification(user, newEmail)
+  //   } catch(error){
+  //     console.error("Error sending verification email:", error);
+  //     throw error;
+  //   }
+  // }
+
+  //Verify new email method 2
+  const sendVerificationNewEmail = async (user) => {
+    try {
+      await sendEmailVerification(user);
+      console.log("Verification email sent");
+    } catch (error) {
+      console.error("Error sending verification email:", error);
+      throw error;
+    }
+  };
+
+  //update password
+  const changePassword = async (user, newPassword) => {
+    await updatePassword(user, newPassword);
+  };
+
+  const resetPassword = (email) => {
+    return sendPasswordResetEmail(auth, email);
+  };
+
+  // checks user validation and grabs user collection
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -56,8 +103,7 @@ export function AuthProvider({ children }) {
         id: doc.id,
       }));
       setUsers(usersData);
-      console.log(users);
-    }
+    };
     getUsers();
     return () => {
       unsubscribe();
@@ -71,7 +117,11 @@ export function AuthProvider({ children }) {
     signInWithGoogle,
     logOut,
     resetPassword,
-    users
+    changeEmail,
+    changePassword,
+    users,
+    sendVerificationEmail,
+    sendVerificationNewEmail,
   };
 
   return (

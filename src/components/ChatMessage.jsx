@@ -29,19 +29,7 @@ function ChatMessage() {
   return (
     <>
       <div className="chatMessages">
-        {/* Conversation */}
-        {messages.map((m) => (
-          <Message message={m} key={m.id}/>
-        ))}
-        {/* <div className="messageBlock">
-          <Message text="Want to meet up later?Want to meet up later?Want to meet up later?Want to meet up later?Want to meet up later?" />
-          <Message text="Want to meet up later?" />
-          <Message text="Want to meet up later?" />
-        </div> */}
-        {/* <div className='messageBlock'>
-          <span>{data.user?.displayName}</span>
-        </div> */}
-        {/* input your message here */}
+        <Message />
         <Input />
       </div>
     </>

@@ -6,7 +6,7 @@ import Navbar from "./Navbar.jsx";
 import ChannelPreview from "./ChannelPreview.jsx";
 
 function Sidebar() {
-
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   return (
@@ -23,8 +23,10 @@ function Sidebar() {
             src={
               auth.currentUser.photoURL ? auth.currentUser.photoURL : "cup.jpg"
             }
+//             src={user.photoURL ? user.photoURL : "avatar.png"}
+            alt=""
           />
-          <SignOut/>
+          <SignOut />
         </div>
       </div>
     </div>
