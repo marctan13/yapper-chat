@@ -6,9 +6,9 @@ function Settings() {
 
   return (
     <div className="chatroom">
-      <div className="container">
-        <Sidebar />
-        <Setting />
+    <div className="container">
+      <Sidebar />
+      <Setting />
       </div>
     </div>
   );

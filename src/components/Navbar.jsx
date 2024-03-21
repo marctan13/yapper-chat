@@ -1,14 +1,12 @@
 import { useNavigate } from "react-router-dom";
 
-function Navbar() {
+function SideNavbar() {
   const navigate = useNavigate();
 
   return (
-    <navbar className="navbar">
+    <div className="navbar">
       <div className="nav-title">
-        <span onClick={() => navigate("/")} className="logo">
-          🗣️
-        </span>
+        <span className="logo" onClick={() => navigate("/")}> 🗣️ </span>
         <span className="title">Yapper Chat</span>
       </div>
       <div className="toggle">
@@ -20,12 +18,12 @@ function Navbar() {
         <span className="toggle-label">Channel</span>
       </div>
       <div className="newMsgContainer">
-        {/*Work in progress soon*/}
-        <button className="newMsg">+ Create New Message</button>
+        <button className="newMsg" onClick={() => navigate("/NewChat")}>
+          + Create New Message
+        </button>
       </div>
-    </navbar>
+    </div>
   );
 }
 
-
-export default Navbar;
+export default SideNavbar;

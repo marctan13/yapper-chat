@@ -1,4 +1,3 @@
-import React from "react";
 import Input from "./Input";
 import Message from "./Message";
 import { collection } from "firebase/firestore";
@@ -13,7 +12,6 @@ function ChatMessage({ path }) {
     docs.map((doc) => {
       console.log(...doc);
     });
-
   return (
     <>
       <div className="chatMessages">

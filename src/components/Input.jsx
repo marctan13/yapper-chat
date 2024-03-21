@@ -4,11 +4,9 @@ import { useAuth } from "../contexts/AuthContext";
 import {db} from "../firebase"
 
 function Input() {
-  // const [message, setMessage] = useState("");
   const messageRef = useRef();
   const {user} = useAuth();
   const [formValue, setFormValue] = useState('')
-  // const messagesRef = collection(db, "messages");
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -25,23 +23,6 @@ function Input() {
       console.log('Failed to send')
     }
   }
-
-  // const sendMessage = async (e) => {
-  //   e.preventDefault();
-  //   try{
-  //     const docRef = doc(db, path, messageRef.current.value)
-  //     const res = await addDoc(collection(db, "messages"), {
-  //       uid: user.uid,
-  //       text: formValue, 
-  //       photoURL: user.photoURL,
-  //       createdAt: serverTimestamp(), 
-  //     })
-  //     setFormValue('');
-  //     messageRef.current.scrollIntoView({behavior: 'smooth'});
-  //   } catch(error){
-  //     console.log('Failed to send')
-  //   }
-  // }
 
   return (
     <div className="inputMessage">
