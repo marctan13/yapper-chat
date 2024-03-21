@@ -31,6 +31,7 @@ function Register() {
         email: emailRef.current.value,
         photoURL: null,
         timestamp: serverTimestamp(),
+        uid
       }); //adds user to database
       sendVerificationEmail(auth.currentUser); //sends verification email to user upon registration
       setMessage("Account Register successful!");
