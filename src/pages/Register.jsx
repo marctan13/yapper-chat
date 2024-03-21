@@ -31,7 +31,7 @@ function Register() {
         email: emailRef.current.value,
         photoURL: null,
         timestamp: serverTimestamp(),
-        uid
+        uid: auth.currentUser.uid,
       }); //adds user to database
       sendVerificationEmail(auth.currentUser); //sends verification email to user upon registration
       setMessage("Account Register successful!");
@@ -72,6 +72,9 @@ function Register() {
             ref={displayNameRef}
           />
           <input required type="email" ref={emailRef} placeholder="Email" />
+          <span>
+            <strong>Password has to be at least 6 characters</strong>
+          </span>
           <input
             required
             type="password"

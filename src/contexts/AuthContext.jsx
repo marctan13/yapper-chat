@@ -10,6 +10,8 @@ import {
   updateEmail,
   sendEmailVerification,
   updatePassword,
+  updateProfile,
+  verifyBeforeUpdateEmail,
 } from "firebase/auth";
 import { getDocs, collection } from 'firebase/firestore'
 
@@ -46,32 +48,12 @@ export function AuthProvider({ children }) {
 
   // update email
   const changeEmail = async (user, newEmail) => {
+    await verifyBeforeUpdateEmail(user, newEmail);
     await updateEmail(user, newEmail);
   };
 
   //verify email
   const sendVerificationEmail = async (user) => {
-    try {
-      await sendEmailVerification(user);
-      console.log("Verification email sent");
-    } catch (error) {
-      console.error("Error sending verification email:", error);
-      throw error;
-    }
-  };
-
-  //verify new email
-  // const sendVerificationNewEmail = async (user, newEmail) => {
-  //   try{
-  //     await sendEmailVerification(user, newEmail)
-  //   } catch(error){
-  //     console.error("Error sending verification email:", error);
-  //     throw error;
-  //   }
-  // }
-
-  //Verify new email method 2
-  const sendVerificationNewEmail = async (user) => {
     try {
       await sendEmailVerification(user);
       console.log("Verification email sent");
@@ -88,6 +70,13 @@ export function AuthProvider({ children }) {
 
   const resetPassword = (email) => {
     return sendPasswordResetEmail(auth, email);
+  };
+
+  //update display name
+  const changeDisplayName = (newDisplayName) => {
+    updateProfile(user, {
+      displayName: newDisplayName,
+    });
   };
 
   // checks user validation and grabs user collection
@@ -121,7 +110,7 @@ export function AuthProvider({ children }) {
     changePassword,
     users,
     sendVerificationEmail,
-    sendVerificationNewEmail,
+    changeDisplayName,
   };
 
   return (

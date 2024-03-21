@@ -1,35 +1,26 @@
 import Input from "./Input";
 import Message from "./Message";
-import { useContext, useEffect, useState } from "react";
-import { ChatContext } from '../contexts/ChatContext'
-import { db } from '../firebase'
-import { doc, onSnapshot } from 'firebase/firestore'
+import { collection } from "firebase/firestore";
+import { db } from "../firebase.js";
+import { useCollectionData } from "react-firebase-hooks/firestore";
 
-function ChatMessage() {
+function ChatMessage({ path }) {
+  const query = collection(db, path);
+  const [docs, loading, error] = useCollectionData(query);
 
-  const [messages, setMessages] = useState([])
-  const { data } = useContext(ChatContext)
-
-  useEffect(() => {
-    if (data && data.chatId) {
-      const unsub = onSnapshot(doc(db, 'chats', data.chatId), (doc)=>{
-        doc.exists() && setMessages(doc.data().messages)
-      })
-
-      return () => {
-        unsub()
-      }
-    }
-  }, [data])
-
-  if(!data || !data.chatId) {
-    return <div>Loading...</div>
-  }
-
+  docs &&
+    docs.map((doc) => {
+      console.log(...doc);
+    });
   return (
     <>
       <div className="chatMessages">
-        <Message />
+        {loading && <div>Loading</div>}
+        {error && <div>error</div>}
+        {/* {docs && docs.map((doc) => (
+          <Message key={doc.id} {...doc}/>
+        ))} */}
+        <Message path={path} />
         <Input />
       </div>
     </>

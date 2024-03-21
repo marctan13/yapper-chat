@@ -4,11 +4,9 @@ import { useAuth } from "../contexts/AuthContext";
 import {db} from "../firebase"
 
 function Input() {
-  // const [message, setMessage] = useState("");
   const messageRef = useRef();
   const {user} = useAuth();
   const [formValue, setFormValue] = useState('')
-  // const messagesRef = collection(db, "messages");
 
   const sendMessage = async (e) => {
     e.preventDefault();
