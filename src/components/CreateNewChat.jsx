@@ -1,14 +1,19 @@
-import { useState } from 'react';
-import UserList from './UserList';
+import { useRef, useState } from 'react';
+import { useAuth } from '../contexts/AuthContext'
 import { useNavigate } from "react-router-dom";
-import { useChatContext } from 'stream-chat-react'
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from '../firebase';
+// import { useCollectionData } from 'react-firebase-hooks/firestore';
 
-function CreateNewChat() {
+function CreateNewChat({ path }) {
     const navigate = useNavigate(); 
-
-    const { client, setActiveChat } = useChatContext();
+    const user = useAuth();
+    const { users } = useAuth();
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [chatName, setChatName] = useState('');
+    // const chat = useRef();
+    // const query = collection(db, "channels/")
+    // const [selected, setSelected] = useState(false);
 
     const handleChange = (e) => {
         e.preventDefault();
@@ -16,24 +21,31 @@ function CreateNewChat() {
         setChatName(e.target.value);
     }
 
-    const createChat = async (e) => {
+    const handleSelect = (userId) => {
+
+        if(selectedUsers.includes(userId)) {
+          setSelectedUsers(selectedUsers.filter((id) => id !== userId));
+        } else {
+          setSelectedUsers([...selectedUsers, userId]);
+        }
+  
+        // setSelected((prevSelected) => !prevSelected);
+      }
+
+    async function handleSubmit(e) {
         e.preventDefault();
 
-        try {
-            const newChat = await client.channel(chatName, {
-                name: chatName, members: selectedUsers
-            });
-
-            await newChat.watch();
-            setChatName('');
-            setSelectedUsers([client.userID]);
-            setActiveChat(newChat);
-            
-        } catch(error) {
-            console.log(error);
-        }
-
+        // const docRef = doc(db, path, chat.current.value)
+        // await setDoc(docRef, {name: chat.current.value})
+        const newChat = await addDoc(collection(db, "channels"), {
+        name: chatName,
+        members: [user.user.uid, ...selectedUsers]
+    })
+        setChatName('');
+        setSelectedUsers([]);
+        navigate("/");
     }
+        console.log(selectedUsers)
 
     return (
         <div className="rightSection">
@@ -42,7 +54,7 @@ function CreateNewChat() {
             </div>
             <div className="chatWrapper">
                 <p onClick={() => navigate("/")}>&lt; Back</p>
-                <form className='createChatDetails'>
+                <form className='createChatDetails' onSubmit={handleSubmit}>
                     <h2>Chat Name </h2>
                     <input 
                         className='chatNameBox'
@@ -52,8 +64,17 @@ function CreateNewChat() {
                         value={chatName}
                     />
                     <h2 className='addMembers'>Add Members </h2>
-                    <UserList />
-                    <button className='createChatBtn' onClick={createChat}>Create New Chat</button>    
+                    {/* <UserList setSelectedUsers={setSelectedUsers}/> */}
+                    ({users.map((user) => {
+                        return (
+                            <div className="userItem-wrapper" key={user.id} onClick={() => handleSelect(user.id)}>
+                                <img src={user.photoURL || 'avatar.png'} size={32}/>
+                                <p>{user.displayName}</p>
+                            </div>
+                        // {selected ? (<img src='selected.png' />) : (<div className="emptySelected"></div>) }
+                        )
+                    })})
+                    <button className='createChatBtn'>Create New Chat</button>    
                 </form>
             </div>
         </div>
@@ -61,5 +82,3 @@ function CreateNewChat() {
 }
 
 export default CreateNewChat;
-
-//setSelectedUsers={setSelectedUsers} => add to <UserList
