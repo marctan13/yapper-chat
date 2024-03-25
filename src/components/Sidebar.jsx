@@ -8,17 +8,21 @@ import ChannelPreview from "./ChannelPreview.jsx";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { collection } from "firebase/firestore";
 import { db } from "../firebase";
+import { useState } from "react";
 
 function Sidebar() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [selectedChannelId, setSelectedChannelId] = useState(null);
+
+  const handleChannelSelect = (channelId) => {
+    setSelectedChannelId(channelId);
+  };
 
   const query = collection(db, "channels");
   const [docs, loading, error] = useCollectionData(query);
 
-  docs?.map((doc) => {
-    console.log(doc.name);
-  });
+  console.log("Docs: ", docs);
 
   return (
     <div className="sidebar">
@@ -26,7 +30,18 @@ function Sidebar() {
       <div className="previews">
         {loading && <div>Loading...</div>}
         {docs &&
-          docs.map((doc) => <ChannelPreview key={doc.id} name={doc.name} />)}
+          docs.map((doc) => {
+            console.log("Document ID:", doc.id);
+            return (
+              <ChannelPreview
+                key={doc.id}
+                name={doc.name}
+                channelId={doc.id}
+                selected={doc.id === selectedChannelId}
+                onSelect={handleChannelSelect}
+              />
+            );
+          })}
       </div>
       <div className="footer">
         <div className="user">

@@ -1,24 +1,20 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext'
 import { useNavigate } from "react-router-dom";
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../firebase';
-// import { useCollectionData } from 'react-firebase-hooks/firestore';
 
-function CreateNewChat({ path }) {
+function CreateNewChat() {
     const navigate = useNavigate(); 
     const user = useAuth();
     const { users } = useAuth();
     const [selectedUsers, setSelectedUsers] = useState([]);
-    const [chatName, setChatName] = useState('');
-    // const chat = useRef();
-    // const query = collection(db, "channels/")
-    // const [selected, setSelected] = useState(false);
+    const [channelName, setChannelName] = useState('');
 
     const handleChange = (e) => {
         e.preventDefault();
 
-        setChatName(e.target.value);
+        setChannelName(e.target.value);
     }
 
     const handleSelect = (userId) => {
@@ -29,23 +25,20 @@ function CreateNewChat({ path }) {
           setSelectedUsers([...selectedUsers, userId]);
         }
   
-        // setSelected((prevSelected) => !prevSelected);
+        // setSelected((prevSelected) => !prevSelected); <= use for when user is selected (DESIGN STUFF)
       }
 
-    async function handleSubmit(e) {
+      async function handleSubmit(e) {
         e.preventDefault();
-
-        // const docRef = doc(db, path, chat.current.value)
-        // await setDoc(docRef, {name: chat.current.value})
-        const newChat = await addDoc(collection(db, "channels"), {
-        name: chatName,
-        members: [user.user.uid, ...selectedUsers]
-    })
-        setChatName('');
+    
+        await addDoc(collection(db, "channels"), {
+            name: channelName,
+            members: [user.user.uid, ...selectedUsers]
+        });
+        setChannelName('');
         setSelectedUsers([]);
         navigate("/");
     }
-        console.log(selectedUsers)
 
     return (
         <div className="rightSection">
@@ -61,10 +54,9 @@ function CreateNewChat({ path }) {
                         placeholder='Type in Chat Name'
                         type='text'
                         onChange={handleChange}
-                        value={chatName}
+                        value={channelName}
                     />
                     <h2 className='addMembers'>Add Members </h2>
-                    {/* <UserList setSelectedUsers={setSelectedUsers}/> */}
                     ({users.map((user) => {
                         return (
                             <div className="userItem-wrapper" key={user.id} onClick={() => handleSelect(user.id)}>
