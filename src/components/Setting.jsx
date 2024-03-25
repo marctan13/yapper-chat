@@ -22,6 +22,8 @@ function Setting() {
   const passwordRef = useRef();
   const displayNameRef = useRef();
 
+  console.log(user.uid);
+
   const handleUpdateEmail = async (e) => {
     e.preventDefault();
     try {
@@ -30,9 +32,7 @@ function Setting() {
       await changeEmail(user, emailRef.current.value);
       setMessage("Check your email inbox for further instructions");
     } catch (error) {
-      setError(
-        "Failed to Update Email. Check new email address to verify"
-      );
+      setError("Check new email address to complete changes");
       console.error("Failed to update email:", error);
     }
   };
