@@ -4,14 +4,19 @@ import { updateProfile } from "firebase/auth";
 import { useAuth } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { serverTimestamp, collection, addDoc } from "firebase/firestore";
+import {
+  serverTimestamp,
+  collection,
+  addDoc,
+  updateDoc,
+} from "firebase/firestore";
 
 function Register() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const displayNameRef = useRef();
   const navigate = useNavigate();
-  const { signUp, sendVerificationEmail } = useAuth();
+  const { signUp, sendVerificationEmail, user } = useAuth();
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -32,7 +37,10 @@ function Register() {
         photoURL: null,
         timestamp: serverTimestamp(),
         uid: auth.currentUser.uid,
-      }); //adds user to database
+      });
+      await updateDoc(res, {
+        uid: res.id
+      }) //adds user to database
       sendVerificationEmail(auth.currentUser); //sends verification email to user upon registration
       setMessage("Account Register successful!");
       navigate("/");

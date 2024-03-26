@@ -1,27 +1,45 @@
+import { useState, useEffect } from "react";
 import Input from "./Input";
 import Message from "./Message";
-import { collection } from "firebase/firestore";
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase.js";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 
-function ChatMessage({ path }) {
-  const query = collection(db, path);
-  const [docs, loading, error] = useCollectionData(query);
+function ChatMessage({ selectedChannel }) {
+  const [messages, setMessages] = useState([]);
+  const [formValue, setFormValue] = useState("");
 
-  docs &&
-    docs.map((doc) => {
-      console.log(...doc);
-    });
+  useEffect(() => {
+    const fetchMessages = async () => {
+      if (!selectedChannel) return; // Exit if no channel is selected
+
+      try {
+        const messagesQuerySnapshot = await getDocs(
+          collection(db, "channels", selectedChannel, "messages")
+        );
+        const allMessages = messagesQuerySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setMessages(allMessages);
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+      }
+    };
+
+    fetchMessages();
+  }, [selectedChannel, formValue]);
   return (
     <>
       <div className="chatMessages">
-        {loading && <div>Loading</div>}
-        {error && <div>error</div>}
-        {/* {docs && docs.map((doc) => (
-          <Message key={doc.id} {...doc}/>
-        ))} */}
-        <Message path={path} />
-        <Input />
+        {messages.map((message) => (
+          <Message key={message.id} {...message} />
+        ))}
+        <Input
+          selectedChannel={selectedChannel}
+          formValue={formValue}
+          setFormValue={setFormValue}
+        />
       </div>
     </>
   );

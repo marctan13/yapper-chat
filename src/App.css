@@ -216,7 +216,8 @@ form {
       padding: 10px 10px 30px 10px;
 
       &:hover {
-        background-color: #00681f;
+        /* background-color: #00681f; */
+        background-color: #39413c;
         color: white;
       }
 
@@ -329,7 +330,7 @@ form {
 /* Chat Message Panel */
 .rightSection {
   flex: 2;
-  overflow-y: auto;
+  overflow-y: scroll;
 
   /*scroll bar for chatroom components
       /* ::-webkit-scrollbar-track {
@@ -348,12 +349,12 @@ form {
   .chatMessages {
     display: flex;
     flex-direction: column;
-    height: 82%;
+    max-height: 82%;
     background-color: #282d35;
 
     .messageBlock {
       height: 55vh;
-      overflow: scroll;
+      overflow-y: visible;
 
       .chatMessage {
         display: flex;
