@@ -299,6 +299,7 @@ form {
       justify-content: space-between;
       /* padding: 25px; */
       height: 30%;
+      cursor: pointer;
       /* margin-bottom: 50em; */
 
       img {
@@ -568,6 +569,12 @@ form {
       color: white;
     }
 
+    .userDisplayName {
+      font-weight: bold;
+      font-size: 15px;
+      padding-right: 6px;
+    }
+
     .username {
       display: flex;
       flex-direction: row;
@@ -580,6 +587,7 @@ form {
 
         button {
           margin: auto;
+          margin-bottom: 5px;
         }
         margin-top: 0em;
       }
@@ -591,10 +599,13 @@ form {
         border-radius: 50%;
       }
     }
-    .editAccount {
-      color: black;
-      background-color: #d9d9d9;
-      max-width: 12em;
+
+    .editName {
+      margin-left: 5px !important;
+    }
+
+    .editEmail {
+      margin-left: 5px !important;
     }
 
     .changePassword {
