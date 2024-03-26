@@ -1,9 +1,10 @@
 import { auth } from "../firebase.js";
 import { useNavigate } from "react-router-dom";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { Bluetooth } from "react-bootstrap-icons";
 
 function Setting() {
   const navigate = useNavigate();
@@ -18,9 +19,19 @@ function Setting() {
   const [displayNameMessage, setDisplayNameMessage] = useState("");
   const { user, changeEmail, changePassword, logOut, changeDisplayName } =
     useAuth();
+  const [currentUser, setCurrentUser] = useState(user);
+
   const emailRef = useRef();
   const passwordRef = useRef();
   const displayNameRef = useRef();
+
+  // Updates the users display name without refreshing page
+  useEffect(() => {
+    setCurrentUser((prevUser) => ({
+      ...prevUser,
+      displayName: user.displayName,
+    }));
+  }, [user.displayName]);
 
   const handleUpdateEmail = async (e) => {
     e.preventDefault();
@@ -58,22 +69,32 @@ function Setting() {
 
   const handleUpdateDisplayName = async (e) => {
     e.preventDefault();
-    if (displayNameRef !== "") {
-      try {
-        setDisplayNameError("");
-        setDisplayNameMessage("");
-        await changeDisplayName(displayNameRef.current.value);
-        setDisplayNameMessage(
-          "Display Name has been updated! Refresh to see changes"
-        );
-      } catch (error) {
-        console.log("failed to change name");
+    const newName = displayNameRef.current.value.trim();
+    if (newName !== "") {
+      if (newName.length <= 15) { // Character Limited 15
+        try {
+          setDisplayNameError("");
+          // This grabs the name input and puts it into an array to capitalize
+          // the 1st character (zero) and uppercase it.
+          const capitalizedNewName =
+            newName.charAt(0).toUpperCase() + newName.slice(1);
+          await changeDisplayName(capitalizedNewName);
+          alert("Display Name has been updated!");
+  
+          user.displayName = capitalizedNewName;
+
+          setDisplayNameIsClicked(false);
+        } catch (error) {
+          alert("Failed to update username. Please try again.");
+        }
+      } else {
+        alert("Display name must be 15 characters or less.");
       }
     } else {
-      setDisplayNameMessage("Please enter a name");
+      alert("Please enter a name.");
     }
   };
-
+  
   return (
     <div className="rightSection">
       <div className="header">
@@ -86,12 +107,15 @@ function Setting() {
           <div className="username">
             <div>
               <div style={{ display: "flex" }}>
-                <h1>{user.displayName}</h1>
+              <h1 className="userDisplayName">Display Name:  </h1>
+                <h2 style={{ color: "navy" }}> {user.displayName}</h2>
                 <button
+                  className="editName"
                   onClick={() => {
                     setDisplayNameIsClicked(!displayNameIsClicked);
                     setError(!error);
                   }}
+                  title="Edit Display Name"
                 >
                   <FontAwesomeIcon icon={faEdit} />
                 </button>
@@ -102,6 +126,7 @@ function Setting() {
                 <form onSubmit={handleUpdateDisplayName}>
                   <input
                     type="text"
+                    className="displayNameInput"
                     placeholder="Enter new display name"
                     ref={displayNameRef}
                   />
@@ -109,14 +134,17 @@ function Setting() {
                 </form>
               )}
             </div>
+            
             <div style={{ display: "flex" }}>
               <span>{user.email}</span>
               <button
-                className="editAccount"
+                className="editEmail"
                 onClick={() => {
                   setIsClicked(!isClicked);
                   setError(!error);
                 }}
+                title="Change Email"
+                style={{ marginLeft: '4px' }}
               >
                 <FontAwesomeIcon icon={faEdit} />
               </button>
@@ -127,13 +155,16 @@ function Setting() {
               <form onSubmit={handleUpdateEmail}>
                 <input
                   type="email"
+                  className="newEmailInput"
                   placeholder="Enter new email"
                   ref={emailRef}
                 />
                 <button type="submit">Update Email</button>
               </form>
             )}
-            <span>Email Verified: {user.emailVerified ? "Yes" : "No"}</span>
+            <span>Email Verified: 
+              <span style={{ color: user.emailVerified ? "green" : "red" }}>
+                {user.emailVerified ? " Yes" : " No"}</span></span>
           </div>
         </div>
         <div className="changePassword">
@@ -143,6 +174,7 @@ function Setting() {
               setPasswordIsClicked(!passwordIsClicked);
               setError(!error);
             }}
+            title="Change Password"
           >
             Change Password
           </button>
@@ -152,6 +184,7 @@ function Setting() {
             <form onSubmit={handleUpdatePassword}>
               <input
                 type="password"
+                className="newPasswordInput"
                 placeholder="Enter new password"
                 ref={passwordRef}
               />
