@@ -56,6 +56,44 @@ form {
   }
 }
 
+.emojiButton {
+  font-size: 32px;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  padding-right: 1%;
+  margin-right: 0px;
+  margin-bottom: 4px;
+}
+
+.emojiPopup {
+  position: absolute;
+  top: calc(70% + 0px);
+  left: 90%;
+  top: 62%;
+  transform: translateX(-50%);
+  background-color: #dde0dc;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 1);
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 195px;
+  max-width: 300px;
+  max-height: 180px;
+  overflow: auto;
+}
+
+.emojiItem {
+  cursor: pointer;
+  font-size: 24px;
+  margin: 5px;
+}
+
+.emojiItem:hover {
+  background-color: #838387;
+}
+
 .sign-in {
   background-color: #dde0dc;
   border: none;
@@ -425,6 +463,7 @@ form {
           width: 80%;
           border-radius: 10px;
           color: black;
+          margin-left: 8px; /* Tried to even the spacing on both sides of Input Box */
         }
       }
 
