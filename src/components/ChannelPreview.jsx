@@ -3,7 +3,6 @@ import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 function ChannelPreview(props) {
-
   //delete channel
   const handleDelete = async (parentCollection, channelId) => {
     try {
@@ -18,11 +17,8 @@ function ChannelPreview(props) {
   return (
     <div className={`chatPreview ${props.isSelected ? "selected" : ""}`}>
       <div className="userChat">
-        <img src="/avatar.png" alt="avatar" />
-        <div
-          className="name-chat"
-          onClick={() => props.onClick(props.id)}
-        >
+        <img src="/cup.jpg" alt="avatar" />
+        <div className="name-chat" onClick={() => props.onClick(props.id)}>
           <h3>{props.name}</h3>
         </div>
         <span>

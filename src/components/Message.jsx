@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { db } from "../firebase.js";
-import { onSnapshot, collection, deleteDoc, doc } from "firebase/firestore";
+import { onSnapshot, collection, doc, deleteDoc } from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useAuth } from "../contexts/AuthContext.jsx";
 
-function Message({ createdAt, text, timestamp, selectedChannel, messageId }) {
+function Message({ createdAt, text, selectedChannel, messageId }) {
   const { user } = useAuth();
 
   //delete message
@@ -32,23 +32,34 @@ function Message({ createdAt, text, timestamp, selectedChannel, messageId }) {
     }
   }
 
+  console.log(createdAt.toDate());
+  // console.log(props.createdAt.getHours());
+  // console.log(props.createdAt.getMinutes());
+
   return (
-    <div className="chatMessage sender">
-      <div className="userInfo">
-        <img src="/friend.png" />
-        <span>10:50pm</span>
-      </div>
-      <div className="message">
-        <p>{text}</p>
-        <div className="messageOption">
-          <button>edit</button>
-          <button
-            onClick={() => {
-              handleDelete("channels", selectedChannel, "messages", messageId);
-            }}
-          >
-            delete
-          </button>
+    <div className="messageBlock">
+      <div className="chatMessage sender">
+        <div className="userInfo">
+          <img src="/friend.png" />
+          <span>10:50pm</span>
+        </div>
+        <div className="message">
+          <p>{text}</p>
+          <div className="messageOption">
+            <button>edit</button>
+            <button
+              onClick={() => {
+                handleDelete(
+                  "channels",
+                  selectedChannel,
+                  "messages",
+                  messageId
+                );
+              }}
+            >
+              delete
+            </button>
+          </div>
         </div>
       </div>
     </div>

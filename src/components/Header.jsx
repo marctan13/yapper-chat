@@ -41,7 +41,7 @@ function Header({ selectedChannel, selectedChannelName }) {
   return (
     <div className="header">
       <div className="chatAvatar">
-        <img className="chatLogo" src="/cup.jpg" />
+        {selectedChannelName && <img className="chatLogo" src="/cup.jpg" />}
       </div>
       <div className="teamInfo">
         <h1
