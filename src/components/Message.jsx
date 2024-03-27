@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
 import { db } from "../firebase.js";
-import { onSnapshot, collection, doc, deleteDoc } from "firebase/firestore";
-import { useCollectionData } from "react-firebase-hooks/firestore";
+import { doc, deleteDoc } from "firebase/firestore";
 import { useAuth } from "../contexts/AuthContext.jsx";
 
 function Message({ createdAt, text, selectedChannel, messageId }) {
@@ -31,10 +29,6 @@ function Message({ createdAt, text, selectedChannel, messageId }) {
       console.error("Error deleting subdocument:", error);
     }
   }
-
-  console.log(createdAt.toDate());
-  // console.log(props.createdAt.getHours());
-  // console.log(props.createdAt.getMinutes());
 
   return (
     <div className="messageBlock">
