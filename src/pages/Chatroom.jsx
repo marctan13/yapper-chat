@@ -4,9 +4,7 @@ import Chats from "../components/Chats";
 
 function Chatroom() {
   const [selectedChannel, setSelectedChannel] = useState("null");
-  const [selectedChannelName, setSelectedChannelName] = useState(
-    "Create / Select a channel"
-  );
+  const [selectedChannelName, setSelectedChannelName] = useState("");
   return (
     <div className="chatroom">
       <div className="container">

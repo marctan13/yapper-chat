@@ -38,7 +38,7 @@ function CreateNewChat({ path }) {
     // await setDoc(docRef, {name: chat.current.value})
     const newChat = await addDoc(collection(db, "channels"), {
       name: chatName,
-      members: [user.user.uid, ...selectedUsers]
+      members: [...selectedUsers]
     });
     setChatName("");
     setSelectedUsers([]);
