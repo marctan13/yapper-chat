@@ -8,7 +8,7 @@ function Chats({ selectedChannel, selectedChannelName }) {
   return (
     <div className="rightSection">
       <Header selectedChannel={selectedChannel} selectedChannelName={selectedChannelName}/>
-      <ChatMessage selectedChannel={selectedChannel} />
+      <ChatMessage selectedChannel={selectedChannel} selectedChannelName={selectedChannelName} />
     </div>
   );
 }

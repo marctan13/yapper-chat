@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import Input from "./Input";
 import Message from "./Message";
-import { collection, getDocs, onSnapshot } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase.js";
-import { useCollectionData } from "react-firebase-hooks/firestore";
 
-function ChatMessage({ selectedChannel }) {
+function ChatMessage({ selectedChannel, selectedChannelName }) {
   const [messages, setMessages] = useState([]);
   const [formValue, setFormValue] = useState("");
 
@@ -26,20 +25,29 @@ function ChatMessage({ selectedChannel }) {
         console.error("Error fetching messages:", error);
       }
     };
-
     fetchMessages();
-  }, [selectedChannel, formValue]);
+  }, [selectedChannel, formValue, messages]);
   return (
     <>
       <div className="chatMessages">
-        {messages.map((message) => (
-          <Message key={message.id} {...message} />
-        ))}
-        <Input
-          selectedChannel={selectedChannel}
-          formValue={formValue}
-          setFormValue={setFormValue}
-        />
+        <div className="messageBlock">
+          {messages.map((message) => (
+            <Message
+              key={message.id}
+              {...message}
+              messageId={message.id}
+              selectedChannel={selectedChannel}
+            />
+          ))}
+        </div>
+        {selectedChannelName &&
+          <Input
+            selectedChannel={selectedChannel}
+            formValue={formValue}
+            setFormValue={setFormValue}
+          />
+
+        }
       </div>
     </>
   );
