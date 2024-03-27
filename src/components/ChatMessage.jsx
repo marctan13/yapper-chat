@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import Input from "./Input";
 import Message from "./Message";
-import { collection, getDocs, onSnapshot } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase.js";
-import { useCollectionData } from "react-firebase-hooks/firestore";
 
-function ChatMessage({ selectedChannel }) {
+function ChatMessage({ selectedChannel, selectedChannelName }) {
   const [messages, setMessages] = useState([]);
   const [formValue, setFormValue] = useState("");
 
@@ -33,13 +32,16 @@ function ChatMessage({ selectedChannel }) {
     <>
       <div className="chatMessages">
         {messages.map((message) => (
-          <Message key={message.id} {...message} />
+          <Message key={message.id} {...message} messageId={message.id} selectedChannel={selectedChannel} />
         ))}
+        {selectedChannelName &&
         <Input
           selectedChannel={selectedChannel}
           formValue={formValue}
           setFormValue={setFormValue}
         />
+        
+        }
       </div>
     </>
   );

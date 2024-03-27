@@ -46,7 +46,6 @@ function Sidebar({ selectedChannel, setSelectedChannel, setSelectedChannelName }
     }
   };
   console.log(selectedChannel);
-  console.log(channels);
 
   return (
     <div className="sidebar">
