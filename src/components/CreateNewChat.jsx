@@ -1,19 +1,18 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../firebase";
-// import { useCollectionData } from 'react-firebase-hooks/firestore';
+
+//work on layout of users on css
 
 function CreateNewChat({ path }) {
   const navigate = useNavigate();
-  const user = useAuth();
   const { users } = useAuth();
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [selected, setSelected] = useState('');
   const [chatName, setChatName] = useState("");
-  // const chat = useRef();
-  // const query = collection(db, "channels/")
-  // const [selected, setSelected] = useState(false);
+  const [img, setImg] = useState(null);
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -28,23 +27,33 @@ function CreateNewChat({ path }) {
       setSelectedUsers([...selectedUsers, userId]);
     }
 
-    // setSelected((prevSelected) => !prevSelected);
+    setSelected((prevSelected) => !prevSelected);
+  };
+
+  const handleImg = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImg(reader.result); 
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   async function handleSubmit(e) {
     e.preventDefault();
 
-    // const docRef = doc(db, path, chat.current.value)
-    // await setDoc(docRef, {name: chat.current.value})
-    const newChat = await addDoc(collection(db, "channels"), {
+    await addDoc(collection(db, "channels"), {
       name: chatName,
-      members: [...selectedUsers]
+      members: [...selectedUsers],
+      image: img
     });
     setChatName("");
     setSelectedUsers([]);
+    setImg(null);
     navigate("/");
   }
-  console.log(selectedUsers);
 
   return (
     <div className="rightSection">
@@ -53,31 +62,42 @@ function CreateNewChat({ path }) {
       </div>
       <div className="chatWrapper">
         <p onClick={() => navigate("/")}>&lt; Back</p>
-        <form className="createChatDetails" onSubmit={handleSubmit}>
-          <h2>Chat Name </h2>
-          <input
-            className="chatNameBox"
-            placeholder="Type in Chat Name"
-            type="text"
-            onChange={handleChange}
-            value={chatName}
-          />
-          <h2 className="addMembers">Add Members </h2>
-          {/* <UserList setSelectedUsers={setSelectedUsers}/> */}(
-          {users.map((user) => {
-            return (
-              <div
-                className="userItem-wrapper"
-                key={user.id}
-                onClick={() => handleSelect(user.id)}
-              >
-                <img src={user.photoURL || "avatar.png"} size={32} />
-                <p>{user.displayName}</p>
-              </div>
-              // {selected ? (<img src='selected.png' />) : (<div className="emptySelected"></div>) }
-            );
-          })}
-          )<button className="createChatBtn">Create New Chat</button>
+          <form className="createChatDetails" onSubmit={handleSubmit}>
+            <div className="chatName">
+              <h2>Channel Name</h2>
+              <input
+                className="chatNameBox"
+                placeholder="Type in Chat Name"
+                type="text"
+                onChange={handleChange}
+                value={chatName}
+              />
+            </div>
+            <div className="setChatImg">
+              <h2>Add Channel Image</h2>
+              <input
+                type="file"
+                id="file"
+                onChange={handleImg}
+              />
+            </div>
+            <div className="addMembers">
+              <h2 className="addMembers">Add Members</h2>
+              {users.map((user) => {
+                return (
+                  <div
+                    className={`userItem-wrapper ${selectedUsers.includes(user.id) ? "selected" : ""}`}
+                    key={user.id}
+                    onClick={() => handleSelect(user.id)}
+                  >
+                    <img src={user.photoURL || "avatar.png"} alt="" size={32} />
+                    <p>{user.displayName}</p>
+                    {selectedUsers.includes(user.id) && <img src='selected.png' alt="Selected" className="selectedImage" />}
+                  </div>
+                  );
+              })}
+          </div>
+          <button className="createChatBtn">Create New Chat</button>
         </form>
       </div>
     </div>

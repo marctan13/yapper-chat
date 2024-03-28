@@ -13,7 +13,7 @@ function Input({ selectedChannel, formValue, setFormValue }) {
   const sendMessage = async (e) => {
     e.preventDefault();
     try {
-      const res = await addDoc(
+      await addDoc(
         collection(db, "channels", selectedChannel, "messages"),
         {
           sender_id: user.uid,

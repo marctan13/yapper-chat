@@ -6,7 +6,7 @@ import SignOut from "./SignOut.jsx";
 import Navbar from "./Navbar.jsx";
 import ChannelPreview from "./ChannelPreview.jsx";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
 
 function Sidebar({ selectedChannel, setSelectedChannel, setSelectedChannelName }) {
@@ -26,7 +26,7 @@ function Sidebar({ selectedChannel, setSelectedChannel, setSelectedChannelName }
       const querySnapshot = await getDocs(channelsRef);
       const channelsData = [];
       querySnapshot.forEach((doc) => {
-        channelsData.push({ id: doc.id, name: doc.data().name });
+        channelsData.push({ id: doc.id, name: doc.data().name, createdAt: doc.data().createdAt });
       });
       setChannels(channelsData);
     } catch (error) {
@@ -34,7 +34,7 @@ function Sidebar({ selectedChannel, setSelectedChannel, setSelectedChannelName }
     }
   }
 
-  const handleClick = (channelName) => {
+  const handleClick = async (channelName) => {
     if (channels.length > 0) {
       const clickedChannel = channels.find(
         (channel) => channel.name === channelName
@@ -42,10 +42,18 @@ function Sidebar({ selectedChannel, setSelectedChannel, setSelectedChannelName }
       if (clickedChannel) {
         setSelectedChannel(clickedChannel.id);
         setSelectedChannelName(clickedChannel.name);
+        
+        try {
+          const channelRef = doc(db, "channels", clickedChannel.id);
+          await updateDoc(channelRef, {
+            lastAccessed: new Date()  // Update lastAccessed timestamp
+          });
+        } catch (error) {
+          console.error("Error updating last accessed timestamp:", error);
+        }
       }
     }
-  };
-  console.log(selectedChannel);
+  };  
 
   return (
     <div className="sidebar">
@@ -53,16 +61,20 @@ function Sidebar({ selectedChannel, setSelectedChannel, setSelectedChannelName }
       <div className="previews">
         {loading && <div>Loading...</div>}
         {docs &&
-          docs.map((doc) => (
-            <ChannelPreview
-              onClick={() => handleClick(doc.name)}
-              isSelected={selectedChannel === doc.id}
-              key={doc.id}
-              name={doc.name}
-              id={doc.id}
-              selectedChannel={selectedChannel}
-            />
-          ))}
+          docs
+            .slice()
+            .sort((a, b) => (b.lastAccessed || 0) - (a.lastAccessed || 0)) // Sort channels based on lastAccessed timestamp
+            .map((doc) => (
+              <ChannelPreview
+                onClick={() => handleClick(doc.name)}
+                isSelected={selectedChannel === doc.id}
+                key={doc.id}
+                name={doc.name}
+                id={doc.id}
+                selectedChannel={selectedChannel}
+                image={doc.image}
+              />
+            ))}
       </div>
       <div className="footer">
         <div className="user">

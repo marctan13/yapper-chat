@@ -19,7 +19,7 @@ function SideNavbar() {
       </div>
       <div className="newMsgContainer">
         <button className="newMsg" onClick={() => navigate("/NewChat")}>
-          + Create New Message
+          + Create New Channel
         </button>
       </div>
     </div>

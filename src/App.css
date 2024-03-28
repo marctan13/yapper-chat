@@ -253,12 +253,24 @@ form {
       cursor: pointer;
       padding: 10px 10px 30px 10px;
 
+      /* ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 5px;;
+      }
+
+      ::-webkit-scrollbar-hover {
+        background: #555;
+      }  */
+
       &:hover {
-        /* background-color: #00681f; */
         background-color: #39413c;
         color: white;
       }
-
+      
       .userChat {
         display: flex;
         flex-direction: row;
@@ -301,7 +313,6 @@ form {
     justify-content: flex-start;
     flex-direction: column;
     height: 75%;
-    border: 1px solid green;
     overflow: scroll;
 
     .newChat {
@@ -319,12 +330,11 @@ form {
       padding: 3em;
       gap: 15px;
     }
+
   }
   /* User Info in Sidebar */
   .footer {
-    position: relative;
     display: flex;
-    /* flex-direction: row; */
     position: static;
     background-color: #979494;
     align-items: center;
@@ -332,10 +342,8 @@ form {
 
     .user {
       display: flex;
-      /* flex-direction: row; */
       align-items: center;
       justify-content: space-between;
-      /* padding: 25px; */
       height: 30%;
       cursor: pointer;
       /* margin-bottom: 50em; */
@@ -344,7 +352,6 @@ form {
         height: 4em;
         width: 4em;
         margin: 2em 7em 0 1em;
-        /* margin-right: 7em; */
         border-radius: 50%;
         object-fit: cover;
       }
@@ -371,7 +378,7 @@ form {
   flex: 2;
   overflow-y: scroll;
 
-  /*scroll bar for chatroom components
+  /*scroll bar for chatroom components*/
       /* ::-webkit-scrollbar-track {
         background: #f1f1f1;
       }
@@ -383,7 +390,7 @@ form {
 
       ::-webkit-scrollbar-hover {
         background: #555;
-      } */
+      }  */
 
   .chatMessages {
     display: flex;
