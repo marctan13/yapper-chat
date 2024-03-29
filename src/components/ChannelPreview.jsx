@@ -22,7 +22,6 @@ function ChannelPreview(props) {
 
   //work on going back to "select channel" page after deleting a channel
   //work on highlighting channel when it's selected
-  //work on fixing trash icon layout on css
 
   return (
     <div className={`chatPreview ${props.isSelected ? "selected" : ""}`}>
@@ -32,7 +31,7 @@ function ChannelPreview(props) {
         <div className="name-chat" onClick={() => props.onClick(props.id)}>
           <h3>{props.name}</h3>
         </div>
-        <span>
+        <span className="deleteContainer">
           <Trash
             onClick={() => handleDelete("channels", props.selectedChannel)}
             style={{ height: "100%" }}

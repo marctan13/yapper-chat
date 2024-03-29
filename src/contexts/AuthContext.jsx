@@ -39,7 +39,14 @@ export function AuthProvider({ children }) {
   };
   //   Google Sign in
   const signInWithGoogle = async () => {
-    signInWithPopup(auth, googleProvider);
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const googleUser = result.user;
+      return googleUser; // Return the user's information after successful sign-in
+    } catch (error) {
+      console.error("Error signing in with Google:", error);
+      throw error;
+    }
   };
   // Sign Out
   const logOut = () => {

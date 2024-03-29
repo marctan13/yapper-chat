@@ -277,7 +277,10 @@ form {
         gap: 15px;
         height: 6vh;
 
-        span {
+        .deleteContainer {
+          position: absolute;
+          left: 22rem; 
+          padding-top: 0.5rem;
           &:hover {
             background-color: #b5b4b4;
           }
@@ -415,6 +418,7 @@ form {
 
           span {
             color: gray;
+            font-size: 0.7rem;
           }
 
           img {
@@ -695,54 +699,81 @@ form {
 
     .createChatDetails {
       display: flex;
-      justify-content: flex-start;
       flex-direction: column;
-      margin-top: 1em;
+      align-items: flex-start;
+      padding-left: 2rem;
 
       h2 {
         color: white;
         font-size: 2em;
-        display: flex;
-        flex-direction: row;
-        margin-right: 5em;
+        margin-right: 5em; 
       }
+    
+      .chatName {
+        display: flex;
+        flex-direction: column;
+        margin: 0.5rem;
 
-      .chatNameBox {
+        .chatNameBox {
         width: 325px;
         border-radius: 5px;
         height: 20px;
+        margin-top: 10px;
+        }
       }
+      
+      .setChatImg {
+        display: flex;
+        flex-direction: column;
+        margin: 0.5rem;
 
+        input {
+          background-color: #4f4d4d;
+          color: white;
+          margin: 10px 0 0 0;
+          padding: 10px 0 0 0;
+        }
+      }
+    
       .addMembers {
-        margin-left: 1.25em;
+        display: flex;
+        flex-direction: column;
+        margin: 0.5rem;
       }
-
+    
       .userItem-wrapper {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         cursor: pointer;
         padding: 10px;
-        padding-right: 13rem;
+        padding-right: 10rem;
 
+        .userItem-wrapper.selected {
+          background-color: #f0f0f0;
+        }
+    
+        .selectedImage {
+          width: 20px;
+        }
+    
         .userInfo {
           display: flex;
           align-items: center;
           gap: 10px;
         }
-
+    
         img {
           width: 50px;
           border-radius: 50%;
         }
-
+    
         p {
-          display: flex;
-          flex-direction: row;
-          padding-left: 1rem;
+          margin-right: 20px;
         }
       }
     }
-
+    
     .createChatBtn {
       display: block;
       margin-right: 15em;

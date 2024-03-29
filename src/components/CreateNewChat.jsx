@@ -71,6 +71,7 @@ function CreateNewChat({ path }) {
                 type="text"
                 onChange={handleChange}
                 value={chatName}
+                required
               />
             </div>
             <div className="setChatImg">
@@ -79,10 +80,12 @@ function CreateNewChat({ path }) {
                 type="file"
                 id="file"
                 onChange={handleImg}
+                className="imageFile"
+                src="image.png"
               />
             </div>
             <div className="addMembers">
-              <h2 className="addMembers">Add Members</h2>
+              <h2>Add Members</h2>
               {users.map((user) => {
                 return (
                   <div
