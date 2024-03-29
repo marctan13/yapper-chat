@@ -20,7 +20,6 @@ function ChatMessage({ selectedChannel, selectedChannelName }) {
           id: doc.id,
           ...doc.data(),
         }));
-        // Sort messages by createdAt timestamp
         allMessages.sort(
           (a, b) => a.createdAt.toMillis() - b.createdAt.toMillis()
         );
@@ -44,9 +43,9 @@ function ChatMessage({ selectedChannel, selectedChannelName }) {
         setMessages(updatedMessages);
       }
     );
-
     return () => unsubscribe();
   }, [selectedChannel]);
+  
   return (
     <>
       <div className="chatMessages">

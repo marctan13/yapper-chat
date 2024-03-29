@@ -253,19 +253,34 @@ form {
       cursor: pointer;
       padding: 10px 10px 30px 10px;
 
+      /* ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 5px;;
+      }
+
+      ::-webkit-scrollbar-hover {
+        background: #555;
+      }  */
+
       &:hover {
-        /* background-color: #00681f; */
         background-color: #39413c;
         color: white;
       }
-
+      
       .userChat {
         display: flex;
         flex-direction: row;
         gap: 15px;
         height: 6vh;
 
-        span {
+        .deleteContainer {
+          position: absolute;
+          left: 22rem; 
+          padding-top: 0.5rem;
           &:hover {
             background-color: #b5b4b4;
           }
@@ -301,7 +316,6 @@ form {
     justify-content: flex-start;
     flex-direction: column;
     height: 75%;
-    border: 1px solid green;
     overflow: scroll;
 
     .newChat {
@@ -319,12 +333,11 @@ form {
       padding: 3em;
       gap: 15px;
     }
+
   }
   /* User Info in Sidebar */
   .footer {
-    position: relative;
     display: flex;
-    /* flex-direction: row; */
     position: static;
     background-color: #979494;
     align-items: center;
@@ -332,10 +345,8 @@ form {
 
     .user {
       display: flex;
-      /* flex-direction: row; */
       align-items: center;
       justify-content: space-between;
-      /* padding: 25px; */
       height: 30%;
       cursor: pointer;
       /* margin-bottom: 50em; */
@@ -344,7 +355,6 @@ form {
         height: 4em;
         width: 4em;
         margin: 2em 7em 0 1em;
-        /* margin-right: 7em; */
         border-radius: 50%;
         object-fit: cover;
       }
@@ -371,7 +381,7 @@ form {
   flex: 2;
   overflow-y: scroll;
 
-  /*scroll bar for chatroom components
+  /*scroll bar for chatroom components*/
       /* ::-webkit-scrollbar-track {
         background: #f1f1f1;
       }
@@ -383,7 +393,7 @@ form {
 
       ::-webkit-scrollbar-hover {
         background: #555;
-      } */
+      }  */
 
   .chatMessages {
     display: flex;
@@ -689,54 +699,81 @@ form {
 
     .createChatDetails {
       display: flex;
-      justify-content: flex-start;
       flex-direction: column;
-      margin-top: 1em;
+      align-items: flex-start;
+      padding-left: 2rem;
 
       h2 {
         color: white;
         font-size: 2em;
-        display: flex;
-        flex-direction: row;
-        margin-right: 5em;
+        margin-right: 5em; 
       }
+    
+      .chatName {
+        display: flex;
+        flex-direction: column;
+        margin: 0.5rem;
 
-      .chatNameBox {
+        .chatNameBox {
         width: 325px;
         border-radius: 5px;
         height: 20px;
+        margin-top: 10px;
+        }
       }
+      
+      .setChatImg {
+        display: flex;
+        flex-direction: column;
+        margin: 0.5rem;
 
+        input {
+          background-color: #4f4d4d;
+          color: white;
+          margin: 10px 0 0 0;
+          padding: 10px 0 0 0;
+        }
+      }
+    
       .addMembers {
-        margin-left: 1.25em;
+        display: flex;
+        flex-direction: column;
+        margin: 0.5rem;
       }
-
+    
       .userItem-wrapper {
         display: flex;
         align-items: center;
+        justify-content: space-between;
         cursor: pointer;
         padding: 10px;
-        padding-right: 13rem;
+        padding-right: 10rem;
 
+        .userItem-wrapper.selected {
+          background-color: #f0f0f0;
+        }
+    
+        .selectedImage {
+          width: 20px;
+        }
+    
         .userInfo {
           display: flex;
           align-items: center;
           gap: 10px;
         }
-
+    
         img {
           width: 50px;
           border-radius: 50%;
         }
-
+    
         p {
-          display: flex;
-          flex-direction: row;
-          padding-left: 1rem;
+          margin-right: 20px;
         }
       }
     }
-
+    
     .createChatBtn {
       display: block;
       margin-right: 15em;

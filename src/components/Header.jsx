@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
-import ChatMenuItem from "./ChatMenuItem";
+import { useState, useEffect } from "react";
 import { db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
+import ChatMenuItem from "./ChatMenuItem";
 
 function Header({ selectedChannel, selectedChannelName }) {
   const [open, setOpen] = useState(false);
   const [members, setMembers] = useState([]);
+  const [channelImage, setChannelImage] = useState(null);
 
   useEffect(() => {
-    const fetchMembers = async () => {
+    const fetchChannelData = async () => {
       try {
         if (!selectedChannel) return; // Exit if no channel is selected
 
@@ -22,7 +23,7 @@ function Header({ selectedChannel, selectedChannelName }) {
         // Fetch user profiles for each member ID
         const memberProfiles = await Promise.all(
           memberIds.map(async (memberId) => {
-            const userDocRef = doc(db, "users", memberId); // Assuming users collection and user documents are stored with IDs
+            const userDocRef = doc(db, "users", memberId);
             const userDocSnap = await getDoc(userDocRef);
             return userDocSnap.data();
           })
@@ -30,18 +31,25 @@ function Header({ selectedChannel, selectedChannelName }) {
 
         // Set the member profiles in state
         setMembers(memberProfiles);
+
+        // Set the channel image (convert string to URL object if necessary)
+        const imageUrl = channelDocSnap.data().image;
+        setChannelImage(imageUrl);
       } catch (error) {
-        console.error("Error fetching members:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
-    fetchMembers();
+    fetchChannelData();
   }, [selectedChannel]);
 
   return (
     <div className="header">
       <div className="chatAvatar">
-        {selectedChannelName && <img className="chatLogo" src="/cup.jpg" />}
+        {channelImage && <img className="chatLogo" src={channelImage} alt="Channel Image" />}
+        {!channelImage && selectedChannelName && (
+          <img className="chatLogo" src="/cup.jpg" alt="Placeholder Image" />
+        )}
       </div>
       <div className="teamInfo">
         <h1

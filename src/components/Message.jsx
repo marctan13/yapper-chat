@@ -46,8 +46,10 @@ function Message({
       );
 
       // Delete the subdocument
-      await deleteDoc(docRef);
-
+      if(confirm("Do you want to delete this message?")) {
+        await deleteDoc(docRef);
+      }
+      
       console.log("Subdocument successfully deleted.");
     } catch (error) {
       console.error("Error deleting subdocument:", error);
@@ -76,5 +78,4 @@ function Message({
     </div>
   );
 }
-
 export default Message;
