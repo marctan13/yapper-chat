@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Input from "./Input";
 import Message from "./Message";
-import { collection, getDocs, onSnapshot } from "firebase/firestore";
+import { collection, getDocs, onSnapshot, query } from "firebase/firestore";
 import { db } from "../firebase.js";
-import { useCollectionData } from "react-firebase-hooks/firestore";
 
-function ChatMessage({ selectedChannel }) {
+function ChatMessage({ selectedChannel, selectedChannelName }) {
   const [messages, setMessages] = useState([]);
   const [formValue, setFormValue] = useState("");
 
@@ -21,25 +20,53 @@ function ChatMessage({ selectedChannel }) {
           id: doc.id,
           ...doc.data(),
         }));
+        // Sort messages by createdAt timestamp
+        allMessages.sort(
+          (a, b) => a.createdAt.toMillis() - b.createdAt.toMillis()
+        );
         setMessages(allMessages);
       } catch (error) {
         console.error("Error fetching messages:", error);
       }
     };
 
-    fetchMessages();
-  }, [selectedChannel, formValue]);
+    const unsubscribe = onSnapshot(
+      query(collection(db, "channels", selectedChannel, "messages")),
+      (snapshot) => {
+        const updatedMessages = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        // Sort messages by createdAt timestamp
+        updatedMessages.sort(
+          (a, b) => a.createdAt.toMillis() - b.createdAt.toMillis()
+        );
+        setMessages(updatedMessages);
+      }
+    );
+
+    return () => unsubscribe();
+  }, [selectedChannel]);
   return (
     <>
       <div className="chatMessages">
-        {messages.map((message) => (
-          <Message key={message.id} {...message} />
-        ))}
-        <Input
-          selectedChannel={selectedChannel}
-          formValue={formValue}
-          setFormValue={setFormValue}
-        />
+        <div className="messageBlock">
+          {messages.map((message) => (
+            <Message
+              key={message.id}
+              {...message}
+              messageId={message.id}
+              selectedChannel={selectedChannel}
+            />
+          ))}
+          {selectedChannelName && (
+            <Input
+              selectedChannel={selectedChannel}
+              formValue={formValue}
+              setFormValue={setFormValue}
+            />
+          )}
+        </div>
       </div>
     </>
   );

@@ -390,10 +390,11 @@ form {
     flex-direction: column;
     max-height: 82%;
     background-color: #282d35;
+    overflow-y: scroll;
 
     .messageBlock {
-      height: 55vh;
-      overflow-y: visible;
+      max-height: 55%;
+      /* overflow-y: visible; */
 
       .chatMessage {
         display: flex;
@@ -407,6 +408,7 @@ form {
 
           span {
             color: gray;
+            font-size: 0.7rem;
           }
 
           img {
@@ -428,6 +430,20 @@ form {
             overflow: visible;
             color: white;
             padding: 12px;
+          }
+
+          .messageOption {
+            margin-left: 5em;
+
+            button {
+              background-color: transparent;
+              border-width: 0;
+              margin: 5px;
+
+              &:hover {
+                cursor: pointer;
+              }
+            }
           }
         }
 

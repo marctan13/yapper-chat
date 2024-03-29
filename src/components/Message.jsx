@@ -1,55 +1,80 @@
-import { useEffect, useState } from "react";
 import { db } from "../firebase.js";
-import { onSnapshot, collection } from "firebase/firestore";
-import { useCollectionData } from "react-firebase-hooks/firestore";
+import { doc, deleteDoc } from "firebase/firestore";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import { CloudLightning } from "react-bootstrap-icons";
 
-function Message(props, { timestamp }) {
+function Message({
+  sender_id,
+  photoURL,
+  createdAt,
+  text,
+  selectedChannel,
+  messageId,
+  displayName
+}) {
   const { user } = useAuth();
 
-  // function formatTimestamp(timestamp) {
-  //   const date = timestamp.toDate(); // Convert Firestore timestamp to JavaScript Date object
-  //   return date.toLocaleString(); // Format Date object into a string
-  // }
-  // const formattedTimestamp = formatTimestamp(timestamp);
+  // Function to convert timestamp to string
+  const formatTimestamp = (timestamp) => {
+    const date = timestamp.toDate(); // Convert Firebase timestamp to Date object
+    const options = {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+      hour12: true, // Set to true to display time in 12-hour format
+    };
+    return date.toLocaleString(undefined, { hour12: true }); // Convert Date object to local string
+  };
 
-  // function formatTimestamp(timestamp) {
-  //   const date = timestamp.toDate(); // Convert Firestore timestamp to JavaScript Date object
+  //delete message
+  async function handleDelete(
+    parentCollection,
+    parentDocId,
+    subcollection,
+    subDocId
+  ) {
+    try {
+      const docRef = doc(
+        db,
+        parentCollection,
+        parentDocId,
+        subcollection,
+        subDocId
+      );
 
-  //   // Extract date components
-  //   const month = String(date.getMonth() + 1).padStart(2, "0"); // Adding 1 because getMonth() returns zero-based month
-  //   const day = String(date.getDate()).padStart(2, "0");
-  //   const year = String(date.getFullYear()).slice(2); // Get last two digits of the year
+      // Delete the subdocument
+      await deleteDoc(docRef);
 
-  //   // Extract time components
-  //   const hours = String(date.getHours()).padStart(2, "0");
-  //   const minutes = String(date.getMinutes()).padStart(2, "0");
+      console.log("Subdocument successfully deleted.");
+    } catch (error) {
+      console.error("Error deleting subdocument:", error);
+    }
+  }
 
-  //   // Combine date and time components into desired format
-  //   const formattedTimestamp = `${month}/${day}/${year} ${hours}:${minutes}`;
-
-  //   return formattedTimestamp;
-  // }
-
-  // const formattedTimestamp = formatTimestamp(timestamp);
-
-    // console.log(props.createdAt.toDate());
-    // console.log(props.createdAt.getHours());
-    // console.log(props.createdAt.getMinutes());
-
-    return(
-      <div className="messageBlock">
-        <div className="chatMessage sender">
-          <div className="userInfo">
-            <img src="/friend.png" />
-            <span>10:50pm</span>
-          </div>
-          <div className="message">
-            <p>{props.text}</p>
-          </div>
+  return (
+    <div className={`chatMessage ${user.uid === sender_id ? "sender" : ""}`}>
+      <div className="userInfo">
+        <img src={photoURL} alt={displayName} />
+        <span>{formatTimestamp(createdAt)}</span>
+      </div>
+      <div className="message">
+        <p>{text}</p>
+        <div className="messageOption">
+          <button>edit</button>
+          <button
+            onClick={() => {
+              handleDelete("channels", selectedChannel, "messages", messageId);
+            }}
+          >
+            delete
+          </button>
         </div>
       </div>
-    );
+    </div>
+  );
 }
 
 export default Message;

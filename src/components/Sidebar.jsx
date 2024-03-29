@@ -9,7 +9,11 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 
-function Sidebar({ selectedChannel, setSelectedChannel, setSelectedChannelName }) {
+function Sidebar({
+  selectedChannel,
+  setSelectedChannel,
+  setSelectedChannelName,
+}) {
   const navigate = useNavigate();
 
   const query = collection(db, "channels");
@@ -45,8 +49,6 @@ function Sidebar({ selectedChannel, setSelectedChannel, setSelectedChannelName }
       }
     }
   };
-  console.log(selectedChannel);
-  console.log(channels);
 
   return (
     <div className="sidebar">

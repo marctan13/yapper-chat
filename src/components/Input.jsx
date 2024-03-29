@@ -18,8 +18,9 @@ function Input({ selectedChannel, formValue, setFormValue }) {
         {
           sender_id: user.uid,
           text: formValue,
-          photoURL: user.photoURL, //change to correct user photo
+          photoURL: user.photoURL ? user.photoURL : "/avatar.png", //change to correct user photo
           createdAt: serverTimestamp(),
+          sender_name: user.displayName,
         }
       );
       setFormValue("");
@@ -74,7 +75,9 @@ function Input({ selectedChannel, formValue, setFormValue }) {
         />
         <button className="send">Send</button>
         <div className="emojiButton" onClick={() => setShowEmojis(!showEmojis)}>
-          <span role="img" aria-label="Emoji Menu" title="Open Emoji Menu">😂</span>
+          <span role="img" aria-label="Emoji Menu" title="Open Emoji Menu">
+            😂
+          </span>
         </div>
         {showEmojis && <EmojiSelection handleEmojiClick={handleEmojiClick} />}
       </form>
