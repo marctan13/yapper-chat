@@ -12,7 +12,7 @@ function ChannelPreview(props) {
         const docRef = doc(db, parentCollection, channelId);
         await deleteDoc(docRef);
         console.log("successful");
-        navigate("/");
+        navigate("/settings");
       }
     } catch (error) {
       console.error(error);
