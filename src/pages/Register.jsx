@@ -40,7 +40,7 @@ function Register() {
       });
       await updateDoc(res, {
         uid: res.id,
-      }) //adds user to database
+      }); //adds user to database
       sendVerificationEmail(auth.currentUser); //sends verification email to user upon registration
       setMessage("Account Register successful!");
       navigate("/");

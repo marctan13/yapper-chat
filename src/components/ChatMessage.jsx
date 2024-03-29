@@ -45,11 +45,11 @@ function ChatMessage({ selectedChannel, selectedChannelName }) {
     );
     return () => unsubscribe();
   }, [selectedChannel]);
-
+  
   return (
     <>
       <div className="chatMessages">
-      <div className="messageBlock">
+        <div className="messageBlock">
           {messages.map((message) => (
             <Message
               key={message.id}

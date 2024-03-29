@@ -14,6 +14,7 @@ function Message({
 }) {
   const { user } = useAuth();
 
+  // Function to convert timestamp to string
   const formatTimestamp = (timestamp) => {
     const date = timestamp.toDate(); // Convert Firebase timestamp to Date object
     const options = {
