@@ -48,7 +48,7 @@ function ChatMessage({ selectedChannel, selectedChannelName }) {
   
   return (
     <>
-      <div className="chatMessages">
+      <div className={`chatMessages ${selectedChannel ? "scroll" : ""}`}>
         <div className="messageBlock">
           {messages.map((message) => (
             <Message
@@ -58,6 +58,7 @@ function ChatMessage({ selectedChannel, selectedChannelName }) {
               selectedChannel={selectedChannel}
             />
           ))}
+            </div>
           {selectedChannelName && (
             <Input
               selectedChannel={selectedChannel}
@@ -65,7 +66,6 @@ function ChatMessage({ selectedChannel, selectedChannelName }) {
               setFormValue={setFormValue}
             />
           )}
-        </div>
       </div>
     </>
   );
