@@ -13,7 +13,7 @@ import {
   updateProfile,
   verifyBeforeUpdateEmail,
 } from "firebase/auth";
-import { getDocs, collection } from 'firebase/firestore'
+import { getDocs, collection } from "firebase/firestore";
 
 //declare context
 const AuthContext = createContext();
@@ -26,7 +26,7 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
-  const usersRef = collection(db, 'users');
+  const usersRef = collection(db, "users");
   const [users, setUsers] = useState([]);
 
   //   Sign up
@@ -39,7 +39,14 @@ export function AuthProvider({ children }) {
   };
   //   Google Sign in
   const signInWithGoogle = async () => {
-    signInWithPopup(auth, googleProvider);
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const googleUser = result.user;
+      return googleUser; // Return the user's information after successful sign-in
+    } catch (error) {
+      console.error("Error signing in with Google:", error);
+      throw error;
+    }
   };
   // Sign Out
   const logOut = () => {

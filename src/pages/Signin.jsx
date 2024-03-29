@@ -1,6 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import {
+  getDocs,
+  collection,
+  addDoc,
+  serverTimestamp,
+} from "firebase/firestore";
+import { db } from "../firebase.js";
 
 function SignIn() {
   const { signIn, signInWithGoogle, user } = useAuth();
@@ -23,7 +30,22 @@ function SignIn() {
   // Google Signin
   const handleGoogleSignIn = async () => {
     try {
-      await signInWithGoogle();
+      const googleUser = await signInWithGoogle();
+      // Check if the user already exists in the collection
+      const querySnapshot = await getDocs(collection(db, "users"));
+      const existingUser = querySnapshot.docs.find(
+        (doc) => doc.data().uid === googleUser.uid
+      );
+      if (!existingUser) {
+        await addDoc(collection(db, "users"), {
+          displayName: googleUser.displayName,
+          email: googleUser.email,
+          photoURL: googleUser.photoURL,
+          created: serverTimestamp(),
+          uid: googleUser.uid,
+        });
+      }
+      navigate("/");
     } catch (error) {
       setError("Failed to log in");
     }
@@ -33,7 +55,7 @@ function SignIn() {
     if (user != null) {
       navigate("/");
     }
-  }, [user]);
+  }, [user, navigate]);
 
   return (
     <div className="formContainer">

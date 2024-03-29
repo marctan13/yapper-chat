@@ -35,12 +35,12 @@ function Register() {
         displayName: displayNameRef.current.value,
         email: emailRef.current.value,
         photoURL: null,
-        timestamp: serverTimestamp(),
+        created: serverTimestamp(),
         uid: auth.currentUser.uid,
       });
       await updateDoc(res, {
-        uid: res.id
-      }) //adds user to database
+        uid: res.id,
+      }); //adds user to database
       sendVerificationEmail(auth.currentUser); //sends verification email to user upon registration
       setMessage("Account Register successful!");
       navigate("/");
