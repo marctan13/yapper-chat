@@ -10,6 +10,7 @@ function Message({
   text,
   selectedChannel,
   messageId,
+  displayName
 }) {
   const { user } = useAuth();
 
@@ -54,29 +55,22 @@ function Message({
   }
 
   return (
-    <div className="messageBlock">
-      <div className={`chatMessage ${user.uid === sender_id ? "sender" : ""}`}>
-        <div className="userInfo">
-          <img src={photoURL} />
-          <span>{formatTimestamp(createdAt)}</span>
-        </div>
-        <div className="message">
-          <p>{text}</p>
-          <div className="messageOption">
-            <button>edit</button>
-            <button
-              onClick={() => {
-                handleDelete(
-                  "channels",
-                  selectedChannel,
-                  "messages",
-                  messageId
-                );
-              }}
-            >
-              delete
-            </button>
-          </div>
+    <div className={`chatMessage ${user.uid === sender_id ? "sender" : ""}`}>
+      <div className="userInfo">
+        <img src={photoURL} alt={displayName} />
+        <span>{formatTimestamp(createdAt)}</span>
+      </div>
+      <div className="message">
+        <p>{text}</p>
+        <div className="messageOption">
+          <button>edit</button>
+          <button
+            onClick={() => {
+              handleDelete("channels", selectedChannel, "messages", messageId);
+            }}
+          >
+            delete
+          </button>
         </div>
       </div>
     </div>

@@ -20,6 +20,7 @@ function Input({ selectedChannel, formValue, setFormValue }) {
           text: formValue,
           photoURL: user.photoURL ? user.photoURL : "/avatar.png", //change to correct user photo
           createdAt: serverTimestamp(),
+          sender_name: user.displayName,
         }
       );
       setFormValue("");
