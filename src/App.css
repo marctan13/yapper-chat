@@ -437,10 +437,22 @@ form {
           margin: 3em 1em 3em 0.5em;
           border-radius: 15px;
 
+          input {
+            background-color: transparent;
+            margin-top: 0.2em;
+          }
+
+          .edited-text {
+            display: flex;
+            justify-content: flex-end;
+            margin: 0;
+            font-size: 0.5rem;
+          }
+
           p {
             overflow: visible;
             color: white;
-            padding: 12px;
+            padding: 8px;
           }
 
           .messageOption {
@@ -449,7 +461,7 @@ form {
             button {
               background-color: transparent;
               border-width: 0;
-              margin: 5px;
+              margin: 3px;
 
               &:hover {
                 cursor: pointer;
@@ -473,16 +485,16 @@ form {
     }
 
     .inputMessage {
-      /* display: flex;
+      display: flex;
       justify-content: flex-start;
       align-items: flex-end;
       height: 18%;
-      width: 100%; */
+      width: 100%;
 
-      display: block;
+      /* display: block;
       position: absolute;
       width: 63%;
-      margin-top: 38.5rem;
+      margin-top: 38.5rem; */
 
       .inputBox {
         display: flex;
