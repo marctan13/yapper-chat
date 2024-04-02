@@ -48,7 +48,7 @@ function ChatMessage({ selectedChannel, selectedChannelName }) {
 
   return (
     <>
-      <div className="chatMessages">
+      <div className={`chatMessages ${selectedChannel ? "scroll" : ""}`}>
       <div className="messageBlock">
           {messages.map((message) => (
             <Message
