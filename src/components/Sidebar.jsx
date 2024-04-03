@@ -9,7 +9,11 @@ import ChannelPreview from "./ChannelPreview.jsx";
 import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
 
-function Sidebar({ selectedChannel, setSelectedChannel, setSelectedChannelName }) {
+function Sidebar({
+  selectedChannel,
+  setSelectedChannel,
+  setSelectedChannelName,
+}) {
   const navigate = useNavigate();
 
   const [channels, setChannels] = useState([]);

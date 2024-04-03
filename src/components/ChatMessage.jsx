@@ -45,11 +45,11 @@ function ChatMessage({ selectedChannel, selectedChannelName }) {
     );
     return () => unsubscribe();
   }, [selectedChannel]);
-
+  
   return (
     <>
-      <div className={`chatMessages ${selectedChannel ? "scroll" : ""}`}>
-      <div className="messageBlock">
+      <div className="chatMessages">
+        <div className="messageBlock">
           {messages.map((message) => (
             <Message
               key={message.id}
