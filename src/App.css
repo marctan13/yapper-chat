@@ -70,6 +70,62 @@ form {
   }
 }
 
+/* Register */
+
+.register-formContainer {
+  background: url("signin-background.jpg");
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.register-formWrapper {
+  background-color: #919eaa;
+  padding: 20px 60px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 5em;
+  gap: 10px;
+  align-items: center;
+}
+
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.register-input {
+  padding: 15px;
+  width: 250px;
+}
+
+.password-strength {
+  margin-top: 5px;
+  font-size: 14px;
+  color: black; /* Change color to black */
+}
+
+.register-weak {
+  color: red;
+}
+
+.register-strong {
+  color: green;
+}
+
+.register-error {
+  color: red;
+  margin-top: 5px;
+}
+
+
 .emojiButton {
   font-size: 32px;
   display: inline-flex;
