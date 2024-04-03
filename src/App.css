@@ -4,9 +4,23 @@
   -ms-overflow-style: none;
 }
 
+html,
 body {
   margin: 0;
-  overflow: hidden;
+  padding: 0;
+  overflow-y: hidden;
+  /* ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 5px;;
+      }
+
+      ::-webkit-scrollbar-hover {
+        background: #555;
+      }  */
 }
 
 .formContainer {
@@ -128,7 +142,7 @@ form {
     height: 85%;
     width: 90%;
     display: flex;
-    overflow: hidden;
+    overflow-y: hidden;
 
     /* Sidebar */
     .sidebar {
@@ -278,9 +292,9 @@ form {
         height: 6vh;
 
         .deleteContainer {
-          position: absolute;
-          left: 22rem;
-          padding-top: 0.5rem;
+          /* position: absolute;
+          left: 22rem; 
+          padding-top: 0.5rem; */
           &:hover {
             background-color: #b5b4b4;
           }
@@ -332,6 +346,10 @@ form {
     .chatPreview {
       padding: 3em;
       gap: 15px;
+
+      &.selected {
+        background-color: red;
+      }
     }
   }
   /* User Info in Sidebar */
@@ -398,14 +416,14 @@ form {
     display: flex;
     flex-direction: column;
     max-height: 82%;
-    /* background-color: #282d35; */
 
     .scroll {
       overflow-y: scroll;
     }
 
     .messageBlock {
-      max-height: 85%;
+      max-height: 55%;
+      overflow-y: visible;
 
       .chatMessage {
         display: flex;
@@ -507,7 +525,6 @@ form {
           width: 80%;
           border-radius: 10px;
           color: black;
-          margin-left: 8px; /* Tried to even the spacing on both sides of Input Box */
         }
       }
 
@@ -544,6 +561,7 @@ form {
     .chatAvatar {
       height: 60%;
       width: 45%;
+      border-radius: 50%;
       margin: 2em;
 
       .chatLogo {
@@ -615,7 +633,7 @@ form {
 
       .memberImg {
         width: 10%;
-        height: 75%;
+        /* height: 75%; */
         border-radius: 50%;
       }
     }
