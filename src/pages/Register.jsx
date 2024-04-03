@@ -55,9 +55,9 @@ function Register() {
         created: serverTimestamp(),
         uid: auth.currentUser.uid,
       });
-      await updateDoc(res, {
-        uid: res.id,
-      }); //adds user to database
+      // await updateDoc(res, {
+      //   uid: res.id,
+      // }); //adds user to database
       sendVerificationEmail(auth.currentUser); //sends verification email to user upon registration
       setMessage("Account Register successful!");
       navigate("/");

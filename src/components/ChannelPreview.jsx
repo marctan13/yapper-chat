@@ -1,3 +1,6 @@
+ //work on going back to "select channel" page after deleting a channel
+ //work on highlighting channel when it's selected
+
 import { Trash } from "react-bootstrap-icons";
 import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase";
@@ -8,9 +11,9 @@ function ChannelPreview(props) {
 
   const handleDelete = async () => {
     try {
-      console.log("deleting channel: ", props.id); // Log the correct channel id
+      console.log("deleting channel: ", props.id);
       if (confirm("Do you want to delete this channel?")) {
-        const docRef = doc(db, "channels", props.id); // Use props.id for correct channel id
+        const docRef = doc(db, "channels", props.id);
         await deleteDoc(docRef);
         console.log("successful");
         navigate("/Settings");
@@ -20,8 +23,6 @@ function ChannelPreview(props) {
       throw error;
     }
   };
-  //work on going back to "select channel" page after deleting a channel
-  //work on highlighting channel when it's selected
 
   return (
     <div

@@ -5,7 +5,6 @@ import "bulma/css/bulma.css";
 import SignOut from "./SignOut.jsx";
 import Navbar from "./Navbar.jsx";
 import ChannelPreview from "./ChannelPreview.jsx";
-// import { useCollectionData } from "react-firebase-hooks/firestore";
 import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../contexts/AuthContext.jsx";
@@ -44,8 +43,8 @@ function Sidebar({
   console.log(channels);
 
   const handleClick = async (channelId) => {
-    setSelectedChannel(channelId); // Update selectedChannel state with the channelId
-    const clickedChannel = channels.find((channel) => channel.id === channelId);
+    setSelectedChannel(channelId);
+    const clickedChannel = channels.find(channel => channel.id === channelId);
     if (clickedChannel) {
       setSelectedChannelName(clickedChannel.name);
       try {
@@ -63,8 +62,8 @@ function Sidebar({
       <div className="previews">
         {channels.map((channel) => (
           <ChannelPreview
-            onClick={() => handleClick(channel.id)} // Pass the channel id to handleClick
-            isSelected={selectedChannel === channel.id} // Compare with channel id
+            onClick={() => handleClick(channel.id)}
+            isSelected={selectedChannel === channel.id}
             key={channel.id}
             name={channel.name}
             id={channel.id}

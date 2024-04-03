@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { db } from "../firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot } from "firebase/firestore";
 import ChatMenuItem from "./ChatMenuItem";
 
 function Header({ selectedChannel, selectedChannelName }) {
@@ -11,37 +11,46 @@ function Header({ selectedChannel, selectedChannelName }) {
   useEffect(() => {
     const fetchChannelData = async () => {
       try {
-        if (!selectedChannel) return; // Exit if no channel is selected
-
-        // Get the channel document
+        if (!selectedChannel) return;
+  
         const channelDocRef = doc(db, "channels", selectedChannel);
-        const channelDocSnap = await getDoc(channelDocRef);
-
-        // Get the member IDs from the channel document
-        const memberIds = channelDocSnap.data().members;
-
-        // Fetch user profiles for each member ID
-        const memberProfiles = await Promise.all(
-          memberIds.map(async (memberId) => {
-            const userDocRef = doc(db, "users", memberId);
-            const userDocSnap = await getDoc(userDocRef);
-            return userDocSnap.data();
-          })
-        );
-
-        // Set the member profiles in state
-        setMembers(memberProfiles);
-
-        // Set the channel image (convert string to URL object if necessary)
-        const imageUrl = channelDocSnap.data().image;
-        setChannelImage(imageUrl);
+        const unsubscribe = onSnapshot(channelDocRef, async (channelDocSnap) => {
+  
+          const memberIds = channelDocSnap.data().members;
+  
+          const memberProfiles = await Promise.all(
+            memberIds.map(async (memberId) => {
+              const userDocRef = doc(db, "users", memberId);
+              console.log("Fetching user document for ID:", memberId);
+              const userDocSnap = await getDoc(userDocRef);
+              if (userDocSnap.exists()) {
+                console.log("User document exists for ID:", memberId);
+                return userDocSnap.data();
+              } else {
+                console.error(`User document for ID ${memberId} does not exist`);
+                return null;
+              }
+            })
+          );
+  
+          setMembers(memberProfiles.filter(profile => profile !== null));
+  
+          const imageUrl = channelDocSnap.data().image;
+          setChannelImage(imageUrl);
+        });
+        
+        return () => {
+          unsubscribe();
+        };
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
+  
     fetchChannelData();
   }, [selectedChannel]);
+  
+  
 
   return (
     <div className="header">
@@ -77,9 +86,9 @@ function Header({ selectedChannel, selectedChannelName }) {
           {members &&
             members
               .slice(0, 4)
-              .map((member) => (
+              .map((member, index) => (
                 <img
-                  key={member?.uid}
+                  key={index}
                   className="memberImg"
                   src={member?.photoURL || "/avatar.png"}
                   alt={member?.displayName || "No Name"}
