@@ -1,10 +1,10 @@
+//work on layout of users on css
+
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../firebase";
-
-//work on layout of users on css
 
 function CreateNewChat({ path }) {
   const navigate = useNavigate();
@@ -21,14 +21,17 @@ function CreateNewChat({ path }) {
   };
 
   const handleSelect = (userId) => {
-    if (selectedUsers.includes(userId)) {
-      setSelectedUsers(selectedUsers.filter((id) => id !== userId));
-    } else {
-      setSelectedUsers([...selectedUsers, userId]);
-    }
-
-    setSelected((prevSelected) => !prevSelected);
+    setSelectedUsers(prevSelectedUsers => {
+      if (prevSelectedUsers.includes(userId)) {
+        return prevSelectedUsers.filter((id) => id !== userId);
+      } else {
+        return [...prevSelectedUsers, userId];
+      }
+    });
+  
+    setSelected(prevSelected => !prevSelected);
   };
+  
 
   const handleImg = (e) => {
     const file = e.target.files[0];
@@ -43,7 +46,7 @@ function CreateNewChat({ path }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
+    
     await addDoc(collection(db, "channels"), {
       name: chatName,
       members: [...selectedUsers],
@@ -89,13 +92,13 @@ function CreateNewChat({ path }) {
               {users.map((user) => {
                 return (
                   <div
-                    className={`userItem-wrapper ${selectedUsers.includes(user.id) ? "selected" : ""}`}
-                    key={user.id}
-                    onClick={() => handleSelect(user.id)}
+                    className={`userItem-wrapper ${selectedUsers.includes(user.uid) ? "selected" : ""}`}
+                    key={user.uid}
+                    onClick={() => handleSelect(user.uid)}
                   >
                     <img src={user.photoURL || "avatar.png"} alt="" size={32} />
                     <p>{user.displayName}</p>
-                    {selectedUsers.includes(user.id) && <img src='selected.png' alt="Selected" className="selectedImage" />}
+                    {selectedUsers.includes(user.uid) && <img src='selected.png' alt="Selected" className="selectedImage" />}
                   </div>
                   );
               })}
