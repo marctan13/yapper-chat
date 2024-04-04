@@ -14,18 +14,35 @@ import {
 function Register() {
   const emailRef = useRef();
   const passwordRef = useRef();
+  const verifyPasswordRef = useRef();
   const displayNameRef = useRef();
   const navigate = useNavigate();
   const { signUp, sendVerificationEmail, user } = useAuth();
-  const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [verifyPasswordError, setVerifyPasswordError] = useState("");
+
+  function checkPasswordStrength(password) {
+    return password.length >= 6 ? "Strong" : "Weak";
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
+    const password = passwordRef.current.value;
+    const verifyPassword = verifyPasswordRef.current.value;
+
+    if (password !== verifyPassword) {
+      setVerifyPasswordError("Passwords do not match");
+      return;
+    } else {
+      setVerifyPasswordError("");
+    }
+
     try {
-      setError("");
       setMessage("");
+      setPasswordError("");
       setLoading(true);
       await signUp(emailRef.current.value, passwordRef.current.value);
       await updateProfile(auth.currentUser, {
@@ -37,65 +54,96 @@ function Register() {
         photoURL: null,
         created: serverTimestamp(),
         uid: auth.currentUser.uid,
+        docid: "",
       });
+      //assigns doc id to uid of document
       await updateDoc(res, {
-        uid: res.id,
-      }); //adds user to database
+        docid: res.id,
+      });
       sendVerificationEmail(auth.currentUser); //sends verification email to user upon registration
       setMessage("Account Register successful!");
       navigate("/");
     } catch (error) {
-      setError("Failed to create an account");
       console.error(error);
       throw error;
     }
     setLoading(false);
   }
 
+  function handlePasswordChange(e) {
+    const password = e.target.value;
+    setPasswordError("");
+    const strength = checkPasswordStrength(password);
+    setPasswordStrength(strength === "Weak" ? "Password is too short" : "");
+  }
+
+  function handleVerifyPasswordChange(e) {
+    const password = passwordRef.current.value;
+    const verifyPassword = e.target.value;
+
+    if (password !== verifyPassword) {
+      setVerifyPasswordError("Passwords do not match");
+    } else {
+      setVerifyPasswordError("");
+    }
+  }
+
   return (
-    <div className="formContainer">
-      <div className="formWrapper">
-        <div className="title-logo">
-          <h1 className="logo">🗣️</h1>
-          <h1 className="title">Yapper Chat</h1>
+    <div className="register-container">
+      <div className="register-formContainer">
+        <div className={`register-formWrapper ${passwordError || verifyPasswordError ? 'error' : ''}`}>
+          <div className="title-logo">
+            <h1 className="logo">🗣️</h1>
+            <h1 className="title">Yapper Chat</h1>
+          </div>
+          <form onSubmit={handleSubmit} className="register-form">
+            <h1>
+              <strong>Register Account</strong>
+            </h1>
+            <input
+              required
+              type="text"
+              placeholder="Display Name"
+              ref={displayNameRef}
+              className="register-input" 
+            />
+            <input 
+              required 
+              type="email" 
+              ref={emailRef} 
+              placeholder="Email"
+              className="register-input" 
+            />
+            <input
+              required
+              type="password"
+              placeholder="Password"
+              ref={passwordRef}
+              onChange={handlePasswordChange}
+              className="register-input"
+            />
+            {passwordStrength && <div className="register-error">{passwordStrength}</div>}
+            <input
+              required
+              type="password"
+              placeholder="Verify Password"
+              ref={verifyPasswordRef}
+              onChange={handleVerifyPasswordChange}
+              className="register-input"
+            />
+            {verifyPasswordError && <div className="register-error">{verifyPasswordError}</div>}
+            <button
+              className="register-button" 
+              type="submit" 
+              disabled={loading}
+            >
+              {loading ? 'Signing up...' : 'Sign up'} {/* Prevents the button from being spam clicked */}
+            </button>
+          </form>
+          <p className="register-login-link">
+            Already have an account? <Link to="/signin">Login</Link>
+          </p>
         </div>
-        <form onSubmit={handleSubmit} className="form">
-          <h1>
-            <strong>Register Account</strong>
-          </h1>
-          {message && (
-            <p>
-              <strong>{message}</strong>
-            </p>
-          )}
-          {error && (
-            <p>
-              <strong>{error}</strong>
-            </p>
-          )}
-          <input
-            required
-            type="text"
-            placeholder="Display Name"
-            ref={displayNameRef}
-          />
-          <input required type="email" ref={emailRef} placeholder="Email" />
-          <span>
-            <strong>Password has to be at least 6 characters</strong>
-          </span>
-          <input
-            required
-            type="password"
-            placeholder="Password"
-            ref={passwordRef}
-          />
-          <button type="submit" onClick={signUp}>
-            Sign up
-          </button>
-        </form>
-        <p>
-          You have an account already? <Link to="/signin">Login</Link>
-        </p>
       </div>
     </div>
   );

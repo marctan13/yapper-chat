@@ -13,9 +13,8 @@ import {
   updateProfile,
   verifyBeforeUpdateEmail,
 } from "firebase/auth";
-import { getDocs, collection } from "firebase/firestore";
+import { getDocs, collection, query, where } from "firebase/firestore";
 
-//declare context
 const AuthContext = createContext();
 
 //to be used by other components
@@ -26,8 +25,9 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
-  const usersRef = collection(db, "users");
+  const [channels, setChannels] = useState([]);
   const [users, setUsers] = useState([]);
+  const usersRef = collection(db, "users");
 
   //   Sign up
   const signUp = (email, password) => {
@@ -48,18 +48,16 @@ export function AuthProvider({ children }) {
       throw error;
     }
   };
-  // Sign Out
+
   const logOut = () => {
     return signOut(auth);
   };
 
-  // update email
   const changeEmail = async (user, newEmail) => {
     await verifyBeforeUpdateEmail(user, newEmail);
     await updateEmail(user, newEmail);
   };
 
-  //verify email
   const sendVerificationEmail = async (user) => {
     try {
       await sendEmailVerification(user);
@@ -70,7 +68,6 @@ export function AuthProvider({ children }) {
     }
   };
 
-  //update password
   const changePassword = async (user, newPassword) => {
     await updatePassword(user, newPassword);
   };
@@ -79,18 +76,44 @@ export function AuthProvider({ children }) {
     return sendPasswordResetEmail(auth, email);
   };
 
-  //update display name
   const changeDisplayName = (newDisplayName) => {
     updateProfile(user, {
       displayName: newDisplayName,
     });
   };
 
+  //fetch channels and filter
+  const fetchChannels = async() => {
+    try {
+      const channelsCollection = collection(db, "channels");
+      const querySnapshot = await getDocs(channelsCollection);
+      const userUid = user.uid;
+      // Fetch the user document based on user's uid
+      const userQuery = query(
+        collection(db, "users"),
+        where("uid", "==", userUid)
+      );
+      const userQuerySnapshot = await getDocs(userQuery);
+      // // Get the docid of the user document
+      const userDocId = userQuerySnapshot.docs.find((doc) => doc.exists())?.id;
+      const channelsData = querySnapshot.docs
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        .filter((channel) => channel.members.includes(userDocId));
+      setChannels(channelsData);
+    } catch (error) {
+      console.error("Error fetching channels: ", error);
+    }
+  }
+
   // checks user validation and grabs user collection
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
+      fetchChannels(currentUser.uid);
     });
     const getUsers = async () => {
       const data = await getDocs(usersRef);
@@ -118,6 +141,8 @@ export function AuthProvider({ children }) {
     users,
     sendVerificationEmail,
     changeDisplayName,
+    channels,
+    fetchChannels,
   };
 
   return (

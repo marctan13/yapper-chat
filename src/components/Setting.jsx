@@ -17,8 +17,14 @@ function Setting() {
   const [passwordMessage, setPasswordMessage] = useState("");
   const [displayNameError, setDisplayNameError] = useState("");
   const [displayNameMessage, setDisplayNameMessage] = useState("");
-  const { user, changeEmail, changePassword, logOut, changeDisplayName } =
-    useAuth();
+  const {
+    user,
+    changeEmail,
+    changePassword,
+    logOut,
+    changeDisplayName,
+    userDocId,
+  } = useAuth();
   const [currentUser, setCurrentUser] = useState(user);
 
   const emailRef = useRef();
@@ -69,7 +75,8 @@ function Setting() {
     e.preventDefault();
     const newName = displayNameRef.current.value.trim();
     if (newName !== "") {
-      if (newName.length <= 15) { // Character Limited 15
+      if (newName.length <= 15) {
+        // Character Limited 15
         try {
           setDisplayNameError("");
           // This grabs the name input and puts it into an array to capitalize
@@ -78,7 +85,7 @@ function Setting() {
             newName.charAt(0).toUpperCase() + newName.slice(1);
           await changeDisplayName(capitalizedNewName);
           alert("Display Name has been updated!");
-  
+
           user.displayName = capitalizedNewName;
 
           setDisplayNameIsClicked(false);
@@ -92,7 +99,7 @@ function Setting() {
       alert("Please enter a name.");
     }
   };
-  
+
   return (
     <div className="rightSection">
       <div className="header">
@@ -105,7 +112,7 @@ function Setting() {
           <div className="username">
             <div>
               <div style={{ display: "flex" }}>
-              <h1 className="userDisplayName">Display Name:  </h1>
+                <h1 className="userDisplayName">Display Name: </h1>
                 <h2 style={{ color: "navy" }}> {user.displayName}</h2>
                 <button
                   className="editName"
@@ -132,7 +139,7 @@ function Setting() {
                 </form>
               )}
             </div>
-            
+
             <div style={{ display: "flex" }}>
               <span>{user.email}</span>
               <button
@@ -142,7 +149,7 @@ function Setting() {
                   setError(!error);
                 }}
                 title="Change Email"
-                style={{ marginLeft: '4px' }}
+                style={{ marginLeft: "4px" }}
               >
                 <FontAwesomeIcon icon={faEdit} />
               </button>
@@ -160,9 +167,12 @@ function Setting() {
                 <button type="submit">Update Email</button>
               </form>
             )}
-            <span>Email Verified: 
+            <span>
+              Email Verified:
               <span style={{ color: user.emailVerified ? "green" : "red" }}>
-                {user.emailVerified ? " Yes" : " No"}</span></span>
+                {user.emailVerified ? " Yes" : " No"}
+              </span>
+            </span>
           </div>
         </div>
         <div className="changePassword">

@@ -4,9 +4,23 @@
   -ms-overflow-style: none;
 }
 
+html,
 body {
   margin: 0;
-  overflow: hidden;
+  padding: 0;
+  overflow-y: hidden;
+  /* ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 5px;;
+      }
+
+      ::-webkit-scrollbar-hover {
+        background: #555;
+      }  */
 }
 
 .formContainer {
@@ -56,6 +70,60 @@ form {
   }
 }
 
+/* Register */
+
+.register-formContainer {
+  background: url("signin-background.jpg");
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.register-formWrapper {
+  background-color: #919eaa;
+  padding: 20px 60px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 5em;
+  gap: 10px;
+  align-items: center;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.register-input {
+  padding: 15px;
+  width: 250px;
+}
+
+.password-strength {
+  margin-top: 5px;
+  font-size: 14px;
+  color: black; /* Change color to black */
+}
+
+.register-weak {
+  color: red;
+}
+
+.register-strong {
+  color: green;
+}
+
+.register-error {
+  color: red;
+  margin-top: 5px;
+}
+
 .emojiButton {
   font-size: 32px;
   display: inline-flex;
@@ -94,6 +162,11 @@ form {
   background-color: #838387;
 }
 
+.selected {
+  background-color: #5f6c64;
+  color: white;
+}
+
 .sign-in {
   background-color: #dde0dc;
   border: none;
@@ -128,7 +201,7 @@ form {
     height: 85%;
     width: 90%;
     display: flex;
-    overflow: hidden;
+    overflow-y: hidden;
 
     /* Sidebar */
     .sidebar {
@@ -270,7 +343,7 @@ form {
         background-color: #39413c;
         color: white;
       }
-      
+
       .userChat {
         display: flex;
         flex-direction: row;
@@ -278,9 +351,9 @@ form {
         height: 6vh;
 
         .deleteContainer {
-          position: absolute;
+          /* position: absolute;
           left: 22rem; 
-          padding-top: 0.5rem;
+          padding-top: 0.5rem; */
           &:hover {
             background-color: #b5b4b4;
           }
@@ -332,8 +405,11 @@ form {
     .chatPreview {
       padding: 3em;
       gap: 15px;
-    }
 
+      &.selected {
+        background-color: red;
+      }
+    }
   }
   /* User Info in Sidebar */
   .footer {
@@ -382,7 +458,7 @@ form {
   overflow-y: scroll;
 
   /*scroll bar for chatroom components*/
-      /* ::-webkit-scrollbar-track {
+  /* ::-webkit-scrollbar-track {
         background: #f1f1f1;
       }
 
@@ -399,12 +475,14 @@ form {
     display: flex;
     flex-direction: column;
     max-height: 82%;
-    background-color: #282d35;
-    overflow-y: scroll;
+
+    .scroll {
+      overflow-y: scroll;
+    }
 
     .messageBlock {
       max-height: 55%;
-      /* overflow-y: visible; */
+      overflow-y: visible;
 
       .chatMessage {
         display: flex;
@@ -433,13 +511,25 @@ form {
           display: flex;
           flex-direction: column;
           max-width: 60%;
-          margin: 3em 1em 3em 0;
+          margin: 3em 1em 3em 0.5em;
           border-radius: 15px;
+
+          input {
+            background-color: transparent;
+            margin-top: 0.2em;
+          }
+
+          .edited-text {
+            display: flex;
+            justify-content: flex-end;
+            margin: 0;
+            font-size: 0.5rem;
+          }
 
           p {
             overflow: visible;
             color: white;
-            padding: 12px;
+            padding: 8px;
           }
 
           .messageOption {
@@ -448,7 +538,7 @@ form {
             button {
               background-color: transparent;
               border-width: 0;
-              margin: 5px;
+              margin: 3px;
 
               &:hover {
                 cursor: pointer;
@@ -478,6 +568,11 @@ form {
       height: 18%;
       width: 100%;
 
+      /* display: block;
+      position: absolute;
+      width: 63%;
+      margin-top: 38.5rem; */
+
       .inputBox {
         display: flex;
         width: 100%;
@@ -489,7 +584,6 @@ form {
           width: 80%;
           border-radius: 10px;
           color: black;
-          margin-left: 8px; /* Tried to even the spacing on both sides of Input Box */
         }
       }
 
@@ -526,6 +620,7 @@ form {
     .chatAvatar {
       height: 60%;
       width: 45%;
+      border-radius: 50%;
       margin: 2em;
 
       .chatLogo {
@@ -597,7 +692,7 @@ form {
 
       .memberImg {
         width: 10%;
-        height: 75%;
+        /* height: 75%; */
         border-radius: 50%;
       }
     }
@@ -706,22 +801,22 @@ form {
       h2 {
         color: white;
         font-size: 2em;
-        margin-right: 5em; 
+        margin-right: 5em;
       }
-    
+
       .chatName {
         display: flex;
         flex-direction: column;
         margin: 0.5rem;
 
         .chatNameBox {
-        width: 325px;
-        border-radius: 5px;
-        height: 20px;
-        margin-top: 10px;
+          width: 325px;
+          border-radius: 5px;
+          height: 20px;
+          margin-top: 10px;
         }
       }
-      
+
       .setChatImg {
         display: flex;
         flex-direction: column;
@@ -734,13 +829,13 @@ form {
           padding: 10px 0 0 0;
         }
       }
-    
+
       .addMembers {
         display: flex;
         flex-direction: column;
         margin: 0.5rem;
       }
-    
+
       .userItem-wrapper {
         display: flex;
         align-items: center;
@@ -752,28 +847,28 @@ form {
         .userItem-wrapper.selected {
           background-color: #f0f0f0;
         }
-    
+
         .selectedImage {
           width: 20px;
         }
-    
+
         .userInfo {
           display: flex;
           align-items: center;
           gap: 10px;
         }
-    
+
         img {
           width: 50px;
           border-radius: 50%;
         }
-    
+
         p {
           margin-right: 20px;
         }
       }
     }
-    
+
     .createChatBtn {
       display: block;
       margin-right: 15em;
