@@ -5,7 +5,14 @@ import "bulma/css/bulma.css";
 import SignOut from "./SignOut.jsx";
 import Navbar from "./Navbar.jsx";
 import ChannelPreview from "./ChannelPreview.jsx";
-import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  updateDoc,
+  doc,
+  query,
+  where,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../contexts/AuthContext.jsx";
 
@@ -28,12 +35,25 @@ function Sidebar({
       const channelsCollection = collection(db, "channels");
       const querySnapshot = await getDocs(channelsCollection);
       const userUid = user.uid;
+
+      // Fetch the user document based on user's uid
+      const userQuery = query(
+        collection(db, "users"),
+        where("uid", "==", userUid)
+      );
+      const userQuerySnapshot = await getDocs(userQuery);
+
+      // Get the docid of the user document
+      const userDocId = userQuerySnapshot.docs.find((doc) => doc.exists())?.id;
+
+      console.log(userDocId);
+
       const channelsData = querySnapshot.docs
         .map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }))
-        .filter((channel) => channel.members.includes(userUid));
+        .filter((channel) => channel.members.includes(userDocId));
       setChannels(channelsData);
     } catch (error) {
       console.error("Error fetching channels: ", error);
@@ -45,7 +65,7 @@ function Sidebar({
     const clickedChannel = channels.find((channel) => channel.id === channelId);
     if (clickedChannel) {
       setSelectedChannelName(clickedChannel.name);
-      navigate('/')
+      navigate("/");
       try {
         const channelRef = doc(db, "channels", channelId);
         await updateDoc(channelRef, { lastAccessed: new Date() });
