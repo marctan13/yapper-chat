@@ -8,7 +8,7 @@ import { db } from "../firebase";
 
 function CreateNewChat({ path }) {
   const navigate = useNavigate();
-  const { users, user } = useAuth();
+  const { users } = useAuth();
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [selected, setSelected] = useState("");
   const [chatName, setChatName] = useState("");
@@ -43,14 +43,11 @@ function CreateNewChat({ path }) {
     }
   };
 
-  console.log(user.docid);
-  console.log(users);
-
   async function handleSubmit(e) {
     e.preventDefault();
     await addDoc(collection(db, "channels"), {
       name: chatName,
-      members: [user.uid, ...selectedUsers],
+      members: [...selectedUsers],
       image: img,
     });
     setChatName("");

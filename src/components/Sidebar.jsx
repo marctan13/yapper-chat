@@ -23,42 +23,11 @@ function Sidebar({
 }) {
   const navigate = useNavigate();
 
-  const [channels, setChannels] = useState([]);
-  const { user } = useAuth();
+  const { channels, fetchChannels } = useAuth();
 
   useEffect(() => {
     fetchChannels();
   }, []);
-
-  async function fetchChannels() {
-    try {
-      const channelsCollection = collection(db, "channels");
-      const querySnapshot = await getDocs(channelsCollection);
-      const userUid = user.uid;
-
-      // Fetch the user document based on user's uid
-      const userQuery = query(
-        collection(db, "users"),
-        where("uid", "==", userUid)
-      );
-      const userQuerySnapshot = await getDocs(userQuery);
-
-      // Get the docid of the user document
-      const userDocId = userQuerySnapshot.docs.find((doc) => doc.exists())?.id;
-
-      console.log(userDocId);
-
-      const channelsData = querySnapshot.docs
-        .map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }))
-        .filter((channel) => channel.members.includes(userDocId));
-      setChannels(channelsData);
-    } catch (error) {
-      console.error("Error fetching channels: ", error);
-    }
-  }
 
   const handleClick = async (channelId) => {
     setSelectedChannel(channelId);
