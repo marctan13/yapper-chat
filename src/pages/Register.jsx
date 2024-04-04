@@ -54,10 +54,12 @@ function Register() {
         photoURL: null,
         created: serverTimestamp(),
         uid: auth.currentUser.uid,
+        docid: "",
       });
+      //assigns doc id to uid of document
       await updateDoc(res, {
-        uid: res.id,
-      }); //adds user to database
+        docid: res.id,
+      });
       sendVerificationEmail(auth.currentUser); //sends verification email to user upon registration
       setMessage("Account Register successful!");
       navigate("/");

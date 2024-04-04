@@ -4,7 +4,8 @@
   -ms-overflow-style: none;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   overflow-y: hidden;
@@ -339,7 +340,7 @@ form {
         background-color: #39413c;
         color: white;
       }
-      
+
       .userChat {
         display: flex;
         flex-direction: row;
@@ -401,8 +402,11 @@ form {
     .chatPreview {
       padding: 3em;
       gap: 15px;
-    }
 
+      &.selected {
+        background-color: red;
+      }
+    }
   }
   /* User Info in Sidebar */
   .footer {
@@ -451,7 +455,7 @@ form {
   overflow-y: scroll;
 
   /*scroll bar for chatroom components*/
-      /* ::-webkit-scrollbar-track {
+  /* ::-webkit-scrollbar-track {
         background: #f1f1f1;
       }
 
@@ -504,13 +508,25 @@ form {
           display: flex;
           flex-direction: column;
           max-width: 60%;
-          margin: 3em 1em 3em 0;
+          margin: 3em 1em 3em 0.5em;
           border-radius: 15px;
+
+          input {
+            background-color: transparent;
+            margin-top: 0.2em;
+          }
+
+          .edited-text {
+            display: flex;
+            justify-content: flex-end;
+            margin: 0;
+            font-size: 0.5rem;
+          }
 
           p {
             overflow: visible;
             color: white;
-            padding: 12px;
+            padding: 8px;
           }
 
           .messageOption {
@@ -519,7 +535,7 @@ form {
             button {
               background-color: transparent;
               border-width: 0;
-              margin: 5px;
+              margin: 3px;
 
               &:hover {
                 cursor: pointer;
@@ -548,6 +564,11 @@ form {
       align-items: flex-end;
       height: 18%;
       width: 100%;
+
+      /* display: block;
+      position: absolute;
+      width: 63%;
+      margin-top: 38.5rem; */
 
       .inputBox {
         display: flex;
@@ -777,22 +798,22 @@ form {
       h2 {
         color: white;
         font-size: 2em;
-        margin-right: 5em; 
+        margin-right: 5em;
       }
-    
+
       .chatName {
         display: flex;
         flex-direction: column;
         margin: 0.5rem;
 
         .chatNameBox {
-        width: 325px;
-        border-radius: 5px;
-        height: 20px;
-        margin-top: 10px;
+          width: 325px;
+          border-radius: 5px;
+          height: 20px;
+          margin-top: 10px;
         }
       }
-      
+
       .setChatImg {
         display: flex;
         flex-direction: column;
@@ -805,13 +826,13 @@ form {
           padding: 10px 0 0 0;
         }
       }
-    
+
       .addMembers {
         display: flex;
         flex-direction: column;
         margin: 0.5rem;
       }
-    
+
       .userItem-wrapper {
         display: flex;
         align-items: center;
@@ -823,28 +844,28 @@ form {
         .userItem-wrapper.selected {
           background-color: #f0f0f0;
         }
-    
+
         .selectedImage {
           width: 20px;
         }
-    
+
         .userInfo {
           display: flex;
           align-items: center;
           gap: 10px;
         }
-    
+
         img {
           width: 50px;
           border-radius: 50%;
         }
-    
+
         p {
           margin-right: 20px;
         }
       }
     }
-    
+
     .createChatBtn {
       display: block;
       margin-right: 15em;

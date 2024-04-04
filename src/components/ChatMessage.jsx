@@ -58,6 +58,7 @@ function ChatMessage({ selectedChannel, selectedChannelName }) {
               selectedChannel={selectedChannel}
             />
           ))}
+            </div>
           {selectedChannelName && (
             <Input
               selectedChannel={selectedChannel}
@@ -65,7 +66,6 @@ function ChatMessage({ selectedChannel, selectedChannelName }) {
               setFormValue={setFormValue}
             />
           )}
-        </div>
       </div>
     </>
   );

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import {
   getDocs,
+  updateDoc,
   collection,
   addDoc,
   serverTimestamp,
@@ -37,13 +38,18 @@ function SignIn() {
         (doc) => doc.data().uid === googleUser.uid
       );
       if (!existingUser) {
-        await addDoc(collection(db, "users"), {
+        const res = await addDoc(collection(db, "users"), {
           displayName: googleUser.displayName,
           email: googleUser.email,
           photoURL: googleUser.photoURL,
           created: serverTimestamp(),
           uid: googleUser.uid,
+          docid: "",
         });
+        //updates uid to document id
+        await updateDoc(res, {
+          docid: res.id,
+        })
       }
       navigate("/");
     } catch (error) {
