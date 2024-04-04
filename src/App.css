@@ -92,7 +92,6 @@ form {
   align-items: center;
 }
 
-
 .register-form {
   display: flex;
   flex-direction: column;
@@ -124,7 +123,6 @@ form {
   color: red;
   margin-top: 5px;
 }
-
 
 .emojiButton {
   font-size: 32px;
@@ -162,6 +160,11 @@ form {
 
 .emojiItem:hover {
   background-color: #838387;
+}
+
+.selected {
+  background-color: #5f6c64;
+  color: white;
 }
 
 .sign-in {

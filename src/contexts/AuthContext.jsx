@@ -15,7 +15,6 @@ import {
 } from "firebase/auth";
 import { getDocs, collection, query, where } from "firebase/firestore";
 
-//declare context
 const AuthContext = createContext();
 
 //to be used by other components
@@ -49,18 +48,16 @@ export function AuthProvider({ children }) {
       throw error;
     }
   };
-  // Sign Out
+
   const logOut = () => {
     return signOut(auth);
   };
 
-  // update email
   const changeEmail = async (user, newEmail) => {
     await verifyBeforeUpdateEmail(user, newEmail);
     await updateEmail(user, newEmail);
   };
 
-  //verify email
   const sendVerificationEmail = async (user) => {
     try {
       await sendEmailVerification(user);
@@ -71,7 +68,6 @@ export function AuthProvider({ children }) {
     }
   };
 
-  //update password
   const changePassword = async (user, newPassword) => {
     await updatePassword(user, newPassword);
   };
@@ -80,7 +76,6 @@ export function AuthProvider({ children }) {
     return sendPasswordResetEmail(auth, email);
   };
 
-  //update display name
   const changeDisplayName = (newDisplayName) => {
     updateProfile(user, {
       displayName: newDisplayName,

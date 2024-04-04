@@ -22,7 +22,7 @@ function Message({
   const formatTimestamp = (timestamp) => {
     if (!timestamp) return "";
     const date = timestamp.toDate(); // Convert Firebase timestamp to Date object
-    return date.toLocaleString(undefined, { hour12: true }); // Convert Date object to local string
+    return date.toLocaleString(undefined, {hour12: true }); // Convert Date object to local string
   };
 
   const handleEdit = () => {
@@ -110,13 +110,18 @@ function Message({
               ) : (
                 <button onClick={handleEdit}>Edit</button>
               )}
-          <button
-            onClick={() => {
-              handleDelete("channels", selectedChannel, "messages", messageId);
-            }}
-            >
-            Delete
-          </button>
+              <button
+                onClick={() => {
+                  handleDelete(
+                    "channels",
+                    selectedChannel,
+                    "messages",
+                    messageId
+                  );
+                }}
+              >
+                Delete
+              </button>
             </>
           )}
         </div>
