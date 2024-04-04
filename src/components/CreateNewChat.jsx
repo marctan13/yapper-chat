@@ -1,14 +1,13 @@
 //work on layout of users on css
-
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 
 function CreateNewChat({ path }) {
   const navigate = useNavigate();
-  const { users } = useAuth();
+  const { users, user } = useAuth();
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [selected, setSelected] = useState("");
   const [chatName, setChatName] = useState("");
@@ -30,7 +29,6 @@ function CreateNewChat({ path }) {
 
     setSelected((prevSelected) => !prevSelected);
   };
-  
 
   const handleImg = (e) => {
     const file = e.target.files[0];
@@ -45,9 +43,18 @@ function CreateNewChat({ path }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    const userUid = user.uid;
+      // Fetch the user document based on user's uid
+      const userQuery = query(
+        collection(db, "users"),
+        where("uid", "==", userUid)
+      );
+      const userQuerySnapshot = await getDocs(userQuery);
+      // // Get the docid of the user document
+      const userDocId = userQuerySnapshot.docs.find((doc) => doc.exists())?.id;
     await addDoc(collection(db, "channels"), {
       name: chatName,
-      members: [...selectedUsers],
+      members: [userDocId, ...selectedUsers],
       image: img,
     });
     setChatName("");
@@ -87,7 +94,7 @@ function CreateNewChat({ path }) {
           </div>
           <div className="addMembers">
             <h2>Add Members</h2>
-            {users.map((user) => {
+            {users.filter(u => u.uid !== user.uid).map((user) => {
               return (
                 <div
                   className={`userItem-wrapper ${
