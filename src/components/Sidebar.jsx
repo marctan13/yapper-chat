@@ -40,13 +40,12 @@ function Sidebar({
     }
   }
 
-  console.log(channels);
-
   const handleClick = async (channelId) => {
     setSelectedChannel(channelId);
-    const clickedChannel = channels.find(channel => channel.id === channelId);
+    const clickedChannel = channels.find((channel) => channel.id === channelId);
     if (clickedChannel) {
       setSelectedChannelName(clickedChannel.name);
+      navigate('/')
       try {
         const channelRef = doc(db, "channels", channelId);
         await updateDoc(channelRef, { lastAccessed: new Date() });
