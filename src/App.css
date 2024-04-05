@@ -694,6 +694,10 @@ form {
         /* height: 75%; */
         border-radius: 50%;
       }
+
+      .more-members {
+        color: white;
+      }
     }
   }
   /* settings page, copy format for new chat*/
