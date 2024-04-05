@@ -13,7 +13,7 @@ import {
   updateProfile,
   verifyBeforeUpdateEmail,
 } from "firebase/auth";
-import { getDocs, collection, query, where } from "firebase/firestore";
+import { getDocs, collection, query, where, onSnapshot } from "firebase/firestore";
 
 const AuthContext = createContext();
 
@@ -83,30 +83,39 @@ export function AuthProvider({ children }) {
   };
 
   //fetch channels and filter
-  const fetchChannels = async() => {
+  const fetchChannels = async () => {
     try {
       const channelsCollection = collection(db, "channels");
-      const querySnapshot = await getDocs(channelsCollection);
-      const userUid = user.uid;
-      // Fetch the user document based on user's uid
-      const userQuery = query(
-        collection(db, "users"),
-        where("uid", "==", userUid)
-      );
-      const userQuerySnapshot = await getDocs(userQuery);
-      // // Get the docid of the user document
-      const userDocId = userQuerySnapshot.docs.find((doc) => doc.exists())?.id;
-      const channelsData = querySnapshot.docs
-        .map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }))
-        .filter((channel) => channel.members.includes(userDocId));
-      setChannels(channelsData);
+      // Subscribe to real-time updates on the channels collection
+      const unsubscribe = onSnapshot(channelsCollection, (snapshot) => {
+        const userUid = user.uid;
+        // Fetch the user document based on user's uid
+        const userQuery = query(
+          collection(db, "users"),
+          where("uid", "==", userUid)
+        );
+        getDocs(userQuery).then((userQuerySnapshot) => {
+          // Get the docid of the user document
+          const userDocId = userQuerySnapshot.docs.find((doc) =>
+            doc.exists()
+          )?.id;
+          // Process the channels data
+          const channelsData = snapshot.docs
+            .map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }))
+            .filter((channel) => channel.members.includes(userDocId));      
+          // Set the channels state
+          setChannels(channelsData);
+        });
+      });
+      // Return the unsubscribe function to stop listening for updates when needed
+      return unsubscribe;
     } catch (error) {
       console.error("Error fetching channels: ", error);
     }
-  }
+  };
 
   // checks user validation and grabs user collection
   useEffect(() => {
