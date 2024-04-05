@@ -92,6 +92,7 @@ function Header({ selectedChannel, selectedChannelName }) {
                   className="memberImg"
                   src={member?.photoURL || "/avatar.png"}
                   alt={member?.displayName || "No Name"}
+                  title={member?.displayName || "No Name"}
                 />
               ))}
         </div>
