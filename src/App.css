@@ -605,8 +605,11 @@ form {
   .header {
     background-color: #21222a;
     display: flex;
-    justify-content: row;
-    height: 20%;
+    align-items: center;
+    justify-content: space-between;
+    height: 15vh;
+    box-sizing: border-box;
+    padding: 0 20px;
 
     h1 {
       display: flex;
@@ -618,22 +621,18 @@ form {
     }
 
     .chatAvatar {
-      height: 60%;
-      width: 45%;
-      border-radius: 50%;
-      margin: 2em;
+      flex: 1;
+      gap: 10px;
 
       .chatLogo {
         border-radius: 50%;
         height: 6em;
+        width: 50%;
       }
     }
 
     .teamInfo {
-      display: flex;
-      flex-direction: column;
-      margin-top: 2em;
-      margin-bottom: 2em;
+      flex: 3;
 
       .dropdown-menu {
         position: absolute;
@@ -694,6 +693,10 @@ form {
         width: 10%;
         /* height: 75%; */
         border-radius: 50%;
+      }
+
+      .more-members {
+        color: white;
       }
     }
   }

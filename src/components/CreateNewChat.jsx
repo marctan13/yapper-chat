@@ -124,5 +124,3 @@ function CreateNewChat({ path }) {
 }
 
 export default CreateNewChat;
-
-//.filter(u => u.uid !== user.uid)

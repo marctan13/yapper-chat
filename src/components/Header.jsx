@@ -92,8 +92,12 @@ function Header({ selectedChannel, selectedChannelName }) {
                   className="memberImg"
                   src={member?.photoURL || "/avatar.png"}
                   alt={member?.displayName || "No Name"}
+                  title={member?.displayName || "No Name"}
                 />
               ))}
+          {members.length > 4 && (
+            <div className="memberImg more-members">+{members.length - 3}</div>
+          )}
         </div>
       </div>
     </div>
