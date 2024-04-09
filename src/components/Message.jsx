@@ -11,7 +11,7 @@ function Message({
   text,
   selectedChannel,
   messageId,
-  displayName,
+  sender_name,
 }) {
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
@@ -22,7 +22,7 @@ function Message({
   const formatTimestamp = (timestamp) => {
     if (!timestamp) return "";
     const date = timestamp.toDate(); // Convert Firebase timestamp to Date object
-    return date.toLocaleString(undefined, {hour12: true }); // Convert Date object to local string
+    return date.toLocaleString(undefined, { hour12: true }); // Convert Date object to local string
   };
 
   const handleEdit = () => {
@@ -82,7 +82,7 @@ function Message({
   return (
     <div className={`chatMessage ${user.uid === sender_id ? "sender" : ""}`}>
       <div className="userInfo">
-        <img src={photoURL} alt={displayName} />
+        <img src={photoURL} alt={sender_name} title={sender_name} />
         <span>{formatTimestamp(createdAt)}</span>
       </div>
       <div className="message">

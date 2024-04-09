@@ -323,146 +323,144 @@ form {
     overflow-y: scroll;
   }
 
-    .chatPreview {
-      cursor: pointer;
-      padding: 5px 5px 30px 5px;
-      max-width: 500px;
-      overflow: hidden;
-    }
-
-      .chatPreview:hover {
-        background-color: #39413c;
-        color: white;
-        cursor: pointer;
-      }
-
-      .userChat {
-        display: flex;
-        flex-direction: row;
-        gap: 15px;
-        height: 6vh;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .name-chat {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        flex: 1;
-      }
-
-        img {
-          height: 3em;
-          width: 3em;
-          border-radius: 50% !important;
-          object-fit: cover;
-        }
-
-        .channel-icon {
-          margin-top: 16px;
-          height: 3em;
-          width: 3em;
-          /* flex: 1; */
-          border-radius: 50% !important;
-          object-fit: cover;
-        }
-
-        .deleteContainer {
-          cursor: pointer;
-          margin-top: 15px;
-          width: 30px;
-          height: 30px;
-        }
-
-        .deleteContainer:hover svg {
-          background-color: #b5b4b4;
-
-        }
-
-          p {
-            font-size: 15px;
-          }
-
-          h3 {
-            padding-top: 14px;
-          }
-        }
-
-  .preview {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    flex-direction: column;
-    height: 75%;
-    overflow: scroll;
+  .chatPreview {
+    cursor: pointer;
+    padding: 5px 5px 30px 5px;
+    max-width: 500px;
+    overflow: hidden;
   }
 
-    .newChat {
-      background-color: #9a9a9a;
-      border: none;
-      width: 20vw;
-      font-size: 24px;
-    }
-
-    .newChat:hover {
-      background-color: #4f4d4d;
-    }
-
-    .chatPreview {
-      padding: 3em;
-      gap: 15px;
-
-      &.selected {
-        background-color: #21222a;
-      }
-    }
-  /* User Info in Sidebar */
-  .footer {
-    display: flex;
-    position: static;
-    background-color: #7a7a7a !important;
-    align-items: center;
-    height: 5%;
+  .chatPreview:hover {
+    background-color: #39413c;
+    color: white;
+    cursor: pointer;
   }
 
-    .user {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 30%;
-      cursor: pointer;
-      /* margin-bottom: 50em; */
-      
+  .userChat {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    height: 6vh;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-      img {
-        height: 4em;
-        width: 4em;
-        margin: 2em 7em 0 1em;
-        border-radius: 50%;
-        object-fit: cover;
-      }
+  .name-chat {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+  }
 
-      .sign-out {
-        border-radius: 15px;
-        background-color: #6c757d;
-        color: white;
-        margin: 2em 0 0 2em;
-        height: 4em;
-        width: 8em;
-      }
+  img {
+    height: 3em;
+    width: 3em;
+    border-radius: 50% !important;
+    object-fit: cover;
+  }
 
-      .sign-out:hover {
-        background-color: white;
-        color: #6c757d;
-        cursor: pointer;
-      }
-    }
+  .channel-icon {
+    margin-top: 16px;
+    height: 3em;
+    width: 3em;
+    /* flex: 1; */
+    border-radius: 50% !important;
+    object-fit: cover;
+  }
+
+  .deleteContainer {
+    cursor: pointer;
+    margin-top: 15px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .deleteContainer:hover svg {
+    background-color: #b5b4b4;
+  }
+
+  p {
+    font-size: 15px;
+  }
+
+  h3 {
+    padding-top: 14px;
+  }
+}
+
+.preview {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  height: 75%;
+  overflow: scroll;
+}
+
+.newChat {
+  background-color: #9a9a9a;
+  border: none;
+  width: 20vw;
+  font-size: 24px;
+}
+
+.newChat:hover {
+  background-color: #4f4d4d;
+}
+
+.chatPreview {
+  padding: 3em;
+  gap: 15px;
+
+  &.selected {
+    background-color: #21222a;
+  }
+}
+/* User Info in Sidebar */
+.footer {
+  display: flex;
+  position: static;
+  background-color: #7a7a7a !important;
+  align-items: center;
+  height: 5%;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 30%;
+  cursor: pointer;
+  /* margin-bottom: 50em; */
+
+  img {
+    height: 4em;
+    width: 4em;
+    margin: 2em 7em 0 1em;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .sign-out {
+    border-radius: 15px;
+    background-color: #6c757d;
+    color: white;
+    margin: 2em 0 0 2em;
+    height: 4em;
+    width: 8em;
+  }
+
+  .sign-out:hover {
+    background-color: white;
+    color: #6c757d;
+    cursor: pointer;
+  }
+}
 
 /* Chat Message Panel */
 .rightSection {
   flex: 2;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   /*scroll bar for chatroom components*/
   /* ::-webkit-scrollbar-track {
@@ -489,7 +487,7 @@ form {
 
     .messageBlock {
       max-height: 55%;
-      overflow-y: visible;
+      overflow-y: auto;
 
       .chatMessage {
         display: flex;
@@ -569,16 +567,16 @@ form {
     }
 
     .inputMessage {
-      display: flex;
+      /* display: flex;
       justify-content: flex-start;
       align-items: flex-end;
       height: 18%;
-      width: 100%;
-
-      /* display: block;
-      position: absolute;
-      width: 63%;
-      margin-top: 38.5rem; */
+      width: 100%; */
+      position: fixed;
+      bottom: 70px;
+      width: 45%;
+      padding: 5px;
+      /* background-color: transparent; */
 
       .inputBox {
         display: flex;
@@ -591,13 +589,14 @@ form {
           width: 80%;
           border-radius: 10px;
           color: black;
+          height: 30px;
         }
       }
 
       .send {
         background-color: #6c757d;
         color: white;
-        width: 5em;
+        max-width: 5em;
         height: 3em;
         border-radius: 5px;
       }
