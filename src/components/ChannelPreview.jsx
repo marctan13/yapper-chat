@@ -30,8 +30,8 @@ function ChannelPreview(props) {
       className={`chatPreview ${props.isSelected ? "selected" : ""}`}
     >
       <div className={`userChat ${props.isSelected ? "selectedChannel" : ""}`}>
-        {props.image && <img src={props.image} alt="avatar" />}
-        {!props.image && <img src="/cup.jpg" alt="avatar" />}
+        {props.image && <img src={props.image} className="channel-icon" alt="avatar" />}
+        {!props.image && <img src="/cup.jpg" className="channel-icon" alt="avatar" />}
         <div className="name-chat">
           <h3>{props.name}</h3>
         </div>
