@@ -95,6 +95,9 @@ function Header({ selectedChannel, selectedChannelName }) {
                   title={member?.displayName || "No Name"}
                 />
               ))}
+          {members.length > 4 && (
+            <div className="memberImg more-members">+{members.length - 3}</div>
+          )}
         </div>
       </div>
     </div>

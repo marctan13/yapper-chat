@@ -1,5 +1,5 @@
- //work on going back to "select channel" page after deleting a channel
- //work on highlighting channel when it's selected
+//work on going back to "select channel" page after deleting a channel
+//work on highlighting channel when it's selected
 
 import { Trash } from "react-bootstrap-icons";
 import { doc, deleteDoc } from "firebase/firestore";
@@ -16,7 +16,7 @@ function ChannelPreview(props) {
         const docRef = doc(db, "channels", props.id);
         await deleteDoc(docRef);
         console.log("successful");
-        navigate("/Settings");
+        // navigate("/Settings");
       }
     } catch (error) {
       console.error(error);
@@ -30,8 +30,8 @@ function ChannelPreview(props) {
       className={`chatPreview ${props.isSelected ? "selected" : ""}`}
     >
       <div className={`userChat ${props.isSelected ? "selectedChannel" : ""}`}>
-        {props.image && <img src={props.image} alt="avatar" />}
-        {!props.image && <img src="/cup.jpg" alt="avatar" />}
+        {props.image && <img src={props.image} className="channel-icon" alt="avatar" />}
+        {!props.image && <img src="/cup.jpg" className="channel-icon" alt="avatar" />}
         <div className="name-chat">
           <h3>{props.name}</h3>
         </div>
