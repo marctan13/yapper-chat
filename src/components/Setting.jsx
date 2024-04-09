@@ -1,4 +1,5 @@
 import { auth } from "../firebase.js";
+import {verifyBeforeUpdateEmail} from "firebase/auth"
 import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext.jsx";
@@ -24,6 +25,7 @@ function Setting() {
     logOut,
     changeDisplayName,
     userDocId,
+    sendVerificationEmail
   } = useAuth();
   const [currentUser, setCurrentUser] = useState(user);
 
@@ -44,10 +46,18 @@ function Setting() {
     try {
       setError("");
       setMessage("");
-      await changeEmail(user, emailRef.current.value);
-      setMessage("Check your email inbox for further instructions");
+      if (!emailRef.current.value) {
+        setError("Please enter a valid email");
+      } else if (!user.emailVerified) {
+        setError("Please verify email before continuing");
+        sendVerificationEmail(user);
+      } else {
+        await changeEmail(user, emailRef.current.value);
+        setMessage("Check your email inbox for further instructions");
+      }
     } catch (error) {
-      setError("Check new email address to complete changes");
+      setError("Failed to update email. Please check new email to verify");
+      await verifyBeforeUpdateEmail(user, emailRef.current.value);
       console.error("Failed to update email:", error);
     }
   };
@@ -57,13 +67,20 @@ function Setting() {
     try {
       setPasswordError("");
       setPasswordMessage("");
-      await changePassword(user, passwordRef.current.value);
-      setPasswordMessage(
-        "Password has been changed! You will be signed out in 3 seconds"
-      );
-      setTimeout(() => {
-        logOut();
-      }, 3000);
+      if(!passwordRef.current.value){
+        setPasswordError("Please enter valid password")
+      } else if(passwordRef.current.value.length < 6){
+        setPasswordError("Password needs at least 6 characters")
+      }
+        else{
+        await changePassword(user, passwordRef.current.value);
+        setPasswordMessage(
+          "Password has been changed! You will be signed out in 3 seconds"
+        );
+        setTimeout(() => {
+          logOut();
+        }, 3000);
+      }
     } catch (error) {
       setPasswordError("Failed to Update Password");
       console.error(error);
