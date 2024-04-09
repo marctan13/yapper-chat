@@ -24,7 +24,9 @@ function Input({ selectedChannel, formValue, setFormValue }) {
         }
       );
       setFormValue("");
-      messageRef.current.scrollIntoView({ behavior: "smooth" });
+      if (messageRef.current) {
+        messageRef.current.scrollIntoView({ behavior: "smooth" });
+      }
     } catch (error) {
       console.log("Failed to send");
     }
