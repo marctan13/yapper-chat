@@ -1,5 +1,5 @@
 import { auth } from "../firebase.js";
-import {verifyBeforeUpdateEmail} from "firebase/auth"
+import { verifyBeforeUpdateEmail } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext.jsx";
@@ -25,7 +25,7 @@ function Setting() {
     logOut,
     changeDisplayName,
     userDocId,
-    sendVerificationEmail
+    sendVerificationEmail,
   } = useAuth();
   const [currentUser, setCurrentUser] = useState(user);
 
@@ -67,12 +67,11 @@ function Setting() {
     try {
       setPasswordError("");
       setPasswordMessage("");
-      if(!passwordRef.current.value){
-        setPasswordError("Please enter valid password")
-      } else if(passwordRef.current.value.length < 6){
-        setPasswordError("Password needs at least 6 characters")
-      }
-        else{
+      if (!passwordRef.current.value) {
+        setPasswordError("Please enter valid password");
+      } else if (passwordRef.current.value.length < 6) {
+        setPasswordError("Password needs at least 6 characters");
+      } else {
         await changePassword(user, passwordRef.current.value);
         setPasswordMessage(
           "Password has been changed! You will be signed out in 3 seconds"
@@ -152,7 +151,19 @@ function Setting() {
                     placeholder="Enter new display name"
                     ref={displayNameRef}
                   />
-                  <button type="submit">Update Display Name</button>
+                  <div>
+                    <button type="submit">Update Display Name</button>
+                    <button
+                      className="editName"
+                      onClick={() => {
+                        setDisplayNameIsClicked(!displayNameIsClicked);
+                        setError(!error);
+                      }}
+                      title="Edit Display Name"
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </form>
               )}
             </div>
@@ -181,7 +192,20 @@ function Setting() {
                   placeholder="Enter new email"
                   ref={emailRef}
                 />
-                <button type="submit">Update Email</button>
+                <div>
+                  <button type="submit">Update Email</button>
+                  <button
+                    className="editEmail"
+                    onClick={() => {
+                      setIsClicked(!isClicked);
+                      setError(!error);
+                    }}
+                    title="Change Email"
+                    style={{ marginLeft: "4px" }}
+                  >
+                    Cancel
+                  </button>
+                </div>
               </form>
             )}
             <span>
@@ -213,7 +237,18 @@ function Setting() {
                 placeholder="Enter new password"
                 ref={passwordRef}
               />
-              <button type="submit">Update Password</button>
+              <div>
+                <button type="submit">Update Password</button>
+                <button
+                  onClick={() => {
+                    setPasswordIsClicked(!passwordIsClicked);
+                    setError(!error);
+                  }}
+                  title="Change Password"
+                >
+                  Cancel
+                </button>
+              </div>
             </form>
           )}
           <hr />
