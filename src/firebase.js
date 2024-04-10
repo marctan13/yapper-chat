@@ -3,7 +3,6 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
-const key = process.env.REACT_APP_FIREBASE_KEY;
 const firebaseConfig = {
   apiKey: "AIzaSyAkCDXQdHEhy3v4VTshG0jZGTJF6vVk4B0",
   authDomain: "yapperchat-2c0f0.firebaseapp.com",
