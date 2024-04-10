@@ -21,10 +21,8 @@ function Header({ selectedChannel, selectedChannelName }) {
             const memberProfiles = await Promise.all(
               memberIds.map(async (memberId) => {
                 const userDocRef = doc(db, "users", memberId);
-                // console.log("Fetching user document for ID:", memberId);
                 const userDocSnap = await getDoc(userDocRef);
                 if (userDocSnap.exists()) {
-                  // console.log("User document exists for ID:", memberId);
                   return userDocSnap.data();
                 } else {
                   console.error(
@@ -46,7 +44,6 @@ function Header({ selectedChannel, selectedChannelName }) {
         console.error("Error fetching data:", error);
       }
     };
-  
     fetchChannelData();
   }, [selectedChannel]);
 

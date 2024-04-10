@@ -1,4 +1,3 @@
-import { auth } from "../firebase.js";
 import { verifyBeforeUpdateEmail } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
@@ -167,6 +166,7 @@ function Setting() {
                 </form>
               )}
             </div>
+            {/* Doesnt render this section if user signs in with Google */}
             {user.providerData[0].providerId === "google.com" ? null : (
               <div style={{ display: "flex" }}>
                 <span>{user.email}</span>
@@ -217,6 +217,7 @@ function Setting() {
             </span>
           </div>
         </div>
+        {/* Doesnt render this section if user signs in with Google */}
         {user.providerData[0].providerId === "google.com" ? null : (
           <div className="changePassword">
             <h1>Password</h1>

@@ -5,6 +5,7 @@ import Setting from "../components/Setting";
 function Settings() {
   const [selectedChannel, setSelectedChannel] = useState("null");
   const [selectedChannelName, setSelectedChannelName] = useState("");
+  
 
   return (
     <div className="chatroom">
