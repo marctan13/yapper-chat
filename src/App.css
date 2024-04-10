@@ -320,7 +320,7 @@ form {
 
   .previews {
     height: 65%;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 
   .chatPreview {
