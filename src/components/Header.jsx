@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { db } from "../firebase";
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 import ChatMenuItem from "./ChatMenuItem";
 
 function Header({ selectedChannel, selectedChannelName }) {
   const [open, setOpen] = useState(false);
   const [members, setMembers] = useState([]);
   const [channelImage, setChannelImage] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchChannelData = async () => {
@@ -59,9 +61,10 @@ function Header({ selectedChannel, selectedChannelName }) {
       </div>
       <div className="teamInfo">
         <h1
-          onClick={() => {
-            setOpen(!open);
-          }}
+          // onClick={() => {
+          //   setOpen(!open);
+          // }}
+          // onClick={() => navigate("/ChatMenuItem")}
         >
           {selectedChannelName
             ? selectedChannelName
