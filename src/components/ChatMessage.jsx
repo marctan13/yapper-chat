@@ -48,6 +48,7 @@ function ChatMessage({ selectedChannel, selectedChannelName }) {
       messageEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
     return () => unsubscribe();
+
   }, [selectedChannel]);
 
   return (

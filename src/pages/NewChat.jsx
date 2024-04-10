@@ -5,7 +5,6 @@ import CreateNewChat from '../components/CreateNewChat'
 function NewChat() {
     const [selectedChannel, setSelectedChannel] = useState("null");
     const [selectedChannelName, setSelectedChannelName] = useState("");
-
     
     return (
       <div className='chatroom'>

@@ -83,40 +83,6 @@ export function AuthProvider({ children }) {
   };
 
   //fetch channels and filter
-  // const fetchChannels = async () => {
-  //   try {
-  //     const channelsCollection = collection(db, "channels");
-  //     // Subscribe to real-time updates on the channels collection
-  //     const unsubscribe = onSnapshot(channelsCollection, (snapshot) => {
-  //       const userUid = user.uid;
-  //       // Fetch the user document based on user's uid
-  //       const userQuery = query(
-  //         collection(db, "users"),
-  //         where("uid", "==", userUid)
-  //       );
-  //       getDocs(userQuery).then((userQuerySnapshot) => {
-  //         // Get the docid of the user document
-  //         const userDocId = userQuerySnapshot.docs.find((doc) =>
-  //           doc.exists()
-  //         )?.id;
-  //         // Process the channels data
-  //         const channelsData = snapshot.docs
-  //           .map((doc) => ({
-  //             id: doc.id,
-  //             ...doc.data(),
-  //           }))
-  //           .filter((channel) => channel.members.includes(userDocId));      
-  //         // Set the channels state
-  //         setChannels(channelsData);
-  //       });
-  //     });
-  //     // Return the unsubscribe function to stop listening for updates when needed
-  //     return unsubscribe;
-  //   } catch (error) {
-  //     console.error("Error fetching channels: ", error);
-  //   }
-  // };
-  //fetch channels and filter
 const fetchChannels = async () => {
   try {
     const channelsCollection = collection(db, "channels");
