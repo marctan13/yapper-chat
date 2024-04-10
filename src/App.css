@@ -329,13 +329,32 @@ form {
     max-width: 500px;
     overflow: hidden;
   }
+  .chatPreview {
+    cursor: pointer;
+    padding: 5px 5px 30px 5px;
+    max-width: 500px;
+    overflow: hidden;
+  }
 
   .chatPreview:hover {
     background-color: #39413c;
     color: white;
     cursor: pointer;
   }
+  .chatPreview:hover {
+    background-color: #39413c;
+    color: white;
+    cursor: pointer;
+  }
 
+  .userChat {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    height: 6vh;
+    justify-content: space-between;
+    align-items: center;
+  }
   .userChat {
     display: flex;
     flex-direction: row;
@@ -351,7 +370,19 @@ form {
     white-space: nowrap;
     flex: 1;
   }
+  .name-chat {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+  }
 
+  img {
+    height: 3em;
+    width: 3em;
+    border-radius: 50% !important;
+    object-fit: cover;
+  }
   img {
     height: 3em;
     width: 3em;
@@ -363,7 +394,6 @@ form {
     margin-top: 16px;
     height: 3em;
     width: 3em;
-    /* flex: 1; */
     border-radius: 50% !important;
     object-fit: cover;
   }
@@ -374,7 +404,16 @@ form {
     width: 30px;
     height: 30px;
   }
+  .deleteContainer {
+    cursor: pointer;
+    margin-top: 15px;
+    width: 30px;
+    height: 30px;
+  }
 
+  .deleteContainer:hover svg {
+    background-color: #b5b4b4;
+  }
   .deleteContainer:hover svg {
     background-color: #b5b4b4;
   }
@@ -382,9 +421,14 @@ form {
   p {
     font-size: 15px;
   }
+  p {
+    font-size: 15px;
+  }
 
   h3 {
     padding-top: 14px;
+    font-size: 20px;
+    font-weight: 500;
   }
 }
 
@@ -480,6 +524,7 @@ form {
     display: flex;
     flex-direction: column;
     max-height: 82%;
+    padding-bottom: 1.5rem;
 
     .scroll {
       overflow-y: scroll;
@@ -522,6 +567,7 @@ form {
           word-wrap: break-word; /* Add this property to wrap long words */
           overflow-wrap: break-word; /* Add this property to handle overflow */
           white-space: pre-wrap;
+          padding: 5px 5px 5px 5px;
 
           input {
             background-color: transparent;
@@ -571,22 +617,17 @@ form {
     }
 
     .inputMessage {
-      /* display: flex;
-      justify-content: flex-start;
-      align-items: flex-end;
-      height: 18%;
-      width: 100%; */
       position: fixed;
       bottom: 70px;
       width: 45%;
       padding: 5px;
-      /* background-color: transparent; */
 
       .inputBox {
         display: flex;
         width: 100%;
         justify-self: flex-start;
         flex-direction: row;
+        background-color: #4f4d4d;
 
         .textBox {
           display: flex;
@@ -701,8 +742,8 @@ form {
 
       .memberImg {
         width: 10%;
-        /* height: 75%; */
-        border-radius: 50%;
+        height: 75%;
+        border-radius: 50% !important;
       }
 
       .more-members {

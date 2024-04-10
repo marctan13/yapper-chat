@@ -16,7 +16,7 @@ function ChannelPreview(props) {
         const docRef = doc(db, "channels", props.id);
         await deleteDoc(docRef);
         console.log("successful");
-        // navigate("/Settings");
+        navigate("/Settings");
       }
     } catch (error) {
       console.error(error);
