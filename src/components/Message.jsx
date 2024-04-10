@@ -79,8 +79,6 @@ function Message({
     }
   }
 
-  console.log(user);
-
   return (
     <div className={`chatMessage ${user.uid === sender_id ? "sender" : ""}`}>
       <div className="userInfo">
