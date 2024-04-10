@@ -22,7 +22,7 @@ function Sidebar({
   useEffect(() => {
     fetchChannels();
   }, []);
-
+  
   useEffect(() => {
     const bumpRecentChannels = async () => {
       try {

@@ -92,8 +92,8 @@ function CreateNewChat({ path }) {
               src="image.png"
             />
           </div>
+          <button className="createChatBtn">Create New Chat</button>
           <div className="addMembers">
-            <button className="createChatBtn">Create New Chat</button>
             <h2>Add Members</h2>
             {users
               .filter((u) => u.uid !== user.uid)

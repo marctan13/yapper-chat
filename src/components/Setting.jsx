@@ -46,7 +46,7 @@ function Setting() {
       setError("");
       setMessage("");
       if (!emailRef.current.value) {
-        setError("Please enter a valid email");
+        setError("Please enter valid email");
       } else if (!user.emailVerified) {
         setError("Please verify email before continuing");
         sendVerificationEmail(user);
