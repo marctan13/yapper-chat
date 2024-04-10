@@ -515,9 +515,13 @@ form {
           background-color: #7c91ff;
           display: flex;
           flex-direction: column;
-          max-width: 60%;
+          min-width: 25%;
+          max-width: 100%;
           margin: 3em 1em 3em 0.5em;
           border-radius: 15px;
+          word-wrap: break-word; /* Add this property to wrap long words */
+          overflow-wrap: break-word; /* Add this property to handle overflow */
+          white-space: pre-wrap;
 
           input {
             background-color: transparent;
