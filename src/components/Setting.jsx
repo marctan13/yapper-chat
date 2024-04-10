@@ -134,6 +134,8 @@ function Setting() {
                   onClick={() => {
                     setDisplayNameIsClicked(!displayNameIsClicked);
                     setError(!error);
+                    setIsClicked(false);
+                    setPasswordIsClicked(false);
                   }}
                   title="Edit Display Name"
                 >
@@ -175,6 +177,8 @@ function Setting() {
                   onClick={() => {
                     setIsClicked(!isClicked);
                     setError(!error);
+                    setPasswordIsClicked(false)
+                    setDisplayNameIsClicked(false);
                   }}
                   title="Change Email"
                   style={{ marginLeft: "4px" }}
@@ -225,6 +229,8 @@ function Setting() {
               onClick={() => {
                 setPasswordIsClicked(!passwordIsClicked);
                 setError(!error);
+                setDisplayNameIsClicked(false);
+                setIsClicked(false);
               }}
               title="Change Password"
             >
