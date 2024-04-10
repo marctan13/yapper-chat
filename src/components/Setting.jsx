@@ -167,21 +167,22 @@ function Setting() {
                 </form>
               )}
             </div>
-
-            <div style={{ display: "flex" }}>
-              <span>{user.email}</span>
-              <button
-                className="editEmail"
-                onClick={() => {
-                  setIsClicked(!isClicked);
-                  setError(!error);
-                }}
-                title="Change Email"
-                style={{ marginLeft: "4px" }}
-              >
-                <FontAwesomeIcon icon={faEdit} />
-              </button>
-            </div>
+            {user.providerData[0].providerId === "google.com" ? null : (
+              <div style={{ display: "flex" }}>
+                <span>{user.email}</span>
+                <button
+                  className="editEmail"
+                  onClick={() => {
+                    setIsClicked(!isClicked);
+                    setError(!error);
+                  }}
+                  title="Change Email"
+                  style={{ marginLeft: "4px" }}
+                >
+                  <FontAwesomeIcon icon={faEdit} />
+                </button>
+              </div>
+            )}
             {error && <h1>{error}</h1>}
             {message && <h1>{message}</h1>}
             {isClicked && (
@@ -216,48 +217,50 @@ function Setting() {
             </span>
           </div>
         </div>
-        <div className="changePassword">
-          <h1>Password</h1>
-          <button
-            onClick={() => {
-              setPasswordIsClicked(!passwordIsClicked);
-              setError(!error);
-            }}
-            title="Change Password"
-          >
-            Change Password
-          </button>
-          {passwordError && <h1>{passwordError}</h1>}
-          {passwordMessage && <h1>{passwordMessage}</h1>}
-          {passwordIsClicked && (
-            <form onSubmit={handleUpdatePassword}>
-              <input
-                type="password"
-                className="newPasswordInput"
-                placeholder="Enter new password"
-                ref={passwordRef}
-              />
-              <div>
-                <button type="submit">Update Password</button>
-                <button
-                  onClick={() => {
-                    setPasswordIsClicked(!passwordIsClicked);
-                    setError(!error);
-                  }}
-                  title="Change Password"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          )}
-          <hr />
-          <div className="notifications">
-            <h1>Notifications</h1>
-            <span>Do Not Disturb</span>
-            <input type="checkbox" name="dnd" id="dnd" />
-            <label htmlFor="dnd">Do Not Disturb</label>
+        {user.providerData[0].providerId === "google.com" ? null : (
+          <div className="changePassword">
+            <h1>Password</h1>
+            <button
+              onClick={() => {
+                setPasswordIsClicked(!passwordIsClicked);
+                setError(!error);
+              }}
+              title="Change Password"
+            >
+              Change Password
+            </button>
+            {passwordError && <h1>{passwordError}</h1>}
+            {passwordMessage && <h1>{passwordMessage}</h1>}
+            {passwordIsClicked && (
+              <form onSubmit={handleUpdatePassword}>
+                <input
+                  type="password"
+                  className="newPasswordInput"
+                  placeholder="Enter new password"
+                  ref={passwordRef}
+                />
+                <div>
+                  <button type="submit">Update Password</button>
+                  <button
+                    onClick={() => {
+                      setPasswordIsClicked(!passwordIsClicked);
+                      setError(!error);
+                    }}
+                    title="Change Password"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
+        )}
+        <div className="notifications">
+          <hr />
+          <h1>Notifications</h1>
+          <span>Do Not Disturb</span>
+          <input type="checkbox" name="dnd" id="dnd" />
+          <label htmlFor="dnd">Do Not Disturb</label>
         </div>
       </div>
     </div>
