@@ -1,5 +1,4 @@
 //work on going back to "select channel" page after deleting a channel
-//work on highlighting channel when it's selected
 
 import { Trash } from "react-bootstrap-icons";
 import { doc, deleteDoc } from "firebase/firestore";
@@ -15,7 +14,7 @@ function ChannelPreview(props) {
       if (confirm("Do you want to delete this channel?")) {
         const docRef = doc(db, "channels", props.id);
         await deleteDoc(docRef);
-        console.log("successful");
+        window.location.reload();
       }
     } catch (error) {
       console.error(error);

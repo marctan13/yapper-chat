@@ -1,14 +1,29 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { db } from "../firebase";
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, updateDoc, onSnapshot } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import ChatMenuItem from "./ChatMenuItem";
+import Dropdown from "react-bootstrap/Dropdown";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+import { useAuth } from "../contexts/AuthContext";
 
-function Header({ selectedChannel, selectedChannelName }) {
+function Header({
+  selectedChannel,
+  selectedChannelName,
+  setSelectedChannelName,
+  setSelectedChannel,
+}) {
   const [open, setOpen] = useState(false);
   const [members, setMembers] = useState([]);
   const [channelImage, setChannelImage] = useState(null);
+  const [show, setShow] = useState(false);
   const navigate = useNavigate();
+  const newChannelName = useRef();
+  const { user } = useAuth();
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   useEffect(() => {
     const fetchChannelData = async () => {
@@ -49,6 +64,35 @@ function Header({ selectedChannel, selectedChannelName }) {
     fetchChannelData();
   }, [selectedChannel]);
 
+  const handleClick = async (e) => {
+    e.preventDefault();
+    try {
+      if (!selectedChannel) return;
+      const channelDocRef = doc(db, "channels", selectedChannel);
+      await updateDoc(channelDocRef, { name: newChannelName.current.value });
+      handleClose();
+    } catch (error) {
+      console.error("Failed to change name", error);
+      throw error;
+    }
+  };
+
+  // const handleLeaveChannel = async () => {
+  //   try {
+  //     if (!selectedChannel) return;
+  //     const channelDocRef = doc(db, "channels", selectedChannel);
+  //     await updateDoc(channelDocRef, {
+  //       members: members.filter((memberId) => memberId !== user.uid), // Assuming currentUserId is accessible
+  //     });
+  //     setSelectedChannel(null); // Clear the selected channel
+  //     setSelectedChannelName(""); // Clear the selected channel name
+  //     handleClose();
+  //   } catch (error) {
+  //     console.error("Failed to leave channel", error);
+  //     throw error;
+  //   }
+  // };
+
   return (
     <div className="header">
       <div className="chatAvatar">
@@ -60,16 +104,47 @@ function Header({ selectedChannel, selectedChannelName }) {
         )}
       </div>
       <div className="teamInfo">
-        <h1
-          // onClick={() => {
-          //   setOpen(!open);
-          // }}
-          // onClick={() => navigate("/ChatMenuItem")}
+        {selectedChannelName ? (
+          <h1 onClick={handleShow}>{selectedChannelName}</h1>
+        ) : (
+          <h1>Select or Create a Channel</h1>
+        )}
+        <Modal
+          // centered
+          show={show}
+          onHide={handleClose}
+          centered
+          style={{
+            color: "white",
+            backgroundColor: "#7a7a7a",
+            height: "15%",
+            maxWidth: "50%",
+            top: "7.5%",
+            left: "40%",
+          }}
         >
-          {selectedChannelName
-            ? selectedChannelName
-            : "Select or Create a Channel"}
-        </h1>
+          <Modal.Header closeButton>
+            <Modal.Title>Chat Menu</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <input
+              type="text"
+              placeholder="Edit Channel Name"
+              ref={newChannelName}
+            />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={handleClick}>
+              Save Changes
+            </Button>
+            {/* <Button variant="danger" onClick={handleLeaveChannel}>
+              Leave Channel
+            </Button> */}
+          </Modal.Footer>
+        </Modal>
         {open && (
           <div className={`dropdown-menu  ${open ? "active" : "inactive"}`}>
             <h3>Chat Menu</h3>
