@@ -8,9 +8,11 @@ html,
 body {
   margin: 0;
   padding: 0;
+  /* hides it on the body */
+  overflow-y: hidden;
 }
 
-.formContainer {
+.signin-formContainer {
   background: url("signin-background.jpg");
   background: cover;
   background-size: 100%;
@@ -20,18 +22,40 @@ body {
   justify-content: flex-end;
 }
 
-.formWrapper {
+.signin-formWrapper {
   background-color: #919eaa;
   padding: 20px 60px;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  height: 55%;
+  height: 370px;
   margin-right: 5em;
   gap: 10px;
   align-items: center;
 }
+/* Forgot Password Containers */
+.forgotPass-formContainer {
+  background: url("signin-background.jpg");
+  background: cover;
+  background-size: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
 
+.forgotPass-formWrapper {
+  background-color: #919eaa;
+  padding: 20px 60px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 320px;
+  margin-right: 5em;
+  gap: 10px;
+  align-items: center;
+}
+/* End of Forgot Password Containers */
 .title-logo {
   display: flex;
   align-items: center;
@@ -95,7 +119,7 @@ form {
 .password-strength {
   margin-top: 5px;
   font-size: 14px;
-  color: black; /* Change color to black */
+  color: black;
 }
 
 .register-weak {
@@ -164,14 +188,25 @@ form {
   background-color: #838387;
 }
 
-.link-btn {
-  text-decoration: underline;
+.links {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.register-btn,
+.forgotPass-btn,
+.register-link {
+  font-size: 15px;
   cursor: pointer;
-  outline: none;
   background-color: transparent;
-  background-repeat: no-repeat;
   border: none;
   color: black;
+}
+
+.button-container {
+  display: flex;
+  gap: 10px;
 }
 /* Main Page */
 .chatroom {
