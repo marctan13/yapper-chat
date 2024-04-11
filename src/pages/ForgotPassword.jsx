@@ -6,22 +6,25 @@ function ForgotPassword() {
   const navigate = useNavigate();
   const { resetPassword } = useAuth();
   const emailRef = useRef();
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       await resetPassword(emailRef.current.value);
-      setMessage("Check inbox for further instructions");
+      window.alert("Check the email provided for further instructions to reset your password.");
+      navigate("/");
     } catch (error) {
-      setError("Failed to Reset Password");
+      window.alert("Failed to Reset Password");
+      console.error("Failed to reset password:", error);
     }
+    setLoading(false);
   };
 
   return (
-    <div className="formContainer">
-      <div className="formWrapper">
+    <div className="forgotPass-formContainer">
+      <div className="forgotPass-formWrapper">
         <div className="title-logo">
           <h1 className="logo">🗣️</h1>
           <h1 className="title">Yapper Chat</h1>
@@ -30,19 +33,9 @@ function ForgotPassword() {
           <h1>
             <strong>Reset Password</strong>
           </h1>
-          {message && (
-            <p>
-              <strong>{message}</strong>
-            </p>
-          )}
-          {error && (
-            <p>
-              <strong>{error}</strong>
-            </p>
-          )}
           <input type="email" placeholder="Email..." ref={emailRef} required />
-          <button type="submit" className="sign-in">
-            Reset Password
+          <button type="submit" className="sign-in" disabled={loading}>
+            {loading ? "Resetting..." : "Reset Password"}
           </button>
         </form>
         <div className="links">
