@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { addDoc, collection, query, where, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 
 function CreateNewChat({ path }) {
@@ -44,14 +44,14 @@ function CreateNewChat({ path }) {
   async function handleSubmit(e) {
     e.preventDefault();
     const userUid = user.uid;
-      // Fetch the user document based on user's uid
-      const userQuery = query(
-        collection(db, "users"),
-        where("uid", "==", userUid)
-      );
-      const userQuerySnapshot = await getDocs(userQuery);
-      // // Get the docid of the user document
-      const userDocId = userQuerySnapshot.docs.find((doc) => doc.exists())?.id;
+    // Fetch the user document based on user's uid
+    const userQuery = query(
+      collection(db, "users"),
+      where("uid", "==", userUid)
+    );
+    const userQuerySnapshot = await getDocs(userQuery);
+    // // Get the docid of the user document
+    const userDocId = userQuerySnapshot.docs.find((doc) => doc.exists())?.id;
     await addDoc(collection(db, "channels"), {
       name: chatName,
       members: [userDocId, ...selectedUsers],
@@ -92,31 +92,34 @@ function CreateNewChat({ path }) {
               src="image.png"
             />
           </div>
+          <button className="createChatBtn">Create New Chat</button>
           <div className="addMembers">
             <h2>Add Members</h2>
-            {users.filter(u => u.uid !== user.uid).map((user) => {
-              return (
-                <div
-                  className={`userItem-wrapper ${
-                    selectedUsers.includes(user.uid) ? "selected" : ""
-                  }`}
-                  key={user.uid}
-                  onClick={() => handleSelect(user.id)}
-                >
-                  <img src={user.photoURL || "avatar.png"} alt="" size={32} />
-                  <p>{user.displayName}</p>
-                  {selectedUsers.includes(user.id) && (
-                    <img
-                      src="selected.png"
-                      alt="Selected"
-                      className="selectedImage"
-                    />
-                  )}
-                </div>
-              );
-            })}
+            {users
+              .filter((u) => u.uid !== user.uid)
+              .map((user) => {
+                return (
+                  <div
+                    className={`userItem-wrapper ${
+                      selectedUsers.includes(user.uid) ? "selected" : ""
+                    }`}
+                    key={user.uid}
+                    onClick={() => handleSelect(user.id)}
+                  >
+                    <img src={user.photoURL || "avatar.png"} alt="" size={32} />
+                    <p>{user.displayName}</p>
+                    {selectedUsers.includes(user.id) && (
+                      <img
+                        src="selected.png"
+                        alt="Selected"
+                        className="selectedImage"
+                      />
+                    )}
+                  </div>
+                );
+              })}
           </div>
-          <button className="createChatBtn">Create New Chat</button>
+          {/* <button className="createChatBtn">Create New Chat</button> */}
         </form>
       </div>
     </div>

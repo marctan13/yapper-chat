@@ -1,4 +1,4 @@
-import { auth } from "../firebase.js";
+import { verifyBeforeUpdateEmail } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext.jsx";
@@ -24,6 +24,7 @@ function Setting() {
     logOut,
     changeDisplayName,
     userDocId,
+    sendVerificationEmail,
   } = useAuth();
   const [currentUser, setCurrentUser] = useState(user);
 
@@ -44,10 +45,18 @@ function Setting() {
     try {
       setError("");
       setMessage("");
-      await changeEmail(user, emailRef.current.value);
-      setMessage("Check your email inbox for further instructions");
+      if (!emailRef.current.value) {
+        setError("Please enter valid email");
+      } else if (!user.emailVerified) {
+        setError("Please verify email before continuing");
+        sendVerificationEmail(user);
+      } else {
+        await changeEmail(user, emailRef.current.value);
+        setMessage("Check your email inbox for further instructions");
+      }
     } catch (error) {
-      setError("Check new email address to complete changes");
+      setError("Failed to update email. Please check new email to verify");
+      await verifyBeforeUpdateEmail(user, emailRef.current.value);
       console.error("Failed to update email:", error);
     }
   };
@@ -57,13 +66,19 @@ function Setting() {
     try {
       setPasswordError("");
       setPasswordMessage("");
-      await changePassword(user, passwordRef.current.value);
-      setPasswordMessage(
-        "Password has been changed! You will be signed out in 3 seconds"
-      );
-      setTimeout(() => {
-        logOut();
-      }, 3000);
+      if (!passwordRef.current.value) {
+        setPasswordError("Please enter valid password");
+      } else if (passwordRef.current.value.length < 6) {
+        setPasswordError("Password needs at least 6 characters");
+      } else {
+        await changePassword(user, passwordRef.current.value);
+        setPasswordMessage(
+          "Password has been changed! You will be signed out in 3 seconds"
+        );
+        setTimeout(() => {
+          logOut();
+        }, 3000);
+      }
     } catch (error) {
       setPasswordError("Failed to Update Password");
       console.error(error);
@@ -119,6 +134,8 @@ function Setting() {
                   onClick={() => {
                     setDisplayNameIsClicked(!displayNameIsClicked);
                     setError(!error);
+                    setIsClicked(false);
+                    setPasswordIsClicked(false);
                   }}
                   title="Edit Display Name"
                 >
@@ -135,25 +152,41 @@ function Setting() {
                     placeholder="Enter new display name"
                     ref={displayNameRef}
                   />
-                  <button type="submit">Update Display Name</button>
+                  <div>
+                    <button type="submit">Update Display Name</button>
+                    <button
+                      className="editName"
+                      onClick={() => {
+                        setDisplayNameIsClicked(!displayNameIsClicked);
+                        setError(!error);
+                      }}
+                      title="Edit Display Name"
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </form>
               )}
             </div>
-
-            <div style={{ display: "flex" }}>
-              <span>{user.email}</span>
-              <button
-                className="editEmail"
-                onClick={() => {
-                  setIsClicked(!isClicked);
-                  setError(!error);
-                }}
-                title="Change Email"
-                style={{ marginLeft: "4px" }}
-              >
-                <FontAwesomeIcon icon={faEdit} />
-              </button>
-            </div>
+            {/* Doesnt render this section if user signs in with Google */}
+            {user.providerData[0].providerId === "google.com" ? null : (
+              <div style={{ display: "flex" }}>
+                <span>{user.email}</span>
+                <button
+                  className="editEmail"
+                  onClick={() => {
+                    setIsClicked(!isClicked);
+                    setError(!error);
+                    setPasswordIsClicked(false)
+                    setDisplayNameIsClicked(false);
+                  }}
+                  title="Change Email"
+                  style={{ marginLeft: "4px" }}
+                >
+                  <FontAwesomeIcon icon={faEdit} />
+                </button>
+              </div>
+            )}
             {error && <h1>{error}</h1>}
             {message && <h1>{message}</h1>}
             {isClicked && (
@@ -164,7 +197,20 @@ function Setting() {
                   placeholder="Enter new email"
                   ref={emailRef}
                 />
-                <button type="submit">Update Email</button>
+                <div>
+                  <button type="submit">Update Email</button>
+                  <button
+                    className="editEmail"
+                    onClick={() => {
+                      setIsClicked(!isClicked);
+                      setError(!error);
+                    }}
+                    title="Change Email"
+                    style={{ marginLeft: "4px" }}
+                  >
+                    Cancel
+                  </button>
+                </div>
               </form>
             )}
             <span>
@@ -175,37 +221,53 @@ function Setting() {
             </span>
           </div>
         </div>
-        <div className="changePassword">
-          <h1>Password</h1>
-          <button
-            onClick={() => {
-              setPasswordIsClicked(!passwordIsClicked);
-              setError(!error);
-            }}
-            title="Change Password"
-          >
-            Change Password
-          </button>
-          {passwordError && <h1>{passwordError}</h1>}
-          {passwordMessage && <h1>{passwordMessage}</h1>}
-          {passwordIsClicked && (
-            <form onSubmit={handleUpdatePassword}>
-              <input
-                type="password"
-                className="newPasswordInput"
-                placeholder="Enter new password"
-                ref={passwordRef}
-              />
-              <button type="submit">Update Password</button>
-            </form>
-          )}
-          <hr />
-          <div className="notifications">
-            <h1>Notifications</h1>
-            <span>Do Not Disturb</span>
-            <input type="checkbox" name="dnd" id="dnd" />
-            <label htmlFor="dnd">Do Not Disturb</label>
+        {/* Doesnt render this section if user signs in with Google */}
+        {user.providerData[0].providerId === "google.com" ? null : (
+          <div className="changePassword">
+            <h1>Password</h1>
+            <button
+              onClick={() => {
+                setPasswordIsClicked(!passwordIsClicked);
+                setError(!error);
+                setDisplayNameIsClicked(false);
+                setIsClicked(false);
+              }}
+              title="Change Password"
+            >
+              Change Password
+            </button>
+            {passwordError && <h1>{passwordError}</h1>}
+            {passwordMessage && <h1>{passwordMessage}</h1>}
+            {passwordIsClicked && (
+              <form onSubmit={handleUpdatePassword}>
+                <input
+                  type="password"
+                  className="newPasswordInput"
+                  placeholder="Enter new password"
+                  ref={passwordRef}
+                />
+                <div>
+                  <button type="submit">Update Password</button>
+                  <button
+                    onClick={() => {
+                      setPasswordIsClicked(!passwordIsClicked);
+                      setError(!error);
+                    }}
+                    title="Change Password"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
+        )}
+        <div className="notifications">
+          <hr />
+          <h1>Notifications</h1>
+          <span>Do Not Disturb</span>
+          <input type="checkbox" name="dnd" id="dnd" />
+          <label htmlFor="dnd">Do Not Disturb</label>
         </div>
       </div>
     </div>

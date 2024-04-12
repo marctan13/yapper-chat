@@ -13,7 +13,7 @@ import {
   updateProfile,
   verifyBeforeUpdateEmail,
 } from "firebase/auth";
-import { getDocs, collection, query, where, onSnapshot } from "firebase/firestore";
+import { getDocs, collection, query, where, onSnapshot, orderBy, limit } from "firebase/firestore";
 
 const AuthContext = createContext();
 
@@ -83,39 +83,65 @@ export function AuthProvider({ children }) {
   };
 
   //fetch channels and filter
-  const fetchChannels = async () => {
-    try {
-      const channelsCollection = collection(db, "channels");
-      // Subscribe to real-time updates on the channels collection
-      const unsubscribe = onSnapshot(channelsCollection, (snapshot) => {
-        const userUid = user.uid;
-        // Fetch the user document based on user's uid
-        const userQuery = query(
-          collection(db, "users"),
-          where("uid", "==", userUid)
+const fetchChannels = async () => {
+  try {
+    const channelsCollection = collection(db, "channels");
+    // Subscribe to real-time updates on the channels collection
+    const unsubscribe = onSnapshot(channelsCollection, async (snapshot) => {
+      const userUid = user.uid;
+      // Fetch the user document based on user's uid
+      const userQuery = query(
+        collection(db, "users"),
+        where("uid", "==", userUid)
+      );
+      const userQuerySnapshot = await getDocs(userQuery);
+      // Get the docid of the user document
+      const userDocId = userQuerySnapshot.docs.find((doc) =>
+        doc.exists()
+      )?.id;
+
+      // Process the channels data
+      const channelsData = [];
+      for (const doc of snapshot.docs) {
+        const channel = {
+          id: doc.id,
+          ...doc.data(),
+        };
+        // Fetch the most recent message for the channel
+        const messagesQuery = query(
+          collection(db, "channels", channel.id, "messages"),
+          orderBy("createdAt", "desc"), // Assuming createdAt field for messages
+          limit(1)
         );
-        getDocs(userQuery).then((userQuerySnapshot) => {
-          // Get the docid of the user document
-          const userDocId = userQuerySnapshot.docs.find((doc) =>
-            doc.exists()
-          )?.id;
-          // Process the channels data
-          const channelsData = snapshot.docs
-            .map((doc) => ({
-              id: doc.id,
-              ...doc.data(),
-            }))
-            .filter((channel) => channel.members.includes(userDocId));      
-          // Set the channels state
-          setChannels(channelsData);
-        });
+        const messageSnapshot = await getDocs(messagesQuery);
+        const recentMessage = messageSnapshot.docs[0]?.data();
+        // Attach the most recent message to the channel
+        channel.recentMessage = recentMessage;
+        channelsData.push(channel);
+      }
+
+      // Sort channels by their most recent message
+      channelsData.sort((a, b) => {
+        const messageA = a.recentMessage?.createdAt || 0;
+        const messageB = b.recentMessage?.createdAt || 0;
+        return messageB - messageA;
       });
-      // Return the unsubscribe function to stop listening for updates when needed
-      return unsubscribe;
-    } catch (error) {
-      console.error("Error fetching channels: ", error);
-    }
-  };
+
+      // Filter channels based on user membership
+      const filteredChannels = channelsData.filter((channel) =>
+        channel.members.includes(userDocId)
+      );
+
+      // Set the channels state
+      setChannels(filteredChannels);
+    });
+    // Return the unsubscribe function to stop listening for updates when needed
+    return unsubscribe;
+  } catch (error) {
+    console.error("Error fetching channels: ", error);
+  }
+};
+
 
   // checks user validation and grabs user collection
   useEffect(() => {

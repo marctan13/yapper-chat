@@ -7,6 +7,7 @@ import { db } from "../firebase.js";
 function ChatMessage({ selectedChannel, selectedChannelName }) {
   const [messages, setMessages] = useState([]);
   const [formValue, setFormValue] = useState("");
+  const messageEndRef = useRef(null);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -43,9 +44,13 @@ function ChatMessage({ selectedChannel, selectedChannelName }) {
         setMessages(updatedMessages);
       }
     );
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
     return () => unsubscribe();
+
   }, [selectedChannel]);
-  
+
   return (
     <>
       <div className="chatMessages">
@@ -58,14 +63,16 @@ function ChatMessage({ selectedChannel, selectedChannelName }) {
               selectedChannel={selectedChannel}
             />
           ))}
-            </div>
-          {selectedChannelName && (
-            <Input
-              selectedChannel={selectedChannel}
-              formValue={formValue}
-              setFormValue={setFormValue}
-            />
-          )}
+          {/* Create a div at the end of messages to scroll into view */}
+          <div ref={messageEndRef}></div>
+        </div>
+        {selectedChannelName && (
+          <Input
+            selectedChannel={selectedChannel}
+            formValue={formValue}
+            setFormValue={setFormValue}
+          />
+        )}
       </div>
     </>
   );

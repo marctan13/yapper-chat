@@ -18,6 +18,7 @@ function Chatroom() {
           selectedChannel={selectedChannel}
           setSelectedChannel={setSelectedChannel}
           selectedChannelName={selectedChannelName}
+          setSelectedChannelName={setSelectedChannelName}
         />
       </div>
     </div>

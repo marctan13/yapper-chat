@@ -16,7 +16,6 @@ function ChannelPreview(props) {
         const docRef = doc(db, "channels", props.id);
         await deleteDoc(docRef);
         console.log("successful");
-        // navigate("/Settings");
       }
     } catch (error) {
       console.error(error);
@@ -30,8 +29,12 @@ function ChannelPreview(props) {
       className={`chatPreview ${props.isSelected ? "selected" : ""}`}
     >
       <div className={`userChat ${props.isSelected ? "selectedChannel" : ""}`}>
-        {props.image && <img src={props.image} className="channel-icon" alt="avatar" />}
-        {!props.image && <img src="/cup.jpg" className="channel-icon" alt="avatar" />}
+        {props.image && (
+          <img src={props.image} className="channel-icon" alt="avatar" />
+        )}
+        {!props.image && (
+          <img src="/cup.jpg" className="channel-icon" alt="avatar" />
+        )}
         <div className="name-chat">
           <h3>{props.name}</h3>
         </div>

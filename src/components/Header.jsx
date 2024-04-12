@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { db } from "../firebase";
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 import ChatMenuItem from "./ChatMenuItem";
 
 function Header({ selectedChannel, selectedChannelName }) {
   const [open, setOpen] = useState(false);
   const [members, setMembers] = useState([]);
   const [channelImage, setChannelImage] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchChannelData = async () => {
@@ -21,10 +23,8 @@ function Header({ selectedChannel, selectedChannelName }) {
             const memberProfiles = await Promise.all(
               memberIds.map(async (memberId) => {
                 const userDocRef = doc(db, "users", memberId);
-                console.log("Fetching user document for ID:", memberId);
                 const userDocSnap = await getDoc(userDocRef);
                 if (userDocSnap.exists()) {
-                  console.log("User document exists for ID:", memberId);
                   return userDocSnap.data();
                 } else {
                   console.error(
@@ -46,7 +46,6 @@ function Header({ selectedChannel, selectedChannelName }) {
         console.error("Error fetching data:", error);
       }
     };
-
     fetchChannelData();
   }, [selectedChannel]);
 
@@ -62,9 +61,10 @@ function Header({ selectedChannel, selectedChannelName }) {
       </div>
       <div className="teamInfo">
         <h1
-          onClick={() => {
-            setOpen(!open);
-          }}
+          // onClick={() => {
+          //   setOpen(!open);
+          // }}
+          // onClick={() => navigate("/ChatMenuItem")}
         >
           {selectedChannelName
             ? selectedChannelName
