@@ -1,6 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import { db } from "../firebase";
-import { doc, getDoc, updateDoc, onSnapshot } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  onSnapshot,
+  query,
+  collection,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import ChatMenuItem from "./ChatMenuItem";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -77,21 +86,40 @@ function Header({
     }
   };
 
-  // const handleLeaveChannel = async () => {
-  //   try {
-  //     if (!selectedChannel) return;
-  //     const channelDocRef = doc(db, "channels", selectedChannel);
-  //     await updateDoc(channelDocRef, {
-  //       members: members.filter((memberId) => memberId !== user.uid), // Assuming currentUserId is accessible
-  //     });
-  //     setSelectedChannel(null); // Clear the selected channel
-  //     setSelectedChannelName(""); // Clear the selected channel name
-  //     handleClose();
-  //   } catch (error) {
-  //     console.error("Failed to leave channel", error);
-  //     throw error;
-  //   }
-  // };
+  const handleLeaveChannel = async () => {
+    try {
+      const userUid = user.uid;
+      // Fetch the user document based on user's uid
+      const userQuery = query(
+        collection(db, "users"),
+        where("uid", "==", userUid)
+      );
+      const userQuerySnapshot = await getDocs(userQuery);
+      // // Get the docid of the user document
+      const userDocId = userQuerySnapshot.docs.find((doc) => doc.exists())?.id;
+      if (!selectedChannel || !userDocId) return;
+      const channelDocRef = doc(db, "channels", selectedChannel);
+      // Fetch the current members of the channel
+      const channelDocSnapshot = await getDoc(channelDocRef);
+      const currentMembers = channelDocSnapshot.data().members;
+
+      if (!currentMembers || currentMembers.length === 0) {
+        // If members array is empty or null, just return
+        return;
+      }
+      // Remove the current user's ID from the members array
+      const updatedMembers = currentMembers?.filter(
+        (memberId) => memberId !== userDocId
+      );
+      await updateDoc(channelDocRef, { members: updatedMembers });
+      setSelectedChannel(null); // Clear the selected channel
+      setSelectedChannelName(""); // Clear the selected channel name
+      handleClose();
+    } catch (error) {
+      console.error("Failed to leave channel", error);
+      throw error;
+    }
+  };
 
   return (
     <div className="header">
@@ -140,9 +168,9 @@ function Header({
             <Button variant="primary" onClick={handleClick}>
               Save Changes
             </Button>
-            {/* <Button variant="danger" onClick={handleLeaveChannel}>
+            <Button variant="danger" onClick={handleLeaveChannel}>
               Leave Channel
-            </Button> */}
+            </Button>
           </Modal.Footer>
         </Modal>
         {open && (
