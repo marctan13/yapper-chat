@@ -2,7 +2,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useState, useEffect, useRef } from "react";
 import { db } from "../firebase";
-import { useAuth } from "../contexts/AuthContext";
+// import { useAuth } from "../contexts/AuthContext";
 import { 
   doc, 
   getDoc, 
@@ -18,8 +18,8 @@ function Header({
   const [members, setMembers] = useState([]);
   const [channelImage, setChannelImage] = useState(null);
   const [show, setShow] = useState(false);
-  const [img, setImg] = useState(null);
   const newChannelName = useRef();
+  const newChannelImage = useRef();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -68,7 +68,7 @@ function Header({
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImg(reader.result);
+        setChannelImage(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -79,7 +79,11 @@ function Header({
     try {
       if (!selectedChannel) return;
       const channelDocRef = doc(db, "channels", selectedChannel);
-      await updateDoc(channelDocRef, { name: newChannelName.current.value });
+      await updateDoc(channelDocRef, 
+        { 
+          name: newChannelName.current.value,
+          image: newChannelImage.current.value
+        });
       handleClose();
     } catch (error) {
       console.error("Failed to change name", error);
@@ -187,6 +191,13 @@ function Header({
                 }}
               />
             )}
+            <h3>Change Channel Image</h3>
+            <input 
+              type="file"
+              id="file"
+              onChange={handleImg}
+              
+            />
             <h3>Change Channel Name</h3>
             <input
               type="text"
