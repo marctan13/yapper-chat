@@ -10,7 +10,7 @@ function ChatMessage({ selectedChannel, selectedChannelName }) {
   const messageEndRef = useRef(null);
 
   useEffect(() => {
-    const fetchMessages = async () => {
+    async () => {
       if (!selectedChannel) return; // Exit if no channel is selected
 
       try {

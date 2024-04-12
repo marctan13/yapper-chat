@@ -37,6 +37,9 @@ function ForgotPassword() {
           <button type="submit" className="sign-in" disabled={loading}>
             {loading ? "Resetting..." : "Reset Password"}
           </button>
+          <button type="submit" className="sign-in" disabled={loading}>
+            {loading ? "Resetting..." : "Reset Password"}
+          </button>
         </form>
         <div className="links">
           <button onClick={() => navigate("/signin")} className="link-btn">

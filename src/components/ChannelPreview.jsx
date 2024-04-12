@@ -1,12 +1,8 @@
-//work on going back to "select channel" page after deleting a channel
-
 import { Trash } from "react-bootstrap-icons";
 import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import { useNavigate } from "react-router-dom";
 
 function ChannelPreview(props) {
-  const navigate = useNavigate();
 
   const handleDelete = async () => {
     try {
