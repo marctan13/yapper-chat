@@ -11,11 +11,10 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-import ChatMenuItem from "./ChatMenuItem";
-import Dropdown from "react-bootstrap/Dropdown";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useAuth } from "../contexts/AuthContext";
+// import { useAuth } from "../contexts/AuthContext";
 
 function Header({
   selectedChannel,
@@ -23,12 +22,11 @@ function Header({
   setSelectedChannelName,
   setSelectedChannel,
 }) {
-  const [open, setOpen] = useState(false);
   const [members, setMembers] = useState([]);
   const [channelImage, setChannelImage] = useState(null);
   const [show, setShow] = useState(false);
-  const navigate = useNavigate();
   const newChannelName = useRef();
+  const newChannelImage = useRef();
   const { user } = useAuth();
 
   const handleClose = () => setShow(false);
@@ -73,12 +71,26 @@ function Header({
     fetchChannelData();
   }, [selectedChannel]);
 
+  const handleImg = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setChannelImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleClick = async (e) => {
     e.preventDefault();
     try {
       if (!selectedChannel) return;
       const channelDocRef = doc(db, "channels", selectedChannel);
-      await updateDoc(channelDocRef, { name: newChannelName.current.value });
+      await updateDoc(channelDocRef, {
+        name: newChannelName.current.value,
+        // image: newChannelImage.current.value,
+      });
       handleClose();
     } catch (error) {
       console.error("Failed to change name", error);
@@ -112,8 +124,8 @@ function Header({
         (memberId) => memberId !== userDocId
       );
       await updateDoc(channelDocRef, { members: updatedMembers });
-      setSelectedChannel(null); // Clear the selected channel
-      setSelectedChannelName(""); // Clear the selected channel name
+      setSelectedChannel(null);
+      setSelectedChannelName("");
       handleClose();
     } catch (error) {
       console.error("Failed to leave channel", error);
@@ -137,53 +149,152 @@ function Header({
         ) : (
           <h1>Select or Create a Channel</h1>
         )}
+
+        {/* **CHAT MENU** */}
         <Modal
-          // centered
           show={show}
           onHide={handleClose}
           centered
           style={{
             color: "white",
             backgroundColor: "#7a7a7a",
-            height: "15%",
-            maxWidth: "50%",
-            top: "7.5%",
+            height: "50%",
+            width: "20%",
+            top: "25%",
             left: "40%",
+            borderRadius: "10px",
+            overflowY: "auto",
+            padding: "1.5rem",
           }}
         >
-          <Modal.Header closeButton>
-            <Modal.Title>Chat Menu</Modal.Title>
+          <Modal.Header
+            style={{
+              display: "flex",
+              flexDirection: "row",
+            }}
+          >
+            <Button
+              variant="secondary"
+              onClick={handleClose}
+              style={{
+                margin: "10px 10px 10px 0",
+              }}
+            >
+              &times;
+            </Button>
+            <Modal.Title
+              style={{
+                fontSize: "20px",
+                fontWeight: "500",
+                marginTop: "5px",
+              }}
+            >
+              Chat Menu
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            {channelImage && (
+              <img
+                className="chatLogo"
+                src={channelImage}
+                alt="Channel Image"
+                style={{
+                  width: "75px",
+                  borderRadius: "50%",
+                  marginRight: "10px",
+                }}
+              />
+            )}
+            {!channelImage && selectedChannelName && (
+              <img
+                className="chatLogo"
+                src="/cup.jpg"
+                alt="Placeholder Image"
+                style={{
+                  width: "75px",
+                  borderRadius: "50%",
+                  marginRight: "10px",
+                }}
+              />
+            )}
+            <h3>Change Channel Image</h3>
+            <input type="file" id="file" onChange={handleImg} />
+            <h3>Change Channel Name</h3>
             <input
               type="text"
               placeholder="Edit Channel Name"
               ref={newChannelName}
+              style={{
+                borderRadius: "5px",
+                width: "170px",
+                height: "30px",
+                marginBottom: "1.5rem",
+                marginTop: ".5em",
+              }}
             />
+            <div>
+              <h5>Members</h5>
+              {selectedChannel &&
+                members &&
+                members.map((member, index) => {
+                  return (
+                    <div
+                      key={index}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        {selectedChannel && (
+                          <img
+                            key={index}
+                            src={member?.photoURL || "/avatar.png"}
+                            alt="member image"
+                            title={member?.displayName || "No Name"}
+                            className="menuUserImg"
+                            style={{
+                              width: "35px",
+                              borderRadius: "50%",
+                              marginBottom: "10px",
+                              marginRight: "10px",
+                            }}
+                          />
+                        )}
+                        <p>{member?.displayName}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={handleClick}>
+            <Button
+              variant="primary"
+              onClick={handleClick}
+              style={{
+                borderRadius: "5px",
+              }}
+            >
               Save Changes
             </Button>
-            <Button variant="danger" onClick={handleLeaveChannel}>
+            <Button
+              variant="danger"
+              style={{
+                borderRadius: "5px",
+              }}
+              onClick={handleLeaveChannel}
+            >
               Leave Channel
             </Button>
           </Modal.Footer>
         </Modal>
-        {open && (
-          <div className={`dropdown-menu  ${open ? "active" : "inactive"}`}>
-            <h3>Chat Menu</h3>
-            <ul>
-              <ChatMenuItem text="Chat Members" />
-              <ChatMenuItem text="Add Members" />
-              <ChatMenuItem text="Mute" />
-              <ChatMenuItem text="Leave Channel" />
-            </ul>
-          </div>
-        )}
 
         <div className="teamImg">
           {members &&

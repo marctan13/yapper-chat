@@ -66,7 +66,7 @@ function CreateNewChat({ path }) {
   return (
     <div className="rightSection">
       <div className="header">
-        <h1>Create New Message</h1>
+        <h1>Create New Channel</h1>
       </div>
       <div className="chatWrapper">
         <p onClick={() => navigate("/")}>&lt; Back</p>
