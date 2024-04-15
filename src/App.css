@@ -372,7 +372,21 @@ form {
           cursor: pointer;
         }
       }
+      .AddFriend {
+        margin-top: 10px;
+        margin-left: 100px;
+        background-color: #6c757d;
+        color: white;
+        width: 15em;
+        height: 2em;
+        border-radius: 5px;
 
+        &:hover {
+          background-color: white;
+          color: #6c757d;
+          cursor: pointer;
+        }
+      }
       .nav-title {
         display: flex;
         align-items: center;
@@ -956,6 +970,74 @@ form {
     .createChatBtn {
       display: block;
       margin-bottom: 1.5em;
+    }
+  }
+}
+
+/*Search User Page*/
+.searchUsername {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 5rem;
+
+  h2 {
+    color: white;
+    font-size: 2em;
+    margin-right: 5em;
+  }
+
+  .FindUser {
+    display: flex;
+    flex-direction: column;
+    margin: 0.5rem;
+
+    .searchInput {
+      width: 325px;
+      border-radius: 5px;
+      height: 20px;
+      margin-top: 10px;
+    }
+  }
+
+  .addMembers {
+    display: flex;
+    flex-direction: column;
+    margin: 0.5rem;
+    height: 300px;
+    overflow-y: auto;
+  }
+
+  .userItem-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 10px;
+    padding-right: 10rem;
+
+    .userItem-wrapper.selected {
+      background-color: #f0f0f0;
+    }
+
+    .selectedImage {
+      width: 20px;
+      height: 10px;
+    }
+
+    .userInfo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    img {
+      width: 50px;
+      border-radius: 50%;
+    }
+
+    p {
+      margin-right: 20px;
     }
   }
 }

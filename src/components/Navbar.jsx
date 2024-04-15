@@ -22,6 +22,11 @@ function SideNavbar() {
           + Create New Channel
         </button>
       </div>
+      <div className="newFriend">
+        <button className="AddFriend" onClick={() => navigate("/SearchUser")}>
+          + Add Friend
+        </button>
+      </div>
     </div>
   );
 }
