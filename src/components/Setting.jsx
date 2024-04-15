@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
-import { Bluetooth } from "react-bootstrap-icons";
+// import { Bluetooth } from "react-bootstrap-icons";
 
 function Setting() {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ function Setting() {
     changePassword,
     logOut,
     changeDisplayName,
-    userDocId,
+    // userDocId,
     sendVerificationEmail,
   } = useAuth();
   const [currentUser, setCurrentUser] = useState(user);

@@ -7,6 +7,8 @@ function Chats({ selectedChannel, setSelectedChannel, selectedChannelName, setSe
       <Header
         selectedChannel={selectedChannel}
         selectedChannelName={selectedChannelName}
+        setSelectedChannel = {setSelectedChannel}
+        setSelectedChannelName={setSelectedChannelName}
       />
       <ChatMessage
         selectedChannel={selectedChannel}
