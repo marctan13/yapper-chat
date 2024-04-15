@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useAuth } from "../contexts/AuthContext";
+import { PersonAdd } from "react-bootstrap-icons";
 // import { useAuth } from "../contexts/AuthContext";
 
 function Header({
@@ -354,7 +355,7 @@ function Header({
                           )}
                           <p>{nonMember?.displayName}</p>
                         </div>
-                        <Button
+                        {/* <Button
                           variant="success"
                           onClick={() => handleAddMember(nonMember.docid)}
                           style={{
@@ -363,7 +364,15 @@ function Header({
                           }}
                         >
                           Add
-                        </Button>
+                        </Button> */}
+                        <PersonAdd
+                        className="add-member"
+                          onClick={() => handleAddMember(nonMember.docid)}
+                          style={{
+                            alignSelf: "flex-end",
+                            marginLeft: "10px",
+                          }}
+                        />
                       </div>
                     );
                   })}
