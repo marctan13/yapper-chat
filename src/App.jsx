@@ -8,6 +8,7 @@ import SignIn from "./pages/Signin";
 import Register from "./pages/Register";
 import Settings from "./pages/Settings";
 import NewChat from "./pages/NewChat.jsx";
+import SearchUser from "./pages/SearchUser.jsx";
 import { AuthProvider } from "./contexts/AuthContext";
 import Protected from "./components/Protected.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
@@ -41,6 +42,7 @@ function App() {
                 }
               />
               <Route path="/newChat" element={<NewChat />} />
+              <Route path="/SearchUser" element={<SearchUser />} />
             </Route>
           </Routes>
         </ChatContextProvider>
