@@ -138,7 +138,8 @@ function Header({
       await updateDoc(channelDocRef, { members: updatedMembers });
       setSelectedChannel(null);
       setSelectedChannelName("");
-      handleClose();
+      window.location.reload();
+      // handleClose();
     } catch (error) {
       console.error("Failed to leave channel", error);
       throw error;
@@ -355,18 +356,8 @@ function Header({
                           )}
                           <p>{nonMember?.displayName}</p>
                         </div>
-                        {/* <Button
-                          variant="success"
-                          onClick={() => handleAddMember(nonMember.docid)}
-                          style={{
-                            alignSelf: "flex-end",
-                            marginLeft: "10px",
-                          }}
-                        >
-                          Add
-                        </Button> */}
                         <PersonAdd
-                        className="add-member"
+                          className="add-member"
                           onClick={() => handleAddMember(nonMember.docid)}
                           style={{
                             alignSelf: "flex-end",

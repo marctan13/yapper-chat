@@ -1,6 +1,15 @@
 import { verifyBeforeUpdateEmail } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
+import {
+  doc,
+  updateDoc,
+  query,
+  collection,
+  where,
+  getDocs,
+} from "firebase/firestore";
+import { db, auth } from "../firebase.js";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
@@ -99,10 +108,21 @@ function Setting() {
           const capitalizedNewName =
             newName.charAt(0).toUpperCase() + newName.slice(1);
           await changeDisplayName(capitalizedNewName);
+          const userUid = user.uid;
+          // Fetch the user document based on user's uid
+          const userQuery = query(
+            collection(db, "users"),
+            where("uid", "==", userUid)
+          );
+          const userQuerySnapshot = await getDocs(userQuery);
+          // // Get the docid of the user document
+          const userDocId = userQuerySnapshot.docs.find((doc) =>
+            doc.exists()
+          )?.id;
+          // Update the display name in the Firestore user document
+          const userDocRef = doc(db, "users", userDocId);
+          await updateDoc(userDocRef, { displayName: capitalizedNewName });
           alert("Display Name has been updated!");
-
-          user.displayName = capitalizedNewName;
-
           setDisplayNameIsClicked(false);
         } catch (error) {
           alert("Failed to update username. Please try again.");
@@ -114,6 +134,8 @@ function Setting() {
       alert("Please enter a name.");
     }
   };
+
+  console.log(user);
 
   return (
     <div className="rightSection">
@@ -177,7 +199,7 @@ function Setting() {
                   onClick={() => {
                     setIsClicked(!isClicked);
                     setError(!error);
-                    setPasswordIsClicked(false)
+                    setPasswordIsClicked(false);
                     setDisplayNameIsClicked(false);
                   }}
                   title="Change Email"
