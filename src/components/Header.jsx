@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useAuth } from "../contexts/AuthContext";
+import { PersonAdd } from "react-bootstrap-icons";
 // import { useAuth } from "../contexts/AuthContext";
 
 function Header({
@@ -23,6 +24,7 @@ function Header({
   setSelectedChannel,
 }) {
   const [members, setMembers] = useState([]);
+  const [nonMembers, setNonMembers] = useState([]);
   const [channelImage, setChannelImage] = useState(null);
   const [show, setShow] = useState(false);
   const newChannelName = useRef();
@@ -61,6 +63,16 @@ function Header({
             setChannelImage(imageUrl);
           }
         );
+
+        // Fetch all users from the database
+        const usersQuerySnapshot = await getDocs(collection(db, "users"));
+        const allUsers = usersQuerySnapshot.docs.map((doc) => doc.data());
+        // Filter out users who are not members of the selected channel
+        const nonMembers = allUsers.filter(
+          (user) => !members.some((member) => member.uid === user.uid)
+        );
+        setNonMembers(nonMembers);
+
         return () => {
           unsubscribe();
         };
@@ -130,6 +142,19 @@ function Header({
     } catch (error) {
       console.error("Failed to leave channel", error);
       throw error;
+    }
+  };
+
+  // Function to handle adding a user to the channel
+  const handleAddMember = async (userId) => {
+    try {
+      const channelDocRef = doc(db, "channels", selectedChannel);
+      const channelDocSnapshot = await getDoc(channelDocRef);
+      const currentMembers = channelDocSnapshot.data().members || []; //gets snapshot of members of selected channel
+      const updatedMembers = [...currentMembers, userId];
+      await updateDoc(channelDocRef, { members: updatedMembers });
+    } catch (error) {
+      console.error("Failed to add member to channel", error);
     }
   };
 
@@ -233,6 +258,16 @@ function Header({
               }}
             />
             <div>
+              <Button
+                variant="primary"
+                onClick={handleClick}
+                style={{
+                  borderRadius: "5px",
+                }}
+              >
+                Save Changes
+              </Button>
+              {/* Displays Members in Channel */}
               <h5>Members</h5>
               {selectedChannel &&
                 members &&
@@ -273,17 +308,77 @@ function Header({
                   );
                 })}
             </div>
+
+            <hr />
+            {/* Add Members into Channel */}
+            <div>
+              <h5>Add Members</h5>
+              {selectedChannel &&
+                nonMembers &&
+                nonMembers
+                  .filter(
+                    (nonMember) =>
+                      !members.some((member) => member.uid === nonMember.uid)
+                  )
+                  .map((nonMember, index) => {
+                    return (
+                      <div
+                        key={index}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between", // Align items and button
+                          marginBottom: "10px",
+                          width: "40%",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          {selectedChannel && (
+                            <img
+                              key={index}
+                              src={nonMember?.photoURL || "/avatar.png"}
+                              alt="nonMember image"
+                              title={nonMember?.displayName || "No Name"}
+                              className="menuUserImg"
+                              style={{
+                                width: "35px",
+                                borderRadius: "50%",
+                                marginBottom: "10px",
+                                marginRight: "10px",
+                              }}
+                            />
+                          )}
+                          <p>{nonMember?.displayName}</p>
+                        </div>
+                        {/* <Button
+                          variant="success"
+                          onClick={() => handleAddMember(nonMember.docid)}
+                          style={{
+                            alignSelf: "flex-end",
+                            marginLeft: "10px",
+                          }}
+                        >
+                          Add
+                        </Button> */}
+                        <PersonAdd
+                        className="add-member"
+                          onClick={() => handleAddMember(nonMember.docid)}
+                          style={{
+                            alignSelf: "flex-end",
+                            marginLeft: "10px",
+                          }}
+                        />
+                      </div>
+                    );
+                  })}
+            </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button
-              variant="primary"
-              onClick={handleClick}
-              style={{
-                borderRadius: "5px",
-              }}
-            >
-              Save Changes
-            </Button>
             <Button
               variant="danger"
               style={{
