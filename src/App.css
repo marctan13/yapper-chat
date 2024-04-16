@@ -56,6 +56,29 @@ body {
   align-items: center;
 }
 /* End of Forgot Password Containers */
+/* Forgot Password Containers */
+.forgotPass-formContainer {
+  background: url("signin-background.jpg");
+  background: cover;
+  background-size: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.forgotPass-formWrapper {
+  background-color: #919eaa;
+  padding: 20px 60px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 320px;
+  margin-right: 5em;
+  gap: 10px;
+  align-items: center;
+}
+/* End of Forgot Password Containers */
 .title-logo {
   display: flex;
   align-items: center;
@@ -79,6 +102,10 @@ form {
     padding: 15px;
     width: 250px;
   }
+}
+
+.add-member:hover{
+  cursor: pointer;
 }
 
 /* Register */
@@ -119,6 +146,7 @@ form {
 .password-strength {
   margin-top: 5px;
   font-size: 14px;
+  color: black;
   color: black;
 }
 
@@ -208,6 +236,11 @@ form {
   display: flex;
   gap: 10px;
 }
+
+.button-container {
+  display: flex;
+  gap: 10px;
+}
 /* Main Page */
 .chatroom {
   background-color: #21222a;
@@ -242,7 +275,7 @@ form {
       }
 
       ::-webkit-scrollbar-thumb {
-        background: #242424;
+        background: #666666;
         border-radius: 50px;
       }
 
@@ -372,7 +405,7 @@ form {
   }
 
   .previews {
-    height: 65%;
+    height: 75%;
     overflow-y: auto;
   }
 
@@ -407,6 +440,7 @@ form {
     height: 6vh;
     justify-content: space-between;
     align-items: center;
+    padding-left: 0.5rem;
   }
   .userChat {
     display: flex;
@@ -454,12 +488,7 @@ form {
   .deleteContainer {
     cursor: pointer;
     margin-top: 15px;
-    width: 30px;
-    height: 30px;
-  }
-  .deleteContainer {
-    cursor: pointer;
-    margin-top: 15px;
+    margin-right: 10px;
     width: 30px;
     height: 30px;
   }
@@ -467,13 +496,7 @@ form {
   .deleteContainer:hover svg {
     background-color: #b5b4b4;
   }
-  .deleteContainer:hover svg {
-    background-color: #b5b4b4;
-  }
 
-  p {
-    font-size: 15px;
-  }
   p {
     font-size: 15px;
   }
@@ -483,15 +506,6 @@ form {
     font-size: 20px;
     font-weight: 500;
   }
-}
-
-.preview {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-direction: column;
-  height: 75%;
-  overflow: scroll;
 }
 
 .newChat {
@@ -519,16 +533,15 @@ form {
   position: static;
   background-color: #7a7a7a !important;
   align-items: center;
-  height: 5%;
+  height: 100px;
 }
 
 .user {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 30%;
+  height: 20%;
   cursor: pointer;
-  /* margin-bottom: 50em; */
 
   img {
     height: 4em;
@@ -542,7 +555,7 @@ form {
     border-radius: 15px;
     background-color: #6c757d;
     color: white;
-    margin: 2em 0 0 2em;
+    margin: 2em 0 0 5em;
     height: 4em;
     width: 8em;
   }
@@ -593,6 +606,7 @@ form {
       .chatMessage {
         display: flex;
         flex-direction: row;
+        
 
         .userInfo {
           display: flex;
@@ -616,7 +630,7 @@ form {
           background-color: #7c91ff;
           display: flex;
           flex-direction: column;
-          min-width: 25%;
+          min-width: 60px;
           max-width: 100%;
           margin: 3em 1em 3em 0.5em;
           border-radius: 15px;
@@ -708,6 +722,7 @@ form {
       }
     }
   }
+  
   /* Header Panel in Chat Page */
   .header {
     background-color: #21222a;
@@ -742,49 +757,6 @@ form {
       flex: 3;
       cursor: pointer;
 
-      .dropdown-menu {
-        position: absolute;
-        background-color: white;
-        top: 100px;
-        right: 60px;
-        padding: 10px 20px;
-        width: 200px;
-
-        h3 {
-          width: 100%;
-          text-align: center;
-          font-size: 18px;
-          padding: 20px 0;
-          font-weight: 500;
-          line-height: 1.2rem;
-        }
-
-        &.active {
-          opacity: 1;
-          visibility: visible;
-        }
-
-        &.inactive {
-          opacity: 0;
-          visibility: hidden;
-        }
-
-        li {
-          padding: 10px 0;
-          border-top: 1px solid black;
-          color: white;
-
-          &:hover {
-            cursor: pointer;
-          }
-        }
-
-        .dropdownItem {
-          display: flex;
-          margin: 10px auto;
-        }
-      }
-
       h1 {
         font-size: 26px;
         color: white;
@@ -806,9 +778,13 @@ form {
       .more-members {
         color: white;
       }
+
+      .menuUserImg {
+        display: flex;
+      }
     }
   }
-  /* settings page, copy format for new chat*/
+  /* settings and chat settings page, copy format for new chat*/
   .chatWrapper {
     display: flex;
     margin-top: 1.5em;
@@ -956,7 +932,7 @@ form {
       .addMembers {
         display: flex;
         flex-direction: column;
-        margin: 0.5rem;
+        /* margin: 0.5rem; */
         height: 300px;
         overflow-y: auto;
       }
@@ -997,8 +973,7 @@ form {
 
     .createChatBtn {
       display: block;
-      margin-right: 15em;
-      margin-bottom: 3em;
+      margin-bottom: 1.5em;
     }
   }
 }
