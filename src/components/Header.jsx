@@ -1,14 +1,21 @@
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
 import { useState, useEffect, useRef } from "react";
 import { db } from "../firebase";
-// import { useAuth } from "../contexts/AuthContext";
-import { 
-  doc, 
-  getDoc, 
-  updateDoc, 
-  onSnapshot 
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  onSnapshot,
+  query,
+  collection,
+  where,
+  getDocs,
 } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+import { useAuth } from "../contexts/AuthContext";
+// import { useAuth } from "../contexts/AuthContext";
+
 function Header({
   selectedChannel,
   selectedChannelName,
@@ -20,6 +27,7 @@ function Header({
   const [show, setShow] = useState(false);
   const newChannelName = useRef();
   const newChannelImage = useRef();
+  const { user } = useAuth();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -79,11 +87,10 @@ function Header({
     try {
       if (!selectedChannel) return;
       const channelDocRef = doc(db, "channels", selectedChannel);
-      await updateDoc(channelDocRef, 
-        { 
-          name: newChannelName.current.value,
-          image: newChannelImage.current.value
-        });
+      await updateDoc(channelDocRef, {
+        name: newChannelName.current.value,
+        // image: newChannelImage.current.value,
+      });
       handleClose();
     } catch (error) {
       console.error("Failed to change name", error);
@@ -91,21 +98,40 @@ function Header({
     }
   };
 
-  // const handleLeaveChannel = async () => {
-  //   try {
-  //     if (!selectedChannel) return;
-  //     const channelDocRef = doc(db, "channels", selectedChannel);
-  //     await updateDoc(channelDocRef, {
-  //       members: members.filter((memberId) => memberId !== user.uid), // Assuming currentUserId is accessible
-  //     });
-  //     setSelectedChannel(null); // Clear the selected channel
-  //     setSelectedChannelName(""); // Clear the selected channel name
-  //     handleClose();
-  //   } catch (error) {
-  //     console.error("Failed to leave channel", error);
-  //     throw error;
-  //   }
-  // };
+  const handleLeaveChannel = async () => {
+    try {
+      const userUid = user.uid;
+      // Fetch the user document based on user's uid
+      const userQuery = query(
+        collection(db, "users"),
+        where("uid", "==", userUid)
+      );
+      const userQuerySnapshot = await getDocs(userQuery);
+      // // Get the docid of the user document
+      const userDocId = userQuerySnapshot.docs.find((doc) => doc.exists())?.id;
+      if (!selectedChannel || !userDocId) return;
+      const channelDocRef = doc(db, "channels", selectedChannel);
+      // Fetch the current members of the channel
+      const channelDocSnapshot = await getDoc(channelDocRef);
+      const currentMembers = channelDocSnapshot.data().members;
+
+      if (!currentMembers || currentMembers.length === 0) {
+        // If members array is empty or null, just return
+        return;
+      }
+      // Remove the current user's ID from the members array
+      const updatedMembers = currentMembers?.filter(
+        (memberId) => memberId !== userDocId
+      );
+      await updateDoc(channelDocRef, { members: updatedMembers });
+      setSelectedChannel(null);
+      setSelectedChannelName("");
+      handleClose();
+    } catch (error) {
+      console.error("Failed to leave channel", error);
+      throw error;
+    }
+  };
 
   return (
     <div className="header">
@@ -141,26 +167,26 @@ function Header({
             padding: "1.5rem",
           }}
         >
-          <Modal.Header 
+          <Modal.Header
             style={{
               display: "flex",
               flexDirection: "row",
             }}
           >
-            <Button 
-              variant="secondary" 
+            <Button
+              variant="secondary"
               onClick={handleClose}
               style={{
-                margin: "10px 10px 10px 0"
+                margin: "10px 10px 10px 0",
               }}
             >
               &times;
             </Button>
-            <Modal.Title 
+            <Modal.Title
               style={{
                 fontSize: "20px",
                 fontWeight: "500",
-                marginTop: "5px"
+                marginTop: "5px",
               }}
             >
               Chat Menu
@@ -168,36 +194,31 @@ function Header({
           </Modal.Header>
           <Modal.Body>
             {channelImage && (
-              <img 
-                className="chatLogo" 
-                src={channelImage} 
-                alt="Channel Image" 
+              <img
+                className="chatLogo"
+                src={channelImage}
+                alt="Channel Image"
                 style={{
-                  width:"75px",
-                  borderRadius:"50%",
-                  marginRight: "10px"
+                  width: "75px",
+                  borderRadius: "50%",
+                  marginRight: "10px",
                 }}
               />
             )}
             {!channelImage && selectedChannelName && (
-              <img 
-                className="chatLogo" 
-                src="/cup.jpg" 
-                alt="Placeholder Image" 
+              <img
+                className="chatLogo"
+                src="/cup.jpg"
+                alt="Placeholder Image"
                 style={{
-                  width:"75px",
-                  borderRadius:"50%",
-                  marginRight: "10px"
+                  width: "75px",
+                  borderRadius: "50%",
+                  marginRight: "10px",
                 }}
               />
             )}
             <h3>Change Channel Image</h3>
-            <input 
-              type="file"
-              id="file"
-              onChange={handleImg}
-              
-            />
+            <input type="file" id="file" onChange={handleImg} />
             <h3>Change Channel Name</h3>
             <input
               type="text"
@@ -208,29 +229,30 @@ function Header({
                 width: "170px",
                 height: "30px",
                 marginBottom: "1.5rem",
-                marginTop: ".5em"
+                marginTop: ".5em",
               }}
             />
             <div>
               <h5>Members</h5>
-              {members && 
-                members
-                  .map((member, index) => {
-                    return (
-                      <div 
-                        key={index}
+              {selectedChannel &&
+                members &&
+                members.map((member, index) => {
+                  return (
+                    <div
+                      key={index}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      <div
                         style={{
                           display: "flex",
                           alignItems: "center",
-                          marginBottom: "10px"
                         }}
                       >
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center"
-                          }}
-                        >
+                        {selectedChannel && (
                           <img
                             key={index}
                             src={member?.photoURL || "/avatar.png"}
@@ -241,30 +263,36 @@ function Header({
                               width: "35px",
                               borderRadius: "50%",
                               marginBottom: "10px",
-                              marginRight: "10px"
+                              marginRight: "10px",
                             }}
                           />
-                          <p>{member?.displayName}</p>
-                        </div>
+                        )}
+                        <p>{member?.displayName}</p>
                       </div>
-                    )
-                  })
-              }
+                    </div>
+                  );
+                })}
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button 
-              variant="primary" 
+            <Button
+              variant="primary"
               onClick={handleClick}
               style={{
-                borderRadius: "5px"
+                borderRadius: "5px",
               }}
             >
               Save Changes
             </Button>
-            {/* <Button variant="danger" onClick={handleLeaveChannel}>
+            <Button
+              variant="danger"
+              style={{
+                borderRadius: "5px",
+              }}
+              onClick={handleLeaveChannel}
+            >
               Leave Channel
-            </Button> */}
+            </Button>
           </Modal.Footer>
         </Modal>
 

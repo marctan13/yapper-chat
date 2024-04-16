@@ -10,9 +10,10 @@ function ChatMessage({ selectedChannel, selectedChannelName }) {
   const messageEndRef = useRef(null);
 
   useEffect(() => {
-    async () => {
-      if (!selectedChannel) return; // Exit if no channel is selected
+    if (!selectedChannel) return; // Exit if no channel is selected or null
 
+    // Define an async function to fetch messages
+    const fetchMessages = async () => {
       try {
         const messagesQuerySnapshot = await getDocs(
           collection(db, "channels", selectedChannel, "messages")
@@ -29,7 +30,9 @@ function ChatMessage({ selectedChannel, selectedChannelName }) {
         console.error("Error fetching messages:", error);
       }
     };
+    fetchMessages();
 
+    // Subscribe to changes in messages collection
     const unsubscribe = onSnapshot(
       query(collection(db, "channels", selectedChannel, "messages")),
       (snapshot) => {
@@ -44,25 +47,27 @@ function ChatMessage({ selectedChannel, selectedChannelName }) {
         setMessages(updatedMessages);
       }
     );
+
+    // Scroll to the end of the message list
     if (messageEndRef.current) {
       messageEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
     return () => unsubscribe();
-
   }, [selectedChannel]);
 
   return (
     <>
       <div className="chatMessages">
         <div className="messageBlock">
-          {messages.map((message) => (
-            <Message
-              key={message.id}
-              {...message}
-              messageId={message.id}
-              selectedChannel={selectedChannel}
-            />
-          ))}
+          {selectedChannel &&
+            messages.map((message) => (
+              <Message
+                key={message.id}
+                {...message}
+                messageId={message.id}
+                selectedChannel={selectedChannel}
+              />
+            ))}
           {/* Create a div at the end of messages to scroll into view */}
           <div ref={messageEndRef}></div>
         </div>
