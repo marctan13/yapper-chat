@@ -15,7 +15,7 @@ import { QrCode } from "react-bootstrap-icons";
 
 function Search() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, getUserDocId } = useAuth();
 
   const [username, setUsername] = useState("");
   const [addUser, setAddUser] = useState("");
@@ -57,46 +57,16 @@ function Search() {
     }
   };
 
-  // const handleAdd = async () => {
-  //  const userUid = user.uid;
-  //  const currentUserQuery = query(
-  //   collection(db,"users"),
-  //   where("uid", "==",userUid)
-  //  );
-  //   const userQuerySnapshot = await getDocs(currentUserQuery);
-  //   const userDocId = userQuerySnapshot.docs.find((doc) => doc.exists())?.id;
-  //   await addDoc(collection(db, "channels"), {
-  //     name:addUser.displayName,
-  //     members: [userDocId,addUser.docid],
-  //     image:  addUser.photoURL ? addUser.photoURL : "/avatar.png",
-  //     channel: false,
-  //   });
-  //   navigate("/");
-  //   console.log(userDocId);
-  // };
-
   const handleAdd = async () => {
-    const userUid = user.uid;
-    const currentUserQuery = query(
-      collection(db, "users"),
-      where("uid", "==", userUid)
-    );
-    const userQuerySnapshot = await getDocs(currentUserQuery);
-    const currentUserDoc = userQuerySnapshot.docs.find((doc) => doc.exists());
-    const currentUserDocId = currentUserDoc?.id;
-    const currentUserDisplayName = currentUserDoc?.data().displayName;
-  
-    if (addUser) {
-      const channelName = `${currentUserDisplayName} & ${addUser.displayName}`;
-      await addDoc(collection(db, "channels"), {
-        name: channelName,
-        members: [currentUserDocId, addUser.docid],
-        image: addUser.photoURL ? addUser.photoURL : "/avatar.png",
-      });
-      navigate("/");
-    } else {
-      console.error("No user found to add to channel.");
-    }
+    const userDocId = await getUserDocId();
+    await addDoc(collection(db, "channels"), {
+      name:addUser.displayName,
+      members: [userDocId,addUser.docid],
+      image:  addUser.photoURL ? addUser.photoURL : "/avatar.png",
+      channel: false,
+    });
+    navigate("/");
+    console.log(userDocId);
   };
 
   const handleKey = (e) => {

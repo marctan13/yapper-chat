@@ -5,9 +5,7 @@ import {
   getDoc,
   updateDoc,
   onSnapshot,
-  query,
   collection,
-  where,
   getDocs,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -29,7 +27,7 @@ function Header({
   const [show, setShow] = useState(false);
   const newChannelName = useRef();
   const newChannelImage = useRef();
-  const { user } = useAuth();
+  const { user, getUserDocId } = useAuth();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -112,15 +110,7 @@ function Header({
 
   const handleLeaveChannel = async () => {
     try {
-      const userUid = user.uid;
-      // Fetch the user document based on user's uid
-      const userQuery = query(
-        collection(db, "users"),
-        where("uid", "==", userUid)
-      );
-      const userQuerySnapshot = await getDocs(userQuery);
-      // // Get the docid of the user document
-      const userDocId = userQuerySnapshot.docs.find((doc) => doc.exists())?.id;
+      const userDocId = await getUserDocId();
       if (!selectedChannel || !userDocId) return;
       const channelDocRef = doc(db, "channels", selectedChannel);
       // Fetch the current members of the channel

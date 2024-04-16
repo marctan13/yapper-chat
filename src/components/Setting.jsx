@@ -4,12 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import {
   doc,
   updateDoc,
-  query,
-  collection,
-  where,
-  getDocs,
 } from "firebase/firestore";
-import { db, auth } from "../firebase.js";
+import { db } from "../firebase.js";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
@@ -32,7 +28,7 @@ function Setting() {
     changePassword,
     logOut,
     changeDisplayName,
-    // userDocId,
+    getUserDocId,
     sendVerificationEmail,
   } = useAuth();
   const [currentUser, setCurrentUser] = useState(user);
@@ -108,18 +104,8 @@ function Setting() {
           const capitalizedNewName =
             newName.charAt(0).toUpperCase() + newName.slice(1);
           await changeDisplayName(capitalizedNewName);
-          const userUid = user.uid;
-          // Fetch the user document based on user's uid
-          const userQuery = query(
-            collection(db, "users"),
-            where("uid", "==", userUid)
-          );
-          const userQuerySnapshot = await getDocs(userQuery);
-          // // Get the docid of the user document
-          const userDocId = userQuerySnapshot.docs.find((doc) =>
-            doc.exists()
-          )?.id;
           // Update the display name in the Firestore user document
+          const userDocId = await getUserDocId();
           const userDocRef = doc(db, "users", userDocId);
           await updateDoc(userDocRef, { displayName: capitalizedNewName });
           alert("Display Name has been updated!");
@@ -134,8 +120,6 @@ function Setting() {
       alert("Please enter a name.");
     }
   };
-
-  console.log(user);
 
   return (
     <div className="rightSection">
