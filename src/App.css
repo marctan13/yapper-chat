@@ -984,11 +984,12 @@ form {
     flex-direction: column;
     margin: 0.5rem;
 
-    .searchInput {
+    .searchInput{
       width: 325px;
       border-radius: 5px;
-      height: 20px;
+      height: 40px;
       margin-top: 10px;
+      font-size: 20px;
     }
   }
 
@@ -1031,5 +1032,18 @@ form {
     p {
       margin-right: 20px;
     }
+  }
+  .add-user-btn {
+    transition-duration: 0.4s;
+    margin-left: 2em;
+    cursor: pointer;
+    .hover{
+      background-color: green;;
+      color: white;
+    }
+  }
+  .error-msg {
+    color: red;
+    font-size: 25px;
   }
 }

@@ -5,9 +5,7 @@ import {
   getDoc,
   updateDoc,
   onSnapshot,
-  query,
   collection,
-  where,
   getDocs,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -27,12 +25,14 @@ function Header({
   const [nonMembers, setNonMembers] = useState([]);
   const [channelImage, setChannelImage] = useState(null);
   const [show, setShow] = useState(false);
+  const [isChannel, setIsChannel] = useState(true);
   const newChannelName = useRef();
   const newChannelImage = useRef();
-  const { user } = useAuth();
+  const { user, getUserDocId } = useAuth();
 
+  //get document of selected channel
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => (isChannel ? setShow(true) : setShow(false));
 
   useEffect(() => {
     const fetchChannelData = async () => {
@@ -43,7 +43,9 @@ function Header({
           channelDocRef,
           async (channelDocSnap) => {
             const memberIds = channelDocSnap.data().members;
-
+            const isChannel = channelDocSnap.data().channel;
+            console.log(isChannel);
+            setIsChannel(isChannel);
             const memberProfiles = await Promise.all(
               memberIds.map(async (memberId) => {
                 const userDocRef = doc(db, "users", memberId);
@@ -112,15 +114,7 @@ function Header({
 
   const handleLeaveChannel = async () => {
     try {
-      const userUid = user.uid;
-      // Fetch the user document based on user's uid
-      const userQuery = query(
-        collection(db, "users"),
-        where("uid", "==", userUid)
-      );
-      const userQuerySnapshot = await getDocs(userQuery);
-      // // Get the docid of the user document
-      const userDocId = userQuerySnapshot.docs.find((doc) => doc.exists())?.id;
+      const userDocId = await getUserDocId();
       if (!selectedChannel || !userDocId) return;
       const channelDocRef = doc(db, "channels", selectedChannel);
       // Fetch the current members of the channel
@@ -138,7 +132,8 @@ function Header({
       await updateDoc(channelDocRef, { members: updatedMembers });
       setSelectedChannel(null);
       setSelectedChannelName("");
-      handleClose();
+      window.location.reload();
+      // handleClose();
     } catch (error) {
       console.error("Failed to leave channel", error);
       throw error;
@@ -374,18 +369,8 @@ function Header({
                           )}
                           <p>{nonMember?.displayName}</p>
                         </div>
-                        {/* <Button
-                          variant="success"
-                          onClick={() => handleAddMember(nonMember.docid)}
-                          style={{
-                            alignSelf: "flex-end",
-                            marginLeft: "10px",
-                          }}
-                        >
-                          Add
-                        </Button> */}
                         <PersonAdd
-                        className="add-member"
+                          className="add-member"
                           onClick={() => handleAddMember(nonMember.docid)}
                           style={{
                             alignSelf: "flex-end",
@@ -411,7 +396,7 @@ function Header({
         </Modal>
 
         <div className="teamImg">
-          {members &&
+          {isChannel && members &&
             members
               .slice(0, 4)
               .map((member, index) => (

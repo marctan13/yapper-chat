@@ -1,6 +1,11 @@
 import { verifyBeforeUpdateEmail } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
+import {
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../firebase.js";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
@@ -23,7 +28,7 @@ function Setting() {
     changePassword,
     logOut,
     changeDisplayName,
-    // userDocId,
+    getUserDocId,
     sendVerificationEmail,
   } = useAuth();
   const [currentUser, setCurrentUser] = useState(user);
@@ -99,10 +104,11 @@ function Setting() {
           const capitalizedNewName =
             newName.charAt(0).toUpperCase() + newName.slice(1);
           await changeDisplayName(capitalizedNewName);
+          // Update the display name in the Firestore user document
+          const userDocId = await getUserDocId();
+          const userDocRef = doc(db, "users", userDocId);
+          await updateDoc(userDocRef, { displayName: capitalizedNewName });
           alert("Display Name has been updated!");
-
-          user.displayName = capitalizedNewName;
-
           setDisplayNameIsClicked(false);
         } catch (error) {
           alert("Failed to update username. Please try again.");
@@ -177,7 +183,7 @@ function Setting() {
                   onClick={() => {
                     setIsClicked(!isClicked);
                     setError(!error);
-                    setPasswordIsClicked(false)
+                    setPasswordIsClicked(false);
                     setDisplayNameIsClicked(false);
                   }}
                   title="Change Email"
