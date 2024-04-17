@@ -246,6 +246,7 @@ form {
   background-color: #21222a;
   height: 100vh;
   display: flex;
+  width: 100%;
   align-items: center;
   justify-content: center;
 
@@ -265,6 +266,8 @@ form {
       display: flex;
       justify-content: flex-start;
       flex-direction: column;
+      width: 10%;
+      min-width: 400px;
 
       ::-webkit-scrollbar {
         width: 15px;
@@ -288,7 +291,7 @@ form {
         display: flex;
         flex-direction: column;
         width: 100%;
-        height: 30%;
+        height: 150px;
         padding: 10px;
         box-sizing: border-box;
         margin-bottom: 5em;
@@ -361,36 +364,42 @@ form {
         }
       }
 
-      .newMsg {
-        margin-top: 10px;
-        margin-left: 100px;
-        background-color: #6c757d;
-        color: white;
-        width: 15em;
-        height: 2em;
-        border-radius: 5px;
+      .addBtns {
+        display: flex;
+        justify-content: space-around;
 
-        &:hover {
-          background-color: white;
-          color: #6c757d;
-          cursor: pointer;
-        }
-      }
-      .AddFriend {
-        margin-top: 10px;
-        margin-left: 100px;
-        background-color: #6c757d;
-        color: white;
-        width: 15em;
-        height: 2em;
-        border-radius: 5px;
+        .newMsg {
+          margin-top: 10px;
+          /* margin-left: 100px; */
+          background-color: #6c757d;
+          color: white;
+          width: 12em;
+          height: 2em;
+          border-radius: 5px;
 
-        &:hover {
-          background-color: white;
-          color: #6c757d;
-          cursor: pointer;
+          &:hover {
+            background-color: white;
+            color: #6c757d;
+            cursor: pointer;
+          }
         }
+        .AddFriend {
+          margin-top: 10px;
+          /* margin-left: 100px; */
+          background-color: #6c757d;
+          color: white;
+          width: 12em;
+          height: 2em;
+          border-radius: 5px;
+
+          &:hover {
+            background-color: white;
+            color: #6c757d;
+            cursor: pointer;
+          }
+        } 
       }
+      
       .nav-title {
         display: flex;
         align-items: center;
@@ -405,7 +414,7 @@ form {
   }
 
   .previews {
-    height: 75%;
+    /* height: 75%; */
     overflow-y: auto;
   }
 
@@ -415,18 +424,7 @@ form {
     max-width: 500px;
     overflow: hidden;
   }
-  .chatPreview {
-    cursor: pointer;
-    padding: 5px 5px 30px 5px;
-    max-width: 500px;
-    overflow: hidden;
-  }
 
-  .chatPreview:hover {
-    background-color: #39413c;
-    color: white;
-    cursor: pointer;
-  }
   .chatPreview:hover {
     background-color: #39413c;
     color: white;
@@ -442,14 +440,6 @@ form {
     align-items: center;
     padding-left: 0.5rem;
   }
-  .userChat {
-    display: flex;
-    flex-direction: row;
-    gap: 15px;
-    height: 6vh;
-    justify-content: space-between;
-    align-items: center;
-  }
 
   .name-chat {
     overflow: hidden;
@@ -457,19 +447,7 @@ form {
     white-space: nowrap;
     flex: 1;
   }
-  .name-chat {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    flex: 1;
-  }
 
-  img {
-    height: 3em;
-    width: 3em;
-    border-radius: 50% !important;
-    object-fit: cover;
-  }
   img {
     height: 3em;
     width: 3em;
@@ -527,26 +505,27 @@ form {
     background-color: #21222a;
   }
 }
-/* User Info in Sidebar */
+/* User Info in Sidebar/ FOOTER */
 .footer {
   display: flex;
   position: static;
   background-color: #7a7a7a !important;
   align-items: center;
   height: 100px;
+  padding: 0;
 }
 
 .user {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 20%;
+  /* height: 20%; */
   cursor: pointer;
 
   img {
     height: 4em;
     width: 4em;
-    margin: 2em 7em 0 1em;
+    /* margin: 2em 7em 0 1em; */
     border-radius: 50%;
     object-fit: cover;
   }
@@ -555,7 +534,7 @@ form {
     border-radius: 15px;
     background-color: #6c757d;
     color: white;
-    margin: 2em 0 0 5em;
+    /* margin: 2em 0 0 5em; */
     height: 4em;
     width: 8em;
   }
@@ -571,6 +550,7 @@ form {
 .rightSection {
   flex: 2;
   overflow-y: auto;
+  width: 500px;
 
   ::-webkit-scrollbar {
     width: 15px;
@@ -602,11 +582,11 @@ form {
     .messageBlock {
       max-height: 55%;
       overflow-y: auto;
+      padding-bottom: 20px;
 
       .chatMessage {
         display: flex;
         flex-direction: row;
-        
 
         .userInfo {
           display: flex;
@@ -688,32 +668,40 @@ form {
 
     .inputMessage {
       position: fixed;
-      bottom: 70px;
+      bottom: 72px;
       width: 45%;
+      /* min-width: 30vw;
+      max-width: 50vw; */
+      height: 8%;
       padding: 5px;
+      background-color: #4f4d4d;
 
       .inputBox {
         display: flex;
         width: 100%;
+        /* min-width: 45vw;
+        max-width: 53vw; */
+        padding-left: 1rem;
         justify-self: flex-start;
         flex-direction: row;
         background-color: #4f4d4d;
 
         .textBox {
           display: flex;
-          width: 80%;
-          border-radius: 10px;
+          width: 75vw;
+          border-radius: 15px;
           color: black;
-          height: 30px;
+          height: 50px;
         }
       }
 
       .send {
         background-color: #6c757d;
         color: white;
-        max-width: 5em;
-        height: 3em;
-        border-radius: 5px;
+        max-width: 100px;
+        width: 500px;
+        height: 50px;
+        border-radius: 15px;
       }
 
       .send:hover {

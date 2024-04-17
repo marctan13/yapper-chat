@@ -180,6 +180,7 @@ function Header({
           show={show}
           onHide={handleClose}
           centered
+          className="popup"
           style={{
             color: "white",
             backgroundColor: "#7a7a7a",
@@ -189,9 +190,26 @@ function Header({
             left: "40%",
             borderRadius: "10px",
             overflowY: "auto",
-            padding: "1.5rem",
+            padding: "1.5rem"
           }}
         >
+        <style> {`
+            .popup::-webkit-scrollbar {
+              width: 15px;
+            }
+            .popup::-webkit-scrollbar-track {
+              background: #979494;
+              border-radius: 0 10px 10px 0;
+            }
+            .popup::-webkit-scrollbar-thumb {
+              background: #666666;
+              border-radius: 50px;
+            }
+            .popup::-webkit-scrollbar-thumb:hover {
+              background: #555;
+            }
+          `}
+        </style>
           <Modal.Header
             style={{
               display: "flex",
@@ -263,6 +281,7 @@ function Header({
                 onClick={handleClick}
                 style={{
                   borderRadius: "5px",
+                  marginBottom: "1rem"
                 }}
               >
                 Save Changes
