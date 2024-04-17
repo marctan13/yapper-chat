@@ -39,12 +39,11 @@ function Header({
       try {
         if (!selectedChannel) return;
         const channelDocRef = doc(db, "channels", selectedChannel);
-        const unsubscribe = onSnapshot(
+        const unsubscribe = selectedChannel ? onSnapshot(
           channelDocRef,
           async (channelDocSnap) => {
             const memberIds = channelDocSnap.data().members;
             const isChannel = channelDocSnap.data().channel;
-            console.log(isChannel);
             setIsChannel(isChannel);
             const memberProfiles = await Promise.all(
               memberIds.map(async (memberId) => {
@@ -64,7 +63,7 @@ function Header({
             const imageUrl = channelDocSnap.data().image;
             setChannelImage(imageUrl);
           }
-        );
+        ) : "";
 
         // Fetch all users from the database
         const usersQuerySnapshot = await getDocs(collection(db, "users"));
