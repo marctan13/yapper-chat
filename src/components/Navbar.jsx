@@ -19,16 +19,20 @@ function SideNavbar({isChannelToggle, toggleChannel}) {
         </label>
         <span className="toggle-label">Channel</span>
       </div>
-      <div className="newMsgContainer">
-        <button className="newMsg" onClick={() => navigate("/NewChat")}>
-          + Create New Channel
-        </button>
+      <div className="addBtns">
+        <div className="newFriend">
+          <button className="AddFriend" onClick={() => navigate("/SearchUser")}>
+            + Add Friend
+          </button>
+        </div>
+        <div className="newMsgContainer">
+          <button className="newMsg" onClick={() => navigate("/NewChat")}>
+            + Create New Channel
+          </button>
+        </div>
+        
       </div>
-      <div className="newFriend">
-        <button className="AddFriend" onClick={() => navigate("/SearchUser")}>
-          + Add Friend
-        </button>
-      </div>
+      
     </div>
   );
 }
