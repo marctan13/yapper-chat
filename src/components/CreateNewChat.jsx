@@ -7,7 +7,7 @@ import { db } from "../firebase";
 
 function CreateNewChat({ path }) {
   const navigate = useNavigate();
-  const { users, user,  getUserDocId } = useAuth();
+  const { users, user, getUserDocId } = useAuth();
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [selected, setSelected] = useState("");
   const [chatName, setChatName] = useState("");
@@ -48,6 +48,7 @@ function CreateNewChat({ path }) {
       name: chatName,
       members: [userDocId, ...selectedUsers],
       image: img,
+      channel: true,
     });
     setChatName("");
     setSelectedUsers([]);

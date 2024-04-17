@@ -25,12 +25,14 @@ function Header({
   const [nonMembers, setNonMembers] = useState([]);
   const [channelImage, setChannelImage] = useState(null);
   const [show, setShow] = useState(false);
+  const [isChannel, setIsChannel] = useState(true);
   const newChannelName = useRef();
   const newChannelImage = useRef();
   const { user, getUserDocId } = useAuth();
 
+  //get document of selected channel
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => (isChannel ? setShow(true) : setShow(false));
 
   useEffect(() => {
     const fetchChannelData = async () => {
@@ -41,7 +43,9 @@ function Header({
           channelDocRef,
           async (channelDocSnap) => {
             const memberIds = channelDocSnap.data().members;
-
+            const isChannel = channelDocSnap.data().channel;
+            console.log(isChannel);
+            setIsChannel(isChannel);
             const memberProfiles = await Promise.all(
               memberIds.map(async (memberId) => {
                 const userDocRef = doc(db, "users", memberId);
@@ -373,7 +377,7 @@ function Header({
         </Modal>
 
         <div className="teamImg">
-          {members &&
+          {isChannel && members &&
             members
               .slice(0, 4)
               .map((member, index) => (
