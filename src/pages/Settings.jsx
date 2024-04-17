@@ -5,7 +5,11 @@ import Setting from "../components/Setting";
 function Settings() {
   const [selectedChannel, setSelectedChannel] = useState("null");
   const [selectedChannelName, setSelectedChannelName] = useState("");
-  
+  const [isChannelToggle, setIsChannelToggle] = useState(true);
+
+  const toggleChannel = () => {
+    setIsChannelToggle((prev) => !prev);
+  };
 
   return (
     <div className="chatroom">
@@ -15,6 +19,8 @@ function Settings() {
           setSelectedChannel={setSelectedChannel}
           selectedChannelName={selectedChannelName}
           setSelectedChannelName={setSelectedChannelName}
+          isChannelToggle={isChannelToggle}
+          toggleChannel={toggleChannel}
         />
         <Setting />
       </div>
