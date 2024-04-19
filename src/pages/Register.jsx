@@ -50,6 +50,7 @@ function Register() {
       }); //updates displayName of authenticated user upon registration
       const res = await addDoc(collection(db, "users"), {
         displayName: displayNameRef.current.value,
+        searchName: displayNameRef.current.value.toLowerCase(),
         email: emailRef.current.value,
         photoURL: null,
         created: serverTimestamp(),
