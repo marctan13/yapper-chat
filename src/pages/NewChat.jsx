@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import Sidebar from '../components/Sidebar'
 import CreateNewChat from '../components/CreateNewChat'
+import { useChat } from "../contexts/ChatContext";
+
 
 function NewChat() {
-    const [selectedChannel, setSelectedChannel] = useState("null");
+    // const [selectedChannel, setSelectedChannel] = useState("null");
     const [selectedChannelName, setSelectedChannelName] = useState("");
     const [isChannelToggle, setIsChannelToggle] = useState(true);
+    const{selectedChannel, setSelectedChannel} = useChat();
+
 
     const toggleChannel = () => {
       setIsChannelToggle((prev) => !prev);

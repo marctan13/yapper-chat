@@ -4,7 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { db } from "../firebase";
 import EmojiSelection from "./EmojiSelection";
 
-function Input({ selectedChannel, formValue, setFormValue }) {
+function Input({ selectedChannel, formValue, setFormValue, messageEndRef }) {
   const messageRef = useRef();
   const { user } = useAuth();
   const [showEmojis, setShowEmojis] = useState(false);
@@ -13,20 +13,18 @@ function Input({ selectedChannel, formValue, setFormValue }) {
   const sendMessage = async (e) => {
     e.preventDefault();
     try {
-      await addDoc(
-        collection(db, "channels", selectedChannel, "messages"),
-        {
-          sender_id: user.uid,
-          text: formValue,
-          photoURL: user.photoURL ? user.photoURL : "/avatar.png", //change to correct user photo
-          createdAt: serverTimestamp(),
-          sender_name: user.displayName,
-        }
-      );
+      await addDoc(collection(db, "channels", selectedChannel, "messages"), {
+        sender_id: user.uid,
+        text: formValue,
+        photoURL: user.photoURL ? user.photoURL : "/avatar.png", //change to correct user photo
+        createdAt: serverTimestamp(),
+        sender_name: user.displayName,
+      });
       setFormValue("");
-      if (messageRef.current) {
-        messageRef.current.scrollIntoView({ behavior: "smooth" });
-      }
+      //scroll to bottom after user input
+      setTimeout(() => {
+        messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+      }, 100);
     } catch (error) {
       console.log("Failed to send");
     }

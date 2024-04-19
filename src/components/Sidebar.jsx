@@ -89,18 +89,18 @@ function Sidebar({
     <div className="sidebar">
       <Navbar isChannelToggle={isChannelToggle} toggleChannel={toggleChannel} />
       <div className="previews">
-        {filteredChannels
-          .map((channel) => (
-            <ChannelPreview
-              onClick={() => handleClick(channel.id)}
-              isSelected={selectedChannel === channel.id}
-              key={channel.id}
-              name={channel.name}
-              id={channel.id}
-              image={channel.image}
-              lastAccessed={channel.lastAccessed}
-            />
-          ))}
+        {filteredChannels.map((channel) => (
+          <ChannelPreview
+            onClick={() => handleClick(channel.id)}
+            isSelected={selectedChannel === channel.id}
+            key={channel.id}
+            name={channel.name}
+            id={channel.id}
+            image={channel.image}
+            lastAccessed={channel.lastAccessed}
+            selectedChannel={selectedChannel}
+          />
+        ))}
       </div>
       <div className="footer">
         <div className="user">

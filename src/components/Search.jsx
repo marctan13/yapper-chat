@@ -13,7 +13,7 @@ import {
 import { db } from "../firebase";
 import { QrCode } from "react-bootstrap-icons";
 
-function Search() {
+function Search({ selectedChannel, setSelectedChannel }) {
   const navigate = useNavigate();
   const { user, getUserDocId } = useAuth();
 
@@ -43,6 +43,7 @@ function Search() {
     );
     try {
       const querySnapshot = await getDocs(q);
+      console.log(querySnapshot);
       if (!querySnapshot.empty) {
         const userData = querySnapshot.docs[0].data();
         setAddUser(userData);
@@ -59,14 +60,16 @@ function Search() {
 
   const handleAdd = async () => {
     const userDocId = await getUserDocId();
-    await addDoc(collection(db, "channels"), {
-      name:addUser.displayName,
-      members: [userDocId,addUser.docid],
-      image:  addUser.photoURL ? addUser.photoURL : "/avatar.png",
+    const newChannelRef = await addDoc(collection(db, "channels"), {
+      name: addUser.displayName,
+      members: [userDocId, addUser.docid],
+      image: addUser.photoURL ? addUser.photoURL : "/avatar.png",
       channel: false,
     });
+    if (!selectedChannel) {
+      setSelectedChannel(newChannelRef.id);
+    }
     navigate("/");
-    console.log(userDocId);
   };
 
   const handleKey = (e) => {

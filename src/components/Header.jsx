@@ -44,6 +44,8 @@ function Header({
           async (channelDocSnap) => {
             const memberIds = channelDocSnap.data().members;
             const isChannel = channelDocSnap.data().channel;
+            const channelName = channelDocSnap.data().name;
+            setSelectedChannelName(channelName);
             setIsChannel(isChannel);
             const memberProfiles = await Promise.all(
               memberIds.map(async (memberId) => {
@@ -83,6 +85,8 @@ function Header({
     };
     fetchChannelData();
   }, [selectedChannel]);
+
+  console.log(selectedChannelName)
 
   const handleImg = (e) => {
     const file = e.target.files[0];
@@ -183,7 +187,8 @@ function Header({
             top: "25%",
             left: "40%",
             borderRadius: "10px",
-            overflowY: "auto",
+            // overflowY: "auto",
+            overflow: "auto",
             padding: "1.5rem"
           }}
         >
