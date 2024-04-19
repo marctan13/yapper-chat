@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 import { db } from "../firebase";
 
 function CreateNewChat({ path }) {
@@ -56,6 +56,8 @@ function CreateNewChat({ path }) {
     navigate("/");
   }
 
+  
+
   return (
     <div className="rightSection">
       <div className="header">
@@ -86,8 +88,8 @@ function CreateNewChat({ path }) {
             />
           </div>
           <button className="createChatBtn">Create New Chat</button>
-          <div className="addMembers">
             <h2>Add Members</h2>
+          <div className="addMembers">
             {users
               .filter((u) => u.uid !== user.uid)
               .map((user) => {

@@ -2,10 +2,11 @@ import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Chats from "../components/Chats";
 
+
 function Chatroom() {
-  const [selectedChannel, setSelectedChannel] = useState("null");
-  const [selectedChannelName, setSelectedChannelName] = useState("");
-  const[isChannelToggle, setIsChannelToggle] = useState(true);
+  const [ selectedChannel, setSelectedChannel ] = useState("null");
+  const [ selectedChannelName, setSelectedChannelName ] = useState("");
+  const [ isChannelToggle, setIsChannelToggle ] = useState(true);
 
   const toggleChannel = () => {
     setIsChannelToggle(prev => !prev);

@@ -8,12 +8,10 @@ import {
   collection,
   getDocs,
 } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useAuth } from "../contexts/AuthContext";
 import { PersonAdd } from "react-bootstrap-icons";
-// import { useAuth } from "../contexts/AuthContext";
 
 function Header({
   selectedChannel,

@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import {
-  QuerySnapshot,
   collection,
   getDocs,
   query,
@@ -11,7 +10,7 @@ import {
   addDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
-import { QrCode } from "react-bootstrap-icons";
+// import { QrCode } from "react-bootstrap-icons";
 
 function Search() {
   const navigate = useNavigate();

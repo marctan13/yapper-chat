@@ -137,7 +137,7 @@ function Register() {
               type="submit" 
               disabled={loading}
             >
-              {loading ? 'Signing up...' : 'Sign up'} {/* Prevents the button from being spam clicked */}
+              {loading ? 'Signing up...' : 'Sign up'}
             </button>
           </form>
           <p className="register-login-link">
