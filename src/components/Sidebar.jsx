@@ -8,6 +8,7 @@ import ChannelPreview from "./ChannelPreview.jsx";
 import { updateDoc, doc, collection, query, orderBy, onSnapshot, limit, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import { Link } from "react-router-dom";
 
 function Sidebar({
   selectedChannel,
@@ -77,6 +78,7 @@ function Sidebar({
       </div>
       <div className="footer">
         <div className="user">
+        
           <img
             onClick={() => navigate("/settings")}
             src={
@@ -85,6 +87,9 @@ function Sidebar({
                 : "avatar.png"
             }
           />
+          <Link to="/settings" className="username-link">
+          <span className="username">{auth.currentUser.displayName}</span>
+          </Link>
           <SignOut />
         </div>
       </div>

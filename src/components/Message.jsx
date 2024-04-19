@@ -83,6 +83,7 @@ function Message({
     <div className={`chatMessage ${user.uid === sender_id ? "sender" : ""}`}>
       <div className="userInfo">
         <img src={photoURL} alt={sender_name} title={sender_name} />
+        <span>{sender_name}</span>
         <span>{formatTimestamp(createdAt)}</span>
       </div>
       <div className="message">

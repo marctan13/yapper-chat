@@ -262,13 +262,6 @@ function Setting() {
             )}
           </div>
         )}
-        <div className="notifications">
-          <hr />
-          <h1>Notifications</h1>
-          <span>Do Not Disturb</span>
-          <input type="checkbox" name="dnd" id="dnd" />
-          <label htmlFor="dnd">Do Not Disturb</label>
-        </div>
       </div>
     </div>
   );

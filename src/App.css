@@ -535,6 +535,15 @@ form {
   align-items: center;
   height: 100px;
 }
+.user .username {
+  margin-right: 2em;
+}
+
+.username-link{
+  margin-top: 2em;
+  color: #4a4a4a;
+}
+
 
 .user {
   display: flex;
@@ -546,7 +555,7 @@ form {
   img {
     height: 4em;
     width: 4em;
-    margin: 2em 7em 0 1em;
+    margin: 2em 1em 0 1em;
     border-radius: 50%;
     object-fit: cover;
   }
