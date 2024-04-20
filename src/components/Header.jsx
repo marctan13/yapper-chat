@@ -5,17 +5,13 @@ import {
   getDoc,
   updateDoc,
   onSnapshot,
-  query,
   collection,
-  where,
   getDocs,
 } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useAuth } from "../contexts/AuthContext";
 import { PersonAdd } from "react-bootstrap-icons";
-// import { useAuth } from "../contexts/AuthContext";
 
 function Header({
   selectedChannel,
@@ -27,23 +23,26 @@ function Header({
   const [nonMembers, setNonMembers] = useState([]);
   const [channelImage, setChannelImage] = useState(null);
   const [show, setShow] = useState(false);
+  const [isChannel, setIsChannel] = useState(true);
   const newChannelName = useRef();
   const newChannelImage = useRef();
-  const { user } = useAuth();
+  const { user, getUserDocId } = useAuth();
 
+  //get document of selected channel
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => (isChannel ? setShow(true) : setShow(false));
 
   useEffect(() => {
     const fetchChannelData = async () => {
       try {
         if (!selectedChannel) return;
         const channelDocRef = doc(db, "channels", selectedChannel);
-        const unsubscribe = onSnapshot(
+        const unsubscribe = selectedChannel ? onSnapshot(
           channelDocRef,
           async (channelDocSnap) => {
             const memberIds = channelDocSnap.data().members;
-
+            const isChannel = channelDocSnap.data().channel;
+            setIsChannel(isChannel);
             const memberProfiles = await Promise.all(
               memberIds.map(async (memberId) => {
                 const userDocRef = doc(db, "users", memberId);
@@ -62,7 +61,7 @@ function Header({
             const imageUrl = channelDocSnap.data().image;
             setChannelImage(imageUrl);
           }
-        );
+        ) : "";
 
         // Fetch all users from the database
         const usersQuerySnapshot = await getDocs(collection(db, "users"));
@@ -112,15 +111,7 @@ function Header({
 
   const handleLeaveChannel = async () => {
     try {
-      const userUid = user.uid;
-      // Fetch the user document based on user's uid
-      const userQuery = query(
-        collection(db, "users"),
-        where("uid", "==", userUid)
-      );
-      const userQuerySnapshot = await getDocs(userQuery);
-      // // Get the docid of the user document
-      const userDocId = userQuerySnapshot.docs.find((doc) => doc.exists())?.id;
+      const userDocId = await getUserDocId();
       if (!selectedChannel || !userDocId) return;
       const channelDocRef = doc(db, "channels", selectedChannel);
       // Fetch the current members of the channel
@@ -138,7 +129,8 @@ function Header({
       await updateDoc(channelDocRef, { members: updatedMembers });
       setSelectedChannel(null);
       setSelectedChannelName("");
-      handleClose();
+      window.location.reload();
+      // handleClose();
     } catch (error) {
       console.error("Failed to leave channel", error);
       throw error;
@@ -180,6 +172,7 @@ function Header({
           show={show}
           onHide={handleClose}
           centered
+          className="popup"
           style={{
             color: "white",
             backgroundColor: "#7a7a7a",
@@ -189,9 +182,26 @@ function Header({
             left: "40%",
             borderRadius: "10px",
             overflowY: "auto",
-            padding: "1.5rem",
+            padding: "1.5rem"
           }}
         >
+        <style> {`
+            .popup::-webkit-scrollbar {
+              width: 15px;
+            }
+            .popup::-webkit-scrollbar-track {
+              background: #979494;
+              border-radius: 0 10px 10px 0;
+            }
+            .popup::-webkit-scrollbar-thumb {
+              background: #666666;
+              border-radius: 50px;
+            }
+            .popup::-webkit-scrollbar-thumb:hover {
+              background: #555;
+            }
+          `}
+        </style>
           <Modal.Header
             style={{
               display: "flex",
@@ -263,6 +273,7 @@ function Header({
                 onClick={handleClick}
                 style={{
                   borderRadius: "5px",
+                  marginBottom: "1rem"
                 }}
               >
                 Save Changes
@@ -355,18 +366,8 @@ function Header({
                           )}
                           <p>{nonMember?.displayName}</p>
                         </div>
-                        {/* <Button
-                          variant="success"
-                          onClick={() => handleAddMember(nonMember.docid)}
-                          style={{
-                            alignSelf: "flex-end",
-                            marginLeft: "10px",
-                          }}
-                        >
-                          Add
-                        </Button> */}
                         <PersonAdd
-                        className="add-member"
+                          className="add-member"
                           onClick={() => handleAddMember(nonMember.docid)}
                           style={{
                             alignSelf: "flex-end",
@@ -392,7 +393,7 @@ function Header({
         </Modal>
 
         <div className="teamImg">
-          {members &&
+          {isChannel && members &&
             members
               .slice(0, 4)
               .map((member, index) => (

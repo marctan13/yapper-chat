@@ -12,70 +12,44 @@ function Search() {
   const [username, setUsername] = useState("");
   const [addUser, setAddUser] = useState([]);
   const [err,setErr] = useState(false);
-  const [getBool, setGetBool] = useState(false);
-  const [userQuery, setUserQuery] = useState([]);
 
   useEffect(() => {
-    console.log(addUser.length);
-    console.log(addUser);
-  }, [userQuery])
-
-  useEffect(() => {
-    if(username == '') {
-      //setGetBool(false);
+    if(username == null) {
       setErr(false);
       setAddUser([]);
     } else {
       handleSearch();
     }
+    console.log(username);
   }, [username])
 
+  useEffect(() => {
+    console.warn(err);
+  }, [err])
+
   const handleSearch = async () => {
-    /* if(!getBool) {
-      setGetBool(true); */
+    // if(username != null) {
       const q = query (
         collection(db, "users"),
         orderBy('searchName'),
         startAt(username.toLowerCase()),
         endAt(username.toLowerCase() + '\uffff')
-        //where("displayName", "==", username)
       );
       try {
         const QuerySnap = await getDocs(q);
-        console.log(QuerySnap);
         setAddUser([]);
-        setUserQuery([]);
         let arr = [];
         QuerySnap.forEach((doc) => {
           console.log(doc.data());
           arr.push(doc.data());
         });
-        console.log(arr);
-        setUserQuery(arr.slice());
+        if(arr[0] == null) throw new Error('Query response empty!');
         setAddUser(arr.slice());
       } catch (err){
         setErr(true);
       }
-   /* } else {
-      const reg = new RegExp(`^${username}.*`, 'i');
-      try {
-        setAddUser(userQuery.filter((user) => user.displayName.match(reg)));
-        if(addUser[0] == ''){
-          setErr(true);
-        }
-      } catch (err){
-        setErr(true);
-      }
-    } */
+    // }
   };
-
-  useEffect(() => {
-    console.log(getBool);
-  }, [getBool])
-
-  /* const handleKey = (e) => {
-    console.log(getBool)
-  }; */
 
   return (
     <div className="rightSection">
@@ -91,16 +65,14 @@ function Search() {
               className="searchInput"
               placeholder="Find a user"
               type="text"
-              // onKeyDown={handleKey}
               onChange={(e) => setUsername(e.target.value)}
               value={username}
             />
-            <button className = "search-btn" onClick={handleSearch}>Search</button>
-            {err && <p className="error-msg">User not found!</p>}
+            {/* <button className = "search-btn" onClick={handleSearch}>Search</button> */}
           </div>
           {err && <p className="error-msg">User not found!</p>}
           {addUser.map((users) => (
-            <div className="addNewFriend">
+            <div key={users.uid} className="addNewFriend">
               <img src ={users.photoURL ? users.photoURL : "avatar.png"} alt={users.displayName}/>
               <span>{users.displayName}</span>
             </div>

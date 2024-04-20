@@ -2,12 +2,12 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 import { db } from "../firebase";
 
 function CreateNewChat({ path }) {
   const navigate = useNavigate();
-  const { users, user } = useAuth();
+  const { users, user, getUserDocId } = useAuth();
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [selected, setSelected] = useState("");
   const [chatName, setChatName] = useState("");
@@ -43,25 +43,20 @@ function CreateNewChat({ path }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const userUid = user.uid;
-    // Fetch the user document based on user's uid
-    const userQuery = query(
-      collection(db, "users"),
-      where("uid", "==", userUid)
-    );
-    const userQuerySnapshot = await getDocs(userQuery);
-    // // Get the docid of the user document
-    const userDocId = userQuerySnapshot.docs.find((doc) => doc.exists())?.id;
+    const userDocId = await getUserDocId();
     await addDoc(collection(db, "channels"), {
       name: chatName,
       members: [userDocId, ...selectedUsers],
       image: img,
+      channel: true,
     });
     setChatName("");
     setSelectedUsers([]);
     setImg(null);
     navigate("/");
   }
+
+  
 
   return (
     <div className="rightSection">
@@ -93,8 +88,8 @@ function CreateNewChat({ path }) {
             />
           </div>
           <button className="createChatBtn">Create New Chat</button>
-          <div className="addMembers">
             <h2>Add Members</h2>
+          <div className="addMembers">
             {users
               .filter((u) => u.uid !== user.uid)
               .map((user) => {
