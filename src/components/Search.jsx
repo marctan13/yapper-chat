@@ -6,6 +6,7 @@ import { QuerySnapshot, collection, getDocs, query, where, startAt, endAt, order
 import { db } from "../firebase";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMessage } from "@fortawesome/free-regular-svg-icons";
 
 function Search({ selectedChannel, setSelectedChannel }) {
   const navigate = useNavigate();
@@ -52,16 +53,18 @@ function Search({ selectedChannel, setSelectedChannel }) {
       }
   };
 
-  const handleAdd = async () => {
+  const handleAdd = async (id) => {
     const userDocId = await getUserDocId();
-    const newChannelRef = await addDoc(collection(db, "channels"), {
-      name: addUser.displayName,
-      members: [userDocId, addUser.docid],
-      image: addUser.photoURL ? addUser.photoURL : "/avatar.png",
-      channel: false,
+    const user2 = addUser.filter((users) => users.uid == id);
+    const newChannelRef = await addDoc(collection(db, 'private-msg'), {
+      name: user.displayName + ', ' + user2[0].displayName,
+      members: [userDocId, user2[0].docid],
+      image: user2[0].photoURL ? user2[0].photoURL : "/avatar.png",
     });
+    
+    console.info('good')
     if (!selectedChannel) {
-      setSelectedChannel(newChannelRef.id);
+      //setSelectedChannel(newChannelRef.id);
     }
     navigate("/");
   };
@@ -71,17 +74,8 @@ function Search({ selectedChannel, setSelectedChannel }) {
     try {
       const friend = addUser.filter((users) => users.uid == friendId);
       console.log(friend);
-      const q = query (
-        collection(db, "users"),
-        where('uid', '==', user.uid)
-      );
-      const QuerySnap = await getDocs(q);
-      let u;
-      QuerySnap.forEach((doc) => {
-        u = doc.data();
-      });
-      const doc = u.docid;
-      const res = await addDoc(collection(db, 'users', doc, 'friends'), {
+      const docId = await getUserDocId();
+      const res = await addDoc(collection(db, 'private-msg'), {
         displayName: friend[0].displayName,
         photoURL: friend[0].photoURL,
         uid: friend[0].uid,
@@ -119,9 +113,9 @@ function Search({ selectedChannel, setSelectedChannel }) {
               <span>{users.displayName}</span>
               <button
                 className="addBtn"
-                onClick={() => sendFriendReq(users.uid)}
+                onClick={() => handleAdd(users.uid)}
               >
-                <FontAwesomeIcon icon={faUserPlus} />
+                <FontAwesomeIcon icon={faMessage} />
               </button>
             </div>
           ))}

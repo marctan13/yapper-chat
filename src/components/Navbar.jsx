@@ -29,10 +29,8 @@ function Navbar({isChannelToggle, toggleChannel}) {
           <button className="newMsg" onClick={() => navigate("/NewChat")}>
             + Create New Channel
           </button>
-        </div>
-        
-      </div>
-      
+        </div>   
+      </div>  
     </div>
   );
 }
