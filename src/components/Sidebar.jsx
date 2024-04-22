@@ -29,6 +29,7 @@ function Sidebar({
   const navigate = useNavigate();
 
   const { channels, fetchChannels } = useAuth();
+  // const{isChannel, setIsChannel} = useState(false);
   const [channelPreviews, setChannelPreviews] = useState([]);
   // const {selectedChannel, setSelectedChannel} = useChat();
 
@@ -90,7 +91,7 @@ function Sidebar({
 
   return (
     <div className="sidebar">
-      <Navbar isChannelToggle={isChannelToggle} toggleChannel={toggleChannel} />
+      <Navbar isChannelToggle={isChannelToggle} toggleChannel={toggleChannel} selectedChannel={selectedChannel}/>
       <div className="previews">
         {filteredChannels.map((channel) => (
           <ChannelPreview

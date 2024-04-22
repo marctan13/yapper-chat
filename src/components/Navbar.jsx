@@ -1,9 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
 
 function SideNavbar({isChannelToggle, toggleChannel}) {
   const navigate = useNavigate();
-  const {channels} = useAuth();
 
   return (
     <div className="navbar">
@@ -14,7 +12,9 @@ function SideNavbar({isChannelToggle, toggleChannel}) {
       <div className="toggle">
         <span className="toggle-label">DMs</span>
         <label className="switch">
-          <input type="checkbox" checked={isChannelToggle} onChange={toggleChannel}/>
+          <input type="checkbox" 
+          checked={isChannelToggle}
+          onChange={toggleChannel}/>
           <span className="slider round"></span>
         </label>
         <span className="toggle-label">Channel</span>

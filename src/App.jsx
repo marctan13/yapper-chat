@@ -16,11 +16,12 @@ import { ChatContextProvider } from "./contexts/ChatContext.jsx";
 function App() {
 
   const [selectedChannel, setSelectedChannel] = useState(null);
+  const [isChannelToggle, setIsChannelToggle] = useState(true);
 
   return (
     <div>
       <AuthProvider>
-        <ChatContextProvider selectedChannel={selectedChannel} setSelectedChannel={setSelectedChannel}>
+        <ChatContextProvider selectedChannel={selectedChannel} setSelectedChannel={setSelectedChannel} isChannelToggle={isChannelToggle} setIsChannelToggle={setIsChannelToggle}>
           <Routes>
             <Route exact path="/">
               <Route

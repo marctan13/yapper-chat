@@ -13,7 +13,7 @@ import {
 import { db } from "../firebase";
 import { QrCode } from "react-bootstrap-icons";
 
-function Search({ selectedChannel, setSelectedChannel }) {
+function Search({ selectedChannel, setSelectedChannel, toggleChannel, isChannelToggle, setIsChannelToggle }) {
   const navigate = useNavigate();
   const { user, getUserDocId } = useAuth();
 
@@ -53,8 +53,13 @@ function Search({ selectedChannel, setSelectedChannel }) {
     if (!selectedChannel) {
       setSelectedChannel(newChannelRef.id);
     }
+    if(isChannelToggle){
+      toggleChannel();
+    }
     navigate("/");
   };
+
+  console.log(isChannelToggle)
 
   const handleKey = (e) => {
     e.code === handleSearch();
