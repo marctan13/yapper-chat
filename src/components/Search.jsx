@@ -2,8 +2,10 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { QuerySnapshot, collection, getDocs, query, where, startAt, endAt, orderBy } from "firebase/firestore";
+import { QuerySnapshot, collection, getDocs, query, where, startAt, endAt, orderBy, addDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Search() {
   const navigate = useNavigate();
@@ -14,7 +16,7 @@ function Search() {
   const [err,setErr] = useState(false);
 
   useEffect(() => {
-    if(username == null) {
+    if(username == '') {
       setErr(false);
       setAddUser([]);
     } else {
@@ -40,7 +42,7 @@ function Search() {
         setAddUser([]);
         let arr = [];
         QuerySnap.forEach((doc) => {
-          console.log(doc.data());
+          //console.log(doc.data());
           arr.push(doc.data());
         });
         if(arr[0] == null) throw new Error('Query response empty!');
@@ -48,8 +50,34 @@ function Search() {
       } catch (err){
         setErr(true);
       }
-    // }
   };
+
+  const sendFriendReq = async (friendId) => {
+    /* const friendsRef = doc(db, 'users', user.docid, 'friends') */
+    try {
+      const friend = addUser.filter((users) => users.uid == friendId);
+      console.log(friend);
+      const q = query (
+        collection(db, "users"),
+        where('uid', '==', user.uid)
+      );
+      const QuerySnap = await getDocs(q);
+      let u;
+      QuerySnap.forEach((doc) => {
+        u = doc.data();
+      });
+      const doc = u.docid;
+      const res = await addDoc(collection(db, 'users', doc, 'friends'), {
+        displayName: friend[0].displayName,
+        photoURL: friend[0].photoURL,
+        uid: friend[0].uid,
+        confirmed: false,
+      });
+      console.log('Added document with ID: ', res.id);
+    } catch (errFri) {
+      console.error("Error fetching messages:" + errFri);
+    }
+  }
 
   return (
     <div className="rightSection">
@@ -75,6 +103,12 @@ function Search() {
             <div key={users.uid} className="addNewFriend">
               <img src ={users.photoURL ? users.photoURL : "avatar.png"} alt={users.displayName}/>
               <span>{users.displayName}</span>
+              <button
+                className="addBtn"
+                onClick={() => sendFriendReq(users.uid)}
+              >
+                <FontAwesomeIcon icon={faUserPlus} />
+              </button>
             </div>
           ))}
         </div>
