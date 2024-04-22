@@ -86,8 +86,6 @@ function Header({
     fetchChannelData();
   }, [selectedChannel]);
 
-  console.log(selectedChannelName)
-
   const handleImg = (e) => {
     const file = e.target.files[0];
     if (file) {

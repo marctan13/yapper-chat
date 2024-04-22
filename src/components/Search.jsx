@@ -1,5 +1,5 @@
 //work on layout of users on css
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import {
@@ -21,21 +21,6 @@ function Search({ selectedChannel, setSelectedChannel }) {
   const [addUser, setAddUser] = useState("");
   const [err, setErr] = useState(false);
 
-  // const handleSearch = async () => {
-  //   const q = query (
-  //     collection(db, "users"),
-  //     where("displayName", "==", username)
-  //   );
-  //  try {
-  //   const QuerySnapshot = await getDocs(q);
-  //   QuerySnapshot.forEach((doc) => {
-  //     setAddUser(doc.data());
-  //   });
-  //  } catch (err){
-  //   setErr(true);
-  //  }
-  // };
-
   const handleSearch = async () => {
     const q = query(
       collection(db, "users"),
@@ -43,7 +28,6 @@ function Search({ selectedChannel, setSelectedChannel }) {
     );
     try {
       const querySnapshot = await getDocs(q);
-      console.log(querySnapshot);
       if (!querySnapshot.empty) {
         const userData = querySnapshot.docs[0].data();
         setAddUser(userData);

@@ -137,9 +137,9 @@ export function AuthProvider({ children }) {
 
         // Filter channels based on user membership
         const filteredChannels = channelsData.filter((channel) =>
-          channel.members.includes(userDocId)
+        channel.members && channel.members.includes(userDocId)
         );
-
+        
         // Set the channels state
         setChannels(filteredChannels);
       });

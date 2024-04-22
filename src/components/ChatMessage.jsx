@@ -9,8 +9,6 @@
     const [formValue, setFormValue] = useState("");
     const messageEndRef = useRef(null);
 
-    console.log(selectedChannel)
-
     useEffect(() => {
         if (!selectedChannel) return; // Exit if no channel is selected
 
