@@ -14,10 +14,6 @@ function NewChat() {
     const toggleChannel = () => {
       setIsChannelToggle((prev) => !prev);
     };
-    
-    const toggleChannel = () => {
-        setIsChannelToggle(prev => !prev);
-      }
     return (
       <div className='chatroom'>
         <div className='container'>

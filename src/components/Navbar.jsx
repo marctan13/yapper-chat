@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
-function SideNavbar({isChannelToggle, toggleChannel}) {
+function Navbar({isChannelToggle, toggleChannel}) {
   const navigate = useNavigate();
   const {channels} = useAuth();
 
