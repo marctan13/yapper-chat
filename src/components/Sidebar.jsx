@@ -11,11 +11,13 @@ import {
   collection,
   query,
   orderBy,
+  onSnapshot,
   limit,
   getDocs,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import { useChat } from "../contexts/ChatContext.jsx";
 
 function Sidebar({
   selectedChannel,
@@ -28,6 +30,8 @@ function Sidebar({
 
   const { channels, fetchChannels } = useAuth();
   const [channelPreviews, setChannelPreviews] = useState([]);
+  // const {selectedChannel, setSelectedChannel} = useChat();
+
 
   useEffect(() => {
     fetchChannels();
@@ -88,18 +92,18 @@ function Sidebar({
     <div className="sidebar">
       <Navbar isChannelToggle={isChannelToggle} toggleChannel={toggleChannel} />
       <div className="previews">
-        {filteredChannels
-          .map((channel) => (
-            <ChannelPreview
-              onClick={() => handleClick(channel.id)}
-              isSelected={selectedChannel === channel.id}
-              key={channel.id}
-              name={channel.name}
-              id={channel.id}
-              image={channel.image}
-              lastAccessed={channel.lastAccessed}
-            />
-          ))}
+        {filteredChannels.map((channel) => (
+          <ChannelPreview
+            onClick={() => handleClick(channel.id)}
+            isSelected={selectedChannel === channel.id}
+            key={channel.id}
+            name={channel.name}
+            id={channel.id}
+            image={channel.image}
+            lastAccessed={channel.lastAccessed}
+            selectedChannel={selectedChannel}
+          />
+        ))}
       </div>
       <div className="footer">
         <div className="user">

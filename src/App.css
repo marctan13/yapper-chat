@@ -259,6 +259,8 @@ form {
       flex-direction: column;
       width: 10%;
       min-width: 400px;
+      width: 10%;
+      min-width: 400px;
 
       ::-webkit-scrollbar {
         width: 15px;
@@ -390,6 +392,14 @@ form {
         } 
       }
       
+          &:hover {
+            background-color: white;
+            color: #6c757d;
+            cursor: pointer;
+          }
+        } 
+      }
+      
       .nav-title {
         display: flex;
         align-items: center;
@@ -443,6 +453,7 @@ form {
     align-items: center;
     padding-left: 0.5rem;
   }
+
 
   .name-chat {
     overflow: hidden;
@@ -581,6 +592,7 @@ form {
       max-height: 55%;
       overflow-y: auto;
       padding-bottom: 20px;
+      padding-bottom: 20px;
 
       .chatMessage {
         display: flex;
@@ -608,6 +620,8 @@ form {
           background-color: #7c91ff;
           display: flex;
           flex-direction: column;
+          min-width: 90px;
+          /* max-width: 100%; */
           min-width: 90px;
           /* max-width: 100%; */
           margin: 3em 1em 3em 0.5em;
@@ -667,7 +681,11 @@ form {
     .inputMessage {
       position: fixed;
       bottom: 72px;
+      bottom: 72px;
       width: 45%;
+      /* min-width: 30vw;
+      max-width: 50vw; */
+      height: 8%;
       /* min-width: 30vw;
       max-width: 50vw; */
       height: 8%;
@@ -680,6 +698,9 @@ form {
         /* min-width: 45vw;
         max-width: 53vw; */
         padding-left: 1rem;
+        /* min-width: 45vw;
+        max-width: 53vw; */
+        padding-left: 1rem;
         justify-self: flex-start;
         flex-direction: row;
         background-color: #282D35;
@@ -688,7 +709,10 @@ form {
           display: flex;
           width: 75vw;
           border-radius: 15px;
+          width: 75vw;
+          border-radius: 15px;
           color: black;
+          height: 50px;
           height: 50px;
         }
       }
@@ -696,6 +720,10 @@ form {
       .send {
         background-color: #6c757d;
         color: white;
+        max-width: 100px;
+        width: 500px;
+        height: 50px;
+        border-radius: 15px;
         max-width: 100px;
         width: 500px;
         height: 50px;
@@ -993,8 +1021,12 @@ form {
     .searchInput{
       display: flex;
       flex-direction: row;
+    .searchInput{
+      display: flex;
+      flex-direction: row;
       width: 325px;
       border-radius: 5px;
+      height: 40px;
       height: 40px;
       margin-top: 10px;
       font-size: 20px;

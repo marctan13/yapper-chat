@@ -1,9 +1,13 @@
-import { createContext, useReducer } from "react";
+import { createContext, useReducer, useContext, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 
 export const ChatContext = createContext();
 
-export const ChatContextProvider = ({ children }) => {
+export const useChat = () => {
+  return useContext(ChatContext);
+}
+
+export const ChatContextProvider = ({ children, selectedChannel, setSelectedChannel }) => {
   const { user: currentUser } = useAuth(); // Fix useContext usage here
   const INITIAL_STATE = {
     chatId: "null",
@@ -26,10 +30,11 @@ export const ChatContextProvider = ({ children }) => {
     }
   };
 
+
   const [state, dispatch] = useReducer(chatReducer, INITIAL_STATE);
 
   return (
-    <ChatContext.Provider value={{ data: state, dispatch }}>
+    <ChatContext.Provider value={{ data: state, dispatch, selectedChannel, setSelectedChannel }}>
       {children}
     </ChatContext.Provider>
   );

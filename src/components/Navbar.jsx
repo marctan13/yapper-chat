@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
-function Navbar({isChannelToggle, toggleChannel}) {
+function SideNavbar({isChannelToggle, toggleChannel}) {
   const navigate = useNavigate();
   const {channels} = useAuth();
 
@@ -29,8 +29,10 @@ function Navbar({isChannelToggle, toggleChannel}) {
           <button className="newMsg" onClick={() => navigate("/NewChat")}>
             + Create New Channel
           </button>
-        </div>   
-      </div>  
+        </div>
+        
+      </div>
+      
     </div>
   );
 }

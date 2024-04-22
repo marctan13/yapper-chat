@@ -7,10 +7,10 @@ import { db } from "../firebase";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-function Search() {
+function Search({ selectedChannel, setSelectedChannel }) {
   const navigate = useNavigate();
-  const {user} = useAuth();
-  
+  const { user, getUserDocId } = useAuth();
+
   const [username, setUsername] = useState("");
   const [addUser, setAddUser] = useState([]);
   const [err,setErr] = useState(false);
@@ -52,6 +52,20 @@ function Search() {
       }
   };
 
+  const handleAdd = async () => {
+    const userDocId = await getUserDocId();
+    const newChannelRef = await addDoc(collection(db, "channels"), {
+      name: addUser.displayName,
+      members: [userDocId, addUser.docid],
+      image: addUser.photoURL ? addUser.photoURL : "/avatar.png",
+      channel: false,
+    });
+    if (!selectedChannel) {
+      setSelectedChannel(newChannelRef.id);
+    }
+    navigate("/");
+  };
+
   const sendFriendReq = async (friendId) => {
     /* const friendsRef = doc(db, 'users', user.docid, 'friends') */
     try {
@@ -86,12 +100,12 @@ function Search() {
       </div>
       <div className="chatWrapper">
         <p onClick={() => navigate("/")}>&lt; Back</p>
-        <div className="searchUsername" >
+        <div className="searchUsername">
           <div className="FindUser">
             <h2>Find a user</h2>
             <input
               className="searchInput"
-              placeholder="Find a user"
+              placeholder="type a username"
               type="text"
               onChange={(e) => setUsername(e.target.value)}
               value={username}
