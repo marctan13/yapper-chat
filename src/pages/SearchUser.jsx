@@ -1,9 +1,14 @@
 import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Search from "../components/Search";
+import { useChat } from "../contexts/ChatContext";
+
 
 function SearchUser() {
   const [isChannelToggle, setIsChannelToggle] = useState(true);
+  // const [selectedChannel, setSelectedChannel] = useState("null");
+  const{selectedChannel, setSelectedChannel} = useChat();
+
 
   const toggleChannel = () => {
     setIsChannelToggle((prev) => !prev);
@@ -15,8 +20,9 @@ function SearchUser() {
         <Sidebar
           isChannelToggle={isChannelToggle}
           toggleChannel={toggleChannel}
+          setSelectedChannel={setSelectedChannel}
         />
-        <Search />
+          <Search setSelectedChannel={setSelectedChannel} selectedChannel={selectedChannel}/>
       </div>
     </div>
   );
