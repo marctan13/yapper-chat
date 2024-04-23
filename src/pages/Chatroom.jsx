@@ -5,7 +5,10 @@ import { useChat } from "../contexts/ChatContext";
 
 function Chatroom() {
   const [selectedChannelName, setSelectedChannelName] = useState("");
-  const{selectedChannel, setSelectedChannel, toggleChannel, isChannelToggle, setIsChannelToggle} = useChat();
+  const [isChannel, setIsChannel] = useState(true);
+  // const [members, setMembers] = useState([]);
+  const [friendName, setFriendName] = useState("")
+  const{selectedChannel, setSelectedChannel, toggleChannel, isChannelToggle, setIsChannelToggle, members, setMembers} = useChat();
 
   return (
     <div className="chatroom">
@@ -18,12 +21,18 @@ function Chatroom() {
           isChannelToggle={isChannelToggle}
           setIsChannelToggle={setIsChannelToggle}
           toggleChannel={toggleChannel} 
+          isChannel={isChannel}
+          members={members}
         />
         <Chats
           selectedChannel={selectedChannel}
           setSelectedChannel={setSelectedChannel}
           selectedChannelName={selectedChannelName}
           setSelectedChannelName={setSelectedChannelName}
+          isChannel={isChannel}
+          setIsChannel={setIsChannel}
+          members={members}
+          setMembers={setMembers}
         />
       </div>
     </div>
