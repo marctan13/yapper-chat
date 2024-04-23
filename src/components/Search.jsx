@@ -59,8 +59,6 @@ function Search({ selectedChannel, setSelectedChannel, toggleChannel, isChannelT
     navigate("/");
   };
 
-  console.log(isChannelToggle)
-
   const handleKey = (e) => {
     e.code === handleSearch();
   };
