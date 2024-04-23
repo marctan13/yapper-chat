@@ -4,7 +4,6 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { QuerySnapshot, collection, getDocs, query, where, startAt, endAt, orderBy, addDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage } from "@fortawesome/free-regular-svg-icons";
 
@@ -26,10 +25,6 @@ function Search({ selectedChannel, setSelectedChannel }) {
     console.log(username);
   }, [username])
 
-  useEffect(() => {
-    console.warn(err);
-  }, [err])
-
   const handleSearch = async () => {
     // if(username != null) {
       const q = query (
@@ -43,7 +38,6 @@ function Search({ selectedChannel, setSelectedChannel }) {
         setAddUser([]);
         let arr = [];
         QuerySnap.forEach((doc) => {
-          //console.log(doc.data());
           arr.push(doc.data());
         });
         if(arr[0] == null) throw new Error('Query response empty!');
@@ -56,36 +50,18 @@ function Search({ selectedChannel, setSelectedChannel }) {
   const handleAdd = async (id) => {
     const userDocId = await getUserDocId();
     const user2 = addUser.filter((users) => users.uid == id);
-    const newChannelRef = await addDoc(collection(db, 'private-msg'), {
+    const newChannelRef = await addDoc(collection(db, 'channels'), {
+      channel: false,
       name: user.displayName + ', ' + user2[0].displayName,
       members: [userDocId, user2[0].docid],
       image: user2[0].photoURL ? user2[0].photoURL : "/avatar.png",
     });
     
-    console.info('good')
     if (!selectedChannel) {
       //setSelectedChannel(newChannelRef.id);
     }
     navigate("/");
   };
-
-  const sendFriendReq = async (friendId) => {
-    /* const friendsRef = doc(db, 'users', user.docid, 'friends') */
-    try {
-      const friend = addUser.filter((users) => users.uid == friendId);
-      console.log(friend);
-      const docId = await getUserDocId();
-      const res = await addDoc(collection(db, 'private-msg'), {
-        displayName: friend[0].displayName,
-        photoURL: friend[0].photoURL,
-        uid: friend[0].uid,
-        confirmed: false,
-      });
-      console.log('Added document with ID: ', res.id);
-    } catch (errFri) {
-      console.error("Error fetching messages:" + errFri);
-    }
-  }
 
   return (
     <div className="rightSection">
@@ -108,7 +84,7 @@ function Search({ selectedChannel, setSelectedChannel }) {
           </div>
           {err && <p className="error-msg">User not found!</p>}
           {addUser.map((users) => (
-            <div key={users.uid} className="addNewFriend">
+            <div key={users.uid} className="addNewDm">
               <img src ={users.photoURL ? users.photoURL : "avatar.png"} alt={users.displayName}/>
               <span>{users.displayName}</span>
               <button
