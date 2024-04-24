@@ -25,7 +25,7 @@ function Sidebar({
   isChannelToggle,
   toggleChannel,
   isChannel,
-  members
+  // members,
 }) {
   const navigate = useNavigate();
 
@@ -33,7 +33,6 @@ function Sidebar({
   // const{isChannel, setIsChannel} = useState(false);
   const [channelPreviews, setChannelPreviews] = useState([]);
   // const {selectedChannel, setSelectedChannel} = useChat();
-
 
   useEffect(() => {
     fetchChannels();
@@ -90,12 +89,20 @@ function Sidebar({
     ? channels.filter((channel) => channel.channel === true)
     : channels.filter((channel) => channel.channel === false);
 
-    console.log("Members" + members)
-    console.log("Filtered Channels" + filteredChannels)
+  // console.log("Members" + members)
+  // console.log("Filtered Channels" + filteredChannels);
+  // filteredChannels.map((channel) => {
+  //   console.log(channel.members);
+  //   console.log(channel)
+  // });
 
   return (
     <div className="sidebar">
-      <Navbar isChannelToggle={isChannelToggle} toggleChannel={toggleChannel} selectedChannel={selectedChannel}/>
+      <Navbar
+        isChannelToggle={isChannelToggle}
+        toggleChannel={toggleChannel}
+        selectedChannel={selectedChannel}
+      />
       <div className="previews">
         {filteredChannels.map((channel) => (
           <ChannelPreview
@@ -108,7 +115,7 @@ function Sidebar({
             lastAccessed={channel.lastAccessed}
             selectedChannel={selectedChannel}
             isChannel={isChannel}
-            members={members}
+            dmMembers={channel.members}
           />
         ))}
       </div>

@@ -1,27 +1,50 @@
-import {useState, useEffect} from "react"
+import { useState, useEffect } from "react";
 import { Trash } from "react-bootstrap-icons";
-import { doc, deleteDoc } from "firebase/firestore";
+import { doc, deleteDoc,getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../contexts/AuthContext";
+import { useChat } from "../contexts/ChatContext";
 
 function ChannelPreview(props) {
   const { user } = useAuth();
   // const [otherMemberDisplayName, setOtherMemberDisplayName] = useState(null)
-console.log("members: " + props.members)
+  //returns document of membrers inside channel
+  const { members } = useChat();
 
-  // useEffect(() => {
-  //   console.log("Members:", props.members);
-  //   // If it's a direct message and there are exactly two members
-  //   if (!props.isChannel && props.members.length === 2) {
-  //     const otherMember = props.members.find(member => member.uid !== user.uid);
-  //     if (otherMember) {
-  //       console.log("Other Member:", otherMember);
-  //       setOtherMemberDisplayName(otherMember.displayName);
-  //     }
-  //   }
-  // }, [props.isChannel, props.members, user.uid]);
+  const [otherMemberName, setOtherMemberName] = useState(null);
 
-  // console.log(otherMemberDisplayName + "Other display Name")
+  // console.log(members)
+
+  useEffect(() => {
+    const fetchOtherMemberName = async () => {
+      // if (props.dmMembers.length !== 2 || members.length === 0) {
+      //   return;
+      // }
+      
+      const otherMemberId = props.dmMembers.find(id => id !== user.uid);
+      if (!otherMemberId) {
+        return;
+      }
+  
+      try {
+        const userDocRef = doc(db, "users", otherMemberId);
+        const userDocSnapshot = await getDoc(userDocRef);
+        
+        if (userDocSnapshot.exists()) {
+          const otherMemberData = userDocSnapshot.data();
+          setOtherMemberName(otherMemberData.displayName);
+        } else {
+          console.log("Other member document not found.");
+        }
+      } catch (error) {
+        console.error("Error fetching other member document:", error);
+      }
+    };
+  
+    fetchOtherMemberName();
+  }, [props.isChannel, props.dmMembers, user.uid, members]);
+
+  console.log("Display Name" + otherMemberName)
 
   const handleDelete = async () => {
     try {
@@ -73,12 +96,11 @@ console.log("members: " + props.members)
         <div className="name-chat">
           {/* Display channel name for channels */}
           {props.isChannel && <h3>{props.name}</h3>}
+          {/* <h3>{props.name}</h3> */}
           {/* Display the other member's name for DMs */}
-          {!props.isChannel && props.members.length === 2 && (
+          {!props.isChannel && props.dmMembers.length === 2 && (
             <h3>
-              {props.members.find((member) => member.uid !== user.uid)
-                ?.displayName}
-                {/* {otherMemberDisplayName} */}
+              {otherMemberName}
             </h3>
           )}
         </div>

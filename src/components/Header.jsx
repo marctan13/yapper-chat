@@ -156,8 +156,6 @@ function Header({
     }
   };
 
-  console.log(members)
-
   return (
     <div className="header">
       <div className="chatAvatar">
