@@ -1,5 +1,5 @@
 #root {
-  font-family: "Lato", "Roboto", system-ui, -apple-system, sans-serif;
+  font-family: "Inter", "Karla", "Space Grotesk", "Lato", "Roboto", system-ui, -apple-system, sans-serif;
 }
 
 .signin-formContainer {
@@ -141,15 +141,15 @@ form {
 }
 
 .register-weak {
-  color: red;
+  color: #e63946;
 }
 
 .register-strong {
-  color: green;
+  color: #38b000;
 }
 
 .register-error {
-  color: red;
+  color: #e63946;
   margin-top: 5px;
 }
 
@@ -1002,11 +1002,14 @@ form {
 
     .search-btn {
       height: 40px;
-      /* width: 100px; */
+      margin-top: 0.75em;
+      margin-left: 0.5em;
+      width: 100px;
     }
   }
 
   .error-msg {
+    padding-top: 0.75em;
     padding-left: 0.5rem;
   }
 
@@ -1014,7 +1017,7 @@ form {
     display: flex;
     flex-direction: row;
     padding-left: 0.5rem;
-    padding-top: 0.5rem;
+    padding-top: 1rem;
 
     span {
       padding-top: 0.75rem;

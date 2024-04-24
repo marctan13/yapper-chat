@@ -1,5 +1,5 @@
 //work on layout of users on css
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import {
@@ -12,28 +12,13 @@ import {
 import { db } from "../firebase";
 // import { QrCode } from "react-bootstrap-icons";
 
-function Search() {
+function Search({ selectedChannel, setSelectedChannel }) {
   const navigate = useNavigate();
   const { user, getUserDocId } = useAuth();
 
   const [username, setUsername] = useState("");
   const [addUser, setAddUser] = useState("");
   const [err, setErr] = useState(false);
-
-  // const handleSearch = async () => {
-  //   const q = query (
-  //     collection(db, "users"),
-  //     where("displayName", "==", username)
-  //   );
-  //  try {
-  //   const QuerySnapshot = await getDocs(q);
-  //   QuerySnapshot.forEach((doc) => {
-  //     setAddUser(doc.data());
-  //   });
-  //  } catch (err){
-  //   setErr(true);
-  //  }
-  // };
 
   const handleSearch = async () => {
     const q = query(
@@ -58,14 +43,16 @@ function Search() {
 
   const handleAdd = async () => {
     const userDocId = await getUserDocId();
-    await addDoc(collection(db, "channels"), {
-      name:addUser.displayName,
-      members: [userDocId,addUser.docid],
-      image:  addUser.photoURL ? addUser.photoURL : "/avatar.png",
+    const newChannelRef = await addDoc(collection(db, "channels"), {
+      name: addUser.displayName,
+      members: [userDocId, addUser.docid],
+      image: addUser.photoURL ? addUser.photoURL : "/avatar.png",
       channel: false,
     });
+    if (!selectedChannel) {
+      setSelectedChannel(newChannelRef.id);
+    }
     navigate("/");
-    console.log(userDocId);
   };
 
   const handleKey = (e) => {
@@ -81,17 +68,19 @@ function Search() {
         <div className="searchUsername">
           <div className="FindUser">
             <h2>Find a user</h2>
-            <input
-              className="searchInput"
-              placeholder="type a username"
-              type="text"
-              onKeyDown={handleKey}
-              onChange={(e) => setUsername(e.target.value)}
-              value={username}
-            />
-            <button className="search-btn" onClick={handleSearch}>
-              Search
-            </button>
+            <div className="searchInput">
+              <input
+                className="searchInput"
+                placeholder="type a username"
+                type="text"
+                onKeyDown={handleKey}
+                onChange={(e) => setUsername(e.target.value)}
+                value={username}
+              />
+              <button className="search-btn" onClick={handleSearch}>
+                Search
+              </button>
+            </div> 
           </div>
           {err && <p className="error-msg">User not found!</p>}
           {addUser && (

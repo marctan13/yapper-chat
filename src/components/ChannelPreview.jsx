@@ -21,9 +21,11 @@ function ChannelPreview(props) {
   return (
     <div
       onClick={() => props.onClick(props.id)}
-      className={`chatPreview ${props.isSelected ? "selected" : ""}`}
+      className={`chatPreview ${
+        props.id === props.selectedChannel ? "selected" : ""
+      }`}
     >
-      <div className={`userChat ${props.isSelected ? "selectedChannel" : ""}`}>
+      <div className={`userChat ${props.id === props.selectedChannel ? "selectedChannel" : ""}`}>
         {props.image && (
           <img src={props.image} className="channel-icon" alt="avatar" />
         )}

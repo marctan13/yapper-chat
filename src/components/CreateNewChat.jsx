@@ -4,10 +4,12 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../firebase";
+import { useChat } from "../contexts/ChatContext";
 
 function CreateNewChat({ path }) {
   const navigate = useNavigate();
   const { users, user, getUserDocId } = useAuth();
+  const{selectedChannel, setSelectedChannel} = useChat();
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [selected, setSelected] = useState("");
   const [chatName, setChatName] = useState("");
@@ -44,12 +46,15 @@ function CreateNewChat({ path }) {
   async function handleSubmit(e) {
     e.preventDefault();
     const userDocId = await getUserDocId();
-    await addDoc(collection(db, "channels"), {
+    const newChannelRef = await addDoc(collection(db, "channels"), {
       name: chatName,
       members: [userDocId, ...selectedUsers],
       image: img,
       channel: true,
     });
+    if (!selectedChannel) {
+      setSelectedChannel(newChannelRef.id);
+    }
     setChatName("");
     setSelectedUsers([]);
     setImg(null);

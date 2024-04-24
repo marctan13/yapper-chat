@@ -1,15 +1,20 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Setting from "../components/Setting";
+import { useChat } from "../contexts/ChatContext";
+
 
 function Settings() {
-  const [selectedChannel, setSelectedChannel] = useState("null");
+  // const [selectedChannel, setSelectedChannel] = useState("null");
   const [selectedChannelName, setSelectedChannelName] = useState("");
-  const [ isChannelToggle, setIsChannelToggle ] = useState(true);
-  
+  const [isChannelToggle, setIsChannelToggle] = useState(true);
+  const{selectedChannel, setSelectedChannel} = useChat();
+
+
   const toggleChannel = () => {
-    setIsChannelToggle(prev => !prev);
-  }
+    setIsChannelToggle((prev) => !prev);
+  };
+
   return (
     <div className="chatroom">
       <div className="container">
@@ -19,7 +24,7 @@ function Settings() {
           selectedChannelName={selectedChannelName}
           setSelectedChannelName={setSelectedChannelName}
           isChannelToggle={isChannelToggle}
-          toggleChannel={toggleChannel} 
+          toggleChannel={toggleChannel}
         />
         <Setting />
       </div>

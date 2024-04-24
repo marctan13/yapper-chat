@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Chatroom from "./pages/Chatroom";
@@ -14,17 +15,19 @@ import { ChatContextProvider } from "./contexts/ChatContext.jsx";
 
 function App() {
 
+  const [selectedChannel, setSelectedChannel] = useState(null);
+
   return (
     <div>
       <AuthProvider>
-        <ChatContextProvider>
+        <ChatContextProvider selectedChannel={selectedChannel} setSelectedChannel={setSelectedChannel}>
           <Routes>
             <Route exact path="/">
               <Route
                 index
                 element={
                   <Protected>
-                    <Chatroom />
+                    <Chatroom/>
                   </Protected>
                 }
               />
@@ -35,12 +38,12 @@ function App() {
                 path="/settings"
                 element={
                   <Protected>
-                    <Settings />
+                    <Settings/>
                   </Protected>
                 }
               />
               <Route path="/newChat" element={<NewChat />} />
-              <Route path="/SearchUser" element={<SearchUser />} />
+              <Route path="/SearchUser" element={<SearchUser/>} />
             </Route>
           </Routes>
         </ChatContextProvider>
