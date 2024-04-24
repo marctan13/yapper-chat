@@ -8,12 +8,10 @@ import {
   collection,
   getDocs,
 } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useAuth } from "../contexts/AuthContext";
 import { PersonAdd } from "react-bootstrap-icons";
-// import { useAuth } from "../contexts/AuthContext";
 
 function Header({
   selectedChannel,
@@ -183,7 +181,7 @@ function Header({
             color: "white",
             backgroundColor: "#7a7a7a",
             height: "50%",
-            width: "20%",
+            width: "400px",
             top: "25%",
             left: "40%",
             borderRadius: "10px",
@@ -195,6 +193,7 @@ function Header({
         <style> {`
             .popup::-webkit-scrollbar {
               width: 15px;
+              height: 15px;
             }
             .popup::-webkit-scrollbar-track {
               background: #979494;
@@ -241,7 +240,7 @@ function Header({
                 src={channelImage}
                 alt="Channel Image"
                 style={{
-                  width: "75px",
+                  width: "50px !important",
                   borderRadius: "50%",
                   marginRight: "10px",
                 }}
@@ -345,9 +344,9 @@ function Header({
                         style={{
                           display: "flex",
                           alignItems: "center",
-                          justifyContent: "space-between", // Align items and button
+                          justifyContent: "space-between",
                           marginBottom: "10px",
-                          width: "40%",
+                          width: "30%",
                         }}
                       >
                         <div

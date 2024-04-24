@@ -1,9 +1,8 @@
 //work on layout of users on css
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import {
-  QuerySnapshot,
   collection,
   getDocs,
   query,
@@ -11,7 +10,7 @@ import {
   addDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
-import { QrCode } from "react-bootstrap-icons";
+// import { QrCode } from "react-bootstrap-icons";
 
 function Search({ selectedChannel, setSelectedChannel }) {
   const navigate = useNavigate();
@@ -20,21 +19,6 @@ function Search({ selectedChannel, setSelectedChannel }) {
   const [username, setUsername] = useState("");
   const [addUser, setAddUser] = useState("");
   const [err, setErr] = useState(false);
-
-  // const handleSearch = async () => {
-  //   const q = query (
-  //     collection(db, "users"),
-  //     where("displayName", "==", username)
-  //   );
-  //  try {
-  //   const QuerySnapshot = await getDocs(q);
-  //   QuerySnapshot.forEach((doc) => {
-  //     setAddUser(doc.data());
-  //   });
-  //  } catch (err){
-  //   setErr(true);
-  //  }
-  // };
 
   const handleSearch = async () => {
     const q = query(
@@ -85,17 +69,19 @@ function Search({ selectedChannel, setSelectedChannel }) {
         <div className="searchUsername">
           <div className="FindUser">
             <h2>Find a user</h2>
-            <input
-              className="searchInput"
-              placeholder="type a username"
-              type="text"
-              onKeyDown={handleKey}
-              onChange={(e) => setUsername(e.target.value)}
-              value={username}
-            />
-            <button className="search-btn" onClick={handleSearch}>
-              Search
-            </button>
+            <div className="searchInput">
+              <input
+                className="searchInput"
+                placeholder="type a username"
+                type="text"
+                onKeyDown={handleKey}
+                onChange={(e) => setUsername(e.target.value)}
+                value={username}
+              />
+              <button className="search-btn" onClick={handleSearch}>
+                Search
+              </button>
+            </div> 
           </div>
           {err && <p className="error-msg">User not found!</p>}
           {addUser && (

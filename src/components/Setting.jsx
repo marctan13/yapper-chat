@@ -134,7 +134,7 @@ function Setting() {
             <div>
               <div style={{ display: "flex" }}>
                 <h1 className="userDisplayName">Display Name: </h1>
-                <h2 style={{ color: "navy" }}> {user.displayName}</h2>
+                <h2 style={{ color: "#219ebc" }}> {user.displayName}</h2>
                 <button
                   className="editName"
                   onClick={() => {
@@ -221,7 +221,7 @@ function Setting() {
             )}
             <span>
               Email Verified:
-              <span style={{ color: user.emailVerified ? "green" : "red" }}>
+              <span style={{ color: user.emailVerified ? "#38b000" : "#e63946" }}>
                 {user.emailVerified ? " Yes" : " No"}
               </span>
             </span>

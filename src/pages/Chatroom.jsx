@@ -22,12 +22,14 @@ function Chatroom() {
           setSelectedChannelName={setSelectedChannelName}
           isChannelToggle={isChannelToggle}
           toggleChannel={toggleChannel} 
+          // className="col-md-3 min-vw-30 sidebar-col"
         />
         <Chats
           selectedChannel={selectedChannel}
           setSelectedChannel={setSelectedChannel}
           selectedChannelName={selectedChannelName}
           setSelectedChannelName={setSelectedChannelName}
+          // className="col-8 position-sticky"
         />
       </div>
     </div>

@@ -9,6 +9,7 @@
     const [formValue, setFormValue] = useState("");
     const messageEndRef = useRef(null);
 
+<<<<<<< HEAD
     console.log(selectedChannel)
 
     useEffect(() => {
@@ -52,6 +53,49 @@
       return () => unsubscribe();
     }, [selectedChannel]);
 
+=======
+    useEffect(() => {
+        if (!selectedChannel) return; // Exit if no channel is selected
+
+      // Define an async function to fetch messages
+      const fetchMessages = async () => {
+        try {
+          const messagesQuerySnapshot = await getDocs(
+            collection(db, "channels", selectedChannel, "messages")
+          );
+          const allMessages = messagesQuerySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          allMessages.sort(
+            (a, b) => a.createdAt.toMillis() - b.createdAt.toMillis()
+          );
+          setMessages(allMessages);
+        } catch (error) {
+          console.error("Error fetching messages:", error);
+        }
+      };
+      fetchMessages();
+
+      // Subscribe to changes in messages collection
+      const unsubscribe = onSnapshot(
+        query(collection(db, "channels", selectedChannel, "messages"), limit(10)),
+        (snapshot) => {
+          const updatedMessages = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          // Sort messages by createdAt timestamp
+          updatedMessages.sort(
+            (a, b) => a.createdAt.toMillis() - b.createdAt.toMillis()
+          );
+          setMessages(updatedMessages);
+        }
+      );
+      return () => unsubscribe();
+    }, [selectedChannel]);
+
+>>>>>>> 9615777b8a8383d4fc74de123b8532519b197ff9
     return (
       <>
         <div className="chatMessages">

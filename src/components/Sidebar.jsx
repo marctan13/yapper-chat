@@ -11,12 +11,12 @@ import {
   collection,
   query,
   orderBy,
-  onSnapshot,
   limit,
   getDocs,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import { useChat } from "../contexts/ChatContext.jsx";
 
 function Sidebar({
   selectedChannel,
@@ -29,6 +29,8 @@ function Sidebar({
 
   const { channels, fetchChannels } = useAuth();
   const [channelPreviews, setChannelPreviews] = useState([]);
+  // const {selectedChannel, setSelectedChannel} = useChat();
+
 
   useEffect(() => {
     fetchChannels();
