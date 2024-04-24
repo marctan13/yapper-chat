@@ -24,10 +24,13 @@ function Sidebar({
   setSelectedChannelName,
   isChannelToggle,
   toggleChannel,
+  isChannel,
+  members
 }) {
   const navigate = useNavigate();
 
   const { channels, fetchChannels } = useAuth();
+  // const{isChannel, setIsChannel} = useState(false);
   const [channelPreviews, setChannelPreviews] = useState([]);
   // const {selectedChannel, setSelectedChannel} = useChat();
 
@@ -87,9 +90,12 @@ function Sidebar({
     ? channels.filter((channel) => channel.channel === true)
     : channels.filter((channel) => channel.channel === false);
 
+    // console.log("Members" + members)
+    // console.log("Filtered Channels" + filteredChannels)
+
   return (
     <div className="sidebar">
-      <Navbar isChannelToggle={isChannelToggle} toggleChannel={toggleChannel} />
+      <Navbar isChannelToggle={isChannelToggle} toggleChannel={toggleChannel} selectedChannel={selectedChannel}/>
       <div className="previews">
         {filteredChannels.map((channel) => (
           <ChannelPreview
@@ -101,6 +107,8 @@ function Sidebar({
             image={channel.image}
             lastAccessed={channel.lastAccessed}
             selectedChannel={selectedChannel}
+            isChannel={isChannel}
+            members={members}
           />
         ))}
       </div>

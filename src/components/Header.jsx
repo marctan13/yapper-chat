@@ -18,12 +18,16 @@ function Header({
   selectedChannelName,
   setSelectedChannelName,
   setSelectedChannel,
+  isChannel,
+  setIsChannel,
+  members,
+  setMembers
 }) {
-  const [members, setMembers] = useState([]);
+  // const [members, setMembers] = useState([]);
   const [nonMembers, setNonMembers] = useState([]);
   const [channelImage, setChannelImage] = useState(null);
   const [show, setShow] = useState(false);
-  const [isChannel, setIsChannel] = useState(true);
+  // const [isChannel, setIsChannel] = useState(true);
   const newChannelName = useRef();
   const newChannelImage = useRef();
   const { user, getUserDocId } = useAuth();
@@ -159,14 +163,20 @@ function Header({
           <img className="chatLogo" src={channelImage} alt="Channel Image" />
         )}
         {!channelImage && selectedChannelName && (
-          <img className="chatLogo" src="/cup.jpg" alt="Placeholder Image" />
+          <img className="chatLogo" src="/yapper-logo.jpg" alt="Placeholder Image" />
         )}
       </div>
       <div className="teamInfo">
-        {selectedChannelName ? (
+        {selectedChannelName && isChannel && (
           <h1 onClick={handleShow}>{selectedChannelName}</h1>
-        ) : (
+        )}
+        {!selectedChannelName && (
           <h1>Select or Create a Channel</h1>
+        )}
+        {!isChannel && members.length === 2 && (
+          <h1 onClick={handleShow}>
+            {members.find((member) => member.uid !== user.uid)?.displayName}
+          </h1>
         )}
 
         {/* **CHAT MENU** */}
@@ -183,7 +193,8 @@ function Header({
             top: "25%",
             left: "40%",
             borderRadius: "10px",
-            overflowY: "auto",
+            // overflowY: "auto",
+            overflow: "auto",
             padding: "1.5rem"
           }}
         >
@@ -237,7 +248,8 @@ function Header({
                 src={channelImage}
                 alt="Channel Image"
                 style={{
-                  width: "50px !important",
+                  width: "50px",
+                  height: "50px",
                   borderRadius: "50%",
                   marginRight: "10px",
                 }}
@@ -246,7 +258,7 @@ function Header({
             {!channelImage && selectedChannelName && (
               <img
                 className="chatLogo"
-                src="/cup.jpg"
+                src="/yapper-logo.jpg"
                 alt="Placeholder Image"
                 style={{
                   width: "75px",
