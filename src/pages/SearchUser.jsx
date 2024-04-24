@@ -5,7 +5,7 @@ import { useChat } from "../contexts/ChatContext";
 
 
 function SearchUser() {
-  const{selectedChannel, setSelectedChannel, toggleChannel, isChannelToggle, setIsChannelToggle} = useChat();
+  const{selectedChannel, setSelectedChannel, toggleChannel, isChannelToggle, setIsChannelToggle,members, setMembers} = useChat();
 
   return (
     <div className="chatroom">
@@ -14,6 +14,7 @@ function SearchUser() {
           isChannelToggle={isChannelToggle}
           toggleChannel={toggleChannel}
           setSelectedChannel={setSelectedChannel}
+          members={members}
         />
           <Search toggleChannel={toggleChannel} setSelectedChannel={setSelectedChannel} selectedChannel={selectedChannel} isChannelToggle={isChannelToggle} setIsChannelToggle={setIsChannelToggle}/>
       </div>

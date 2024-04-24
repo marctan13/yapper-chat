@@ -6,7 +6,7 @@ import { useChat } from "../contexts/ChatContext";
 
 function Settings() {
   const [selectedChannelName, setSelectedChannelName] = useState("");
-  const{selectedChannel, setSelectedChannel, toggleChannel, isChannelToggle, setIsChannelToggle, members, setMembers} = useChat();
+  const{selectedChannel, setSelectedChannel, toggleChannel, isChannelToggle, setIsChannelToggle, members} = useChat();
 
   return (
     <div className="chatroom">
@@ -18,6 +18,7 @@ function Settings() {
           setSelectedChannelName={setSelectedChannelName}
           isChannelToggle={isChannelToggle}
           toggleChannel={toggleChannel}
+          members={members}
         />
         <Setting />
       </div>
