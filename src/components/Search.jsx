@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import {
-  QuerySnapshot,
   collection,
   getDocs,
   query,
@@ -11,7 +10,7 @@ import {
   addDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
-import { QrCode } from "react-bootstrap-icons";
+// import { QrCode } from "react-bootstrap-icons";
 
 function Search({ selectedChannel, setSelectedChannel, toggleChannel, isChannelToggle, setIsChannelToggle }) {
   const navigate = useNavigate();
@@ -72,17 +71,19 @@ function Search({ selectedChannel, setSelectedChannel, toggleChannel, isChannelT
         <div className="searchUsername">
           <div className="FindUser">
             <h2>Find a user</h2>
-            <input
-              className="searchInput"
-              placeholder="type a username"
-              type="text"
-              onKeyDown={handleKey}
-              onChange={(e) => setUsername(e.target.value)}
-              value={username}
-            />
-            <button className="search-btn" onClick={handleSearch}>
-              Search
-            </button>
+            <div className="searchInput">
+              <input
+                className="searchInput"
+                placeholder="type a username"
+                type="text"
+                onKeyDown={handleKey}
+                onChange={(e) => setUsername(e.target.value)}
+                value={username}
+              />
+              <button className="search-btn" onClick={handleSearch}>
+                Search
+              </button>
+            </div> 
           </div>
           {err && <p className="error-msg">User not found!</p>}
           {addUser && (

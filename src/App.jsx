@@ -11,7 +11,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import Protected from "./components/Protected.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import { ChatContextProvider } from "./contexts/ChatContext.jsx";
-
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
 

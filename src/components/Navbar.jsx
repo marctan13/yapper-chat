@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-function SideNavbar({isChannelToggle, toggleChannel}) {
+function Navbar({isChannelToggle, toggleChannel}) {
   const navigate = useNavigate();
 
   return (
@@ -29,12 +29,10 @@ function SideNavbar({isChannelToggle, toggleChannel}) {
           <button className="newMsg" onClick={() => navigate("/NewChat")}>
             + Create New Channel
           </button>
-        </div>
-        
-      </div>
-      
+        </div>   
+      </div>  
     </div>
   );
 }
 
-export default SideNavbar;
+export default Navbar;
