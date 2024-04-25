@@ -1,5 +1,4 @@
-// import { onAuthStateChanged } from "firebase/auth";
-// import { auth } from "./firebase";
+import { useState } from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Chatroom from "./pages/Chatroom";
@@ -12,21 +11,25 @@ import { AuthProvider } from "./contexts/AuthContext";
 import Protected from "./components/Protected.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import { ChatContextProvider } from "./contexts/ChatContext.jsx";
-
+// import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
+
+  const [selectedChannel, setSelectedChannel] = useState(null);
+  const [isChannelToggle, setIsChannelToggle] = useState(true);
 
   return (
     <div>
       <AuthProvider>
-        <ChatContextProvider>
+        <ChatContextProvider selectedChannel={selectedChannel} setSelectedChannel={setSelectedChannel} isChannelToggle={isChannelToggle} setIsChannelToggle={setIsChannelToggle}>
           <Routes>
             <Route exact path="/">
               <Route
                 index
                 element={
                   <Protected>
-                    <Chatroom />
+                    <Chatroom/>
                   </Protected>
                 }
               />
@@ -37,12 +40,12 @@ function App() {
                 path="/settings"
                 element={
                   <Protected>
-                    <Settings />
+                    <Settings/>
                   </Protected>
                 }
               />
               <Route path="/newChat" element={<NewChat />} />
-              <Route path="/SearchUser" element={<SearchUser />} />
+              <Route path="/SearchUser" element={<SearchUser/>} />
             </Route>
           </Routes>
         </ChatContextProvider>

@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Setting from "../components/Setting";
+import { useChat } from "../contexts/ChatContext";
+
 
 function Settings() {
-  const [selectedChannel, setSelectedChannel] = useState("null");
   const [selectedChannelName, setSelectedChannelName] = useState("");
-  
+  const{selectedChannel, setSelectedChannel, toggleChannel, isChannelToggle, setIsChannelToggle} = useChat();
 
   return (
     <div className="chatroom">
@@ -15,6 +16,8 @@ function Settings() {
           setSelectedChannel={setSelectedChannel}
           selectedChannelName={selectedChannelName}
           setSelectedChannelName={setSelectedChannelName}
+          isChannelToggle={isChannelToggle}
+          toggleChannel={toggleChannel}
         />
         <Setting />
       </div>

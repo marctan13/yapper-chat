@@ -5,23 +5,21 @@ import {
   getDoc,
   updateDoc,
   onSnapshot,
-  query,
   collection,
-  where,
   getDocs,
 } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useAuth } from "../contexts/AuthContext";
 import { PersonAdd } from "react-bootstrap-icons";
-// import { useAuth } from "../contexts/AuthContext";
 
 function Header({
   selectedChannel,
   selectedChannelName,
   setSelectedChannelName,
   setSelectedChannel,
+  isChannel,
+  setIsChannel,
 }) {
   const [members, setMembers] = useState([]);
   const [nonMembers, setNonMembers] = useState([]);
@@ -29,21 +27,25 @@ function Header({
   const [show, setShow] = useState(false);
   const newChannelName = useRef();
   const newChannelImage = useRef();
-  const { user } = useAuth();
+  const { user, getUserDocId } = useAuth();
 
+  //get document of selected channel
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => (isChannel ? setShow(true) : setShow(false));
 
   useEffect(() => {
     const fetchChannelData = async () => {
       try {
         if (!selectedChannel) return;
         const channelDocRef = doc(db, "channels", selectedChannel);
-        const unsubscribe = onSnapshot(
+        const unsubscribe = selectedChannel ? onSnapshot(
           channelDocRef,
           async (channelDocSnap) => {
             const memberIds = channelDocSnap.data().members;
-
+            const isChannel = channelDocSnap.data().channel;
+            const channelName = channelDocSnap.data().name;
+            setSelectedChannelName(channelName);
+            setIsChannel(isChannel);
             const memberProfiles = await Promise.all(
               memberIds.map(async (memberId) => {
                 const userDocRef = doc(db, "users", memberId);
@@ -62,7 +64,7 @@ function Header({
             const imageUrl = channelDocSnap.data().image;
             setChannelImage(imageUrl);
           }
-        );
+        ) : "";
 
         // Fetch all users from the database
         const usersQuerySnapshot = await getDocs(collection(db, "users"));
@@ -112,15 +114,7 @@ function Header({
 
   const handleLeaveChannel = async () => {
     try {
-      const userUid = user.uid;
-      // Fetch the user document based on user's uid
-      const userQuery = query(
-        collection(db, "users"),
-        where("uid", "==", userUid)
-      );
-      const userQuerySnapshot = await getDocs(userQuery);
-      // // Get the docid of the user document
-      const userDocId = userQuerySnapshot.docs.find((doc) => doc.exists())?.id;
+      const userDocId = await getUserDocId();
       if (!selectedChannel || !userDocId) return;
       const channelDocRef = doc(db, "channels", selectedChannel);
       // Fetch the current members of the channel
@@ -138,7 +132,8 @@ function Header({
       await updateDoc(channelDocRef, { members: updatedMembers });
       setSelectedChannel(null);
       setSelectedChannelName("");
-      handleClose();
+      window.location.reload();
+      // handleClose();
     } catch (error) {
       console.error("Failed to leave channel", error);
       throw error;
@@ -161,18 +156,30 @@ function Header({
   return (
     <div className="header">
       <div className="chatAvatar">
-        {channelImage && (
-          <img className="chatLogo" src={channelImage} alt="Channel Image" />
-        )}
+        {/* Channel header with no Image */}
         {!channelImage && selectedChannelName && (
-          <img className="chatLogo" src="/cup.jpg" alt="Placeholder Image" />
+          <img className="chatLogo" src="/yapper-logo.jpg" alt="Placeholder Image" />
+        )}
+        {/* DM Header */}
+        {!isChannel && members.length === 2 && (
+          <img className="chatLogo" src={members.find((member) => member.uid !== user.uid)?.photoURL ? members.find((member) => member.uid !== user.uid)?.photoURL : "/avatar.png"} alt="Member image" />
+        )}
+        {/* Channel Header with Image */}
+        {isChannel && channelImage && (
+          <img className="chatLogo" src={channelImage} alt="Channel Image" />
         )}
       </div>
       <div className="teamInfo">
-        {selectedChannelName ? (
+        {selectedChannelName && isChannel && (
           <h1 onClick={handleShow}>{selectedChannelName}</h1>
-        ) : (
+        )}
+        {!selectedChannelName && (
           <h1>Select or Create a Channel</h1>
+        )}
+        {!isChannel && members.length === 2 && (
+          <h1 onClick={handleShow}>
+            {members.find((member) => member.uid !== user.uid)?.displayName}
+          </h1>
         )}
 
         {/* **CHAT MENU** */}
@@ -180,18 +187,38 @@ function Header({
           show={show}
           onHide={handleClose}
           centered
+          className="popup"
           style={{
             color: "white",
             backgroundColor: "#7a7a7a",
             height: "50%",
-            width: "20%",
+            width: "400px",
             top: "25%",
             left: "40%",
             borderRadius: "10px",
-            overflowY: "auto",
-            padding: "1.5rem",
+            // overflowY: "auto",
+            overflow: "auto",
+            padding: "1.5rem"
           }}
         >
+        <style> {`
+            .popup::-webkit-scrollbar {
+              width: 15px;
+              height: 15px;
+            }
+            .popup::-webkit-scrollbar-track {
+              background: #979494;
+              border-radius: 0 10px 10px 0;
+            }
+            .popup::-webkit-scrollbar-thumb {
+              background: #666666;
+              border-radius: 50px;
+            }
+            .popup::-webkit-scrollbar-thumb:hover {
+              background: #555;
+            }
+          `}
+        </style>
           <Modal.Header
             style={{
               display: "flex",
@@ -224,7 +251,8 @@ function Header({
                 src={channelImage}
                 alt="Channel Image"
                 style={{
-                  width: "75px",
+                  width: "50px",
+                  height: "50px",
                   borderRadius: "50%",
                   marginRight: "10px",
                 }}
@@ -233,7 +261,7 @@ function Header({
             {!channelImage && selectedChannelName && (
               <img
                 className="chatLogo"
-                src="/cup.jpg"
+                src="/yapper-logo.jpg"
                 alt="Placeholder Image"
                 style={{
                   width: "75px",
@@ -263,6 +291,7 @@ function Header({
                 onClick={handleClick}
                 style={{
                   borderRadius: "5px",
+                  marginBottom: "1rem"
                 }}
               >
                 Save Changes
@@ -327,9 +356,9 @@ function Header({
                         style={{
                           display: "flex",
                           alignItems: "center",
-                          justifyContent: "space-between", // Align items and button
+                          justifyContent: "space-between",
                           marginBottom: "10px",
-                          width: "40%",
+                          width: "30%",
                         }}
                       >
                         <div
@@ -355,18 +384,8 @@ function Header({
                           )}
                           <p>{nonMember?.displayName}</p>
                         </div>
-                        {/* <Button
-                          variant="success"
-                          onClick={() => handleAddMember(nonMember.docid)}
-                          style={{
-                            alignSelf: "flex-end",
-                            marginLeft: "10px",
-                          }}
-                        >
-                          Add
-                        </Button> */}
                         <PersonAdd
-                        className="add-member"
+                          className="add-member"
                           onClick={() => handleAddMember(nonMember.docid)}
                           style={{
                             alignSelf: "flex-end",
@@ -392,7 +411,7 @@ function Header({
         </Modal>
 
         <div className="teamImg">
-          {members &&
+          {isChannel && members &&
             members
               .slice(0, 4)
               .map((member, index) => (

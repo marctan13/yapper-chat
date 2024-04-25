@@ -1,10 +1,14 @@
 import { verifyBeforeUpdateEmail } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
+import {
+  doc,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../firebase.js";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
-// import { Bluetooth } from "react-bootstrap-icons";
 
 function Setting() {
   const navigate = useNavigate();
@@ -23,7 +27,7 @@ function Setting() {
     changePassword,
     logOut,
     changeDisplayName,
-    // userDocId,
+    getUserDocId,
     sendVerificationEmail,
   } = useAuth();
   const [currentUser, setCurrentUser] = useState(user);
@@ -99,10 +103,11 @@ function Setting() {
           const capitalizedNewName =
             newName.charAt(0).toUpperCase() + newName.slice(1);
           await changeDisplayName(capitalizedNewName);
+          // Update the display name in the Firestore user document
+          const userDocId = await getUserDocId();
+          const userDocRef = doc(db, "users", userDocId);
+          await updateDoc(userDocRef, { displayName: capitalizedNewName });
           alert("Display Name has been updated!");
-
-          user.displayName = capitalizedNewName;
-
           setDisplayNameIsClicked(false);
         } catch (error) {
           alert("Failed to update username. Please try again.");
@@ -128,7 +133,7 @@ function Setting() {
             <div>
               <div style={{ display: "flex" }}>
                 <h1 className="userDisplayName">Display Name: </h1>
-                <h2 style={{ color: "navy" }}> {user.displayName}</h2>
+                <h2 style={{ color: "#219ebc" }}> {user.displayName}</h2>
                 <button
                   className="editName"
                   onClick={() => {
@@ -177,7 +182,7 @@ function Setting() {
                   onClick={() => {
                     setIsClicked(!isClicked);
                     setError(!error);
-                    setPasswordIsClicked(false)
+                    setPasswordIsClicked(false);
                     setDisplayNameIsClicked(false);
                   }}
                   title="Change Email"
@@ -215,7 +220,7 @@ function Setting() {
             )}
             <span>
               Email Verified:
-              <span style={{ color: user.emailVerified ? "green" : "red" }}>
+              <span style={{ color: user.emailVerified ? "#38b000" : "#e63946" }}>
                 {user.emailVerified ? " Yes" : " No"}
               </span>
             </span>
@@ -262,13 +267,6 @@ function Setting() {
             )}
           </div>
         )}
-        <div className="notifications">
-          <hr />
-          <h1>Notifications</h1>
-          <span>Do Not Disturb</span>
-          <input type="checkbox" name="dnd" id="dnd" />
-          <label htmlFor="dnd">Do Not Disturb</label>
-        </div>
       </div>
     </div>
   );

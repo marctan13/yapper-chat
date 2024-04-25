@@ -1,7 +1,7 @@
 import Header from "./Header";
 import ChatMessage from "./ChatMessage";
 
-function Chats({ selectedChannel, setSelectedChannel, selectedChannelName, setSelectedChannelName }) {
+function Chats({ selectedChannel, setSelectedChannel, selectedChannelName, setSelectedChannelName, isChannel,setIsChannel}) {
   return (
     <div className="rightSection">
       <Header
@@ -9,6 +9,8 @@ function Chats({ selectedChannel, setSelectedChannel, selectedChannelName, setSe
         selectedChannelName={selectedChannelName}
         setSelectedChannel = {setSelectedChannel}
         setSelectedChannelName={setSelectedChannelName}
+        isChannel={isChannel}
+        setIsChannel={setIsChannel}
       />
       <ChatMessage
         selectedChannel={selectedChannel}
