@@ -27,13 +27,15 @@ function Sidebar({
 }) {
   const navigate = useNavigate();
 
-  const { channels, fetchChannels } = useAuth();
+  const { channels, fetchChannels, getUserDocId } = useAuth();
   const [channelPreviews, setChannelPreviews] = useState([]);
   // const {selectedChannel, setSelectedChannel} = useChat();
+  const [docId, setDocId] = useState('');
 
 
   useEffect(() => {
     fetchChannels();
+    changeDM();
   }, []);
 
   useEffect(() => {
@@ -82,6 +84,14 @@ function Sidebar({
     }
   };
 
+  // retrieve user's docId for comparison
+  const changeDM = async () => {
+    await getUserDocId()
+    .then((res) => {
+      setDocId(res);
+    });
+  }
+
   // Filter channels based on the toggle state
   const filteredChannels = isChannelToggle
     ? channels.filter((channel) => channel.channel === true)
@@ -99,6 +109,9 @@ function Sidebar({
             name={channel.name}
             id={channel.id}
             image={channel.image}
+            channel={channel.channel}
+            members={channel.members}
+            docId={docId}
             lastAccessed={channel.lastAccessed}
             selectedChannel={selectedChannel}
           />
