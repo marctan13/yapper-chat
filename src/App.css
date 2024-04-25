@@ -259,6 +259,8 @@ form {
       flex-direction: column;
       width: 10%;
       min-width: 400px;
+      width: 10%;
+      min-width: 400px;
 
       ::-webkit-scrollbar {
         width: 15px;
@@ -328,7 +330,7 @@ form {
             width: 26px;
             left: 4px;
             bottom: 4px;
-            background-color: white;
+            /* background-color: white; */
           }
 
           input:checked + .slider {
@@ -389,6 +391,8 @@ form {
           }
         } 
       }
+        } 
+      }
       
       .nav-title {
         display: flex;
@@ -409,7 +413,7 @@ form {
         }
       }
     }
-  }
+  
 
   .previews {
     height: 65%;
@@ -443,6 +447,7 @@ form {
     align-items: center;
     padding-left: 0.5rem;
   }
+
 
   .name-chat {
     overflow: hidden;
@@ -487,7 +492,7 @@ form {
     font-size: 20px;
     font-weight: 500;
   }
-}
+
 
 .newChat {
   background-color: #9a9a9a;
@@ -590,6 +595,7 @@ form {
       max-height: 55%;
       overflow-y: auto;
       padding-bottom: 20px;
+      padding-bottom: 20px;
 
       .chatMessage {
         display: flex;
@@ -617,6 +623,8 @@ form {
           background-color: #7c91ff;
           display: flex;
           flex-direction: column;
+          min-width: 90px;
+          /* max-width: 100%; */
           min-width: 90px;
           /* max-width: 100%; */
           margin: 3em 1em 3em 0.5em;
@@ -676,7 +684,11 @@ form {
     .inputMessage {
       position: fixed;
       bottom: 72px;
+      bottom: 72px;
       width: 45%;
+      /* min-width: 30vw;
+      max-width: 50vw; */
+      height: 8%;
       /* min-width: 30vw;
       max-width: 50vw; */
       height: 8%;
@@ -689,6 +701,9 @@ form {
         /* min-width: 45vw;
         max-width: 53vw; */
         padding-left: 1rem;
+        /* min-width: 45vw;
+        max-width: 53vw; */
+        padding-left: 1rem;
         justify-self: flex-start;
         flex-direction: row;
         background-color: #282D35;
@@ -697,7 +712,10 @@ form {
           display: flex;
           width: 75vw;
           border-radius: 15px;
+          width: 75vw;
+          border-radius: 15px;
           color: black;
+          height: 50px;
           height: 50px;
         }
       }
@@ -705,6 +723,10 @@ form {
       .send {
         background-color: #6c757d;
         color: white;
+        max-width: 100px;
+        width: 500px;
+        height: 50px;
+        border-radius: 15px;
         max-width: 100px;
         width: 500px;
         height: 50px;
@@ -987,6 +1009,42 @@ form {
   align-items: flex-start;
   padding-left: 5rem;
 
+  .addNewDm {
+    display: grid;
+    width: 22.5em;
+    align-items: center;
+    margin-top: 1em;
+    grid-template-columns: 1fr 0.75em 4fr 0.75em 1fr;
+
+    img {
+      grid-column: 1 / 2;
+    }
+
+    span {
+      font-size: large;
+      grid-column: 3 / 8;
+    }
+
+    .addBtn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: white;
+      color: #6c757d;
+      width: 2.5em;
+      height: 66%;
+      margin-top: 0;
+      grid-column: 9 / 10;
+      border-radius: 5px;
+
+      &:hover {
+        background-color: #6c757d;
+        color: white;	
+        cursor: pointer;
+      }
+    }
+  }
+
   h2 {
     color: white;
     font-size: 2em;
@@ -1002,8 +1060,12 @@ form {
     .searchInput{
       display: flex;
       flex-direction: row;
+    .searchInput{
+      display: flex;
+      flex-direction: row;
       width: 325px;
       border-radius: 5px;
+      height: 40px;
       height: 40px;
       margin-top: 10px;
       font-size: 20px;
@@ -1022,7 +1084,7 @@ form {
     padding-left: 0.5rem;
   }
 
-  .addNewFriend {
+  .addNewDm {
     display: flex;
     flex-direction: row;
     padding-left: 0.5rem;
@@ -1092,4 +1154,4 @@ form {
     color: red;
     font-size: 25px;
   }
-}
+  }}
