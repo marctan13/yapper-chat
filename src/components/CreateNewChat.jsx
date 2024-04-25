@@ -1,11 +1,10 @@
-//work on layout of users on css
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 
-function CreateNewChat({ path }) {
+function CreateNewChat({ customAvatar, currentUser }) { // Try passing customAvatar and currentUser as props
   const navigate = useNavigate();
   const { users, user } = useAuth();
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -106,7 +105,12 @@ function CreateNewChat({ path }) {
                     key={user.uid}
                     onClick={() => handleSelect(user.id)}
                   >
-                    <img src={user.photoURL || "avatar.png"} alt="" size={32} />
+                    <img
+                      src={user.photoURL ? user.photoURL : "avatar.png"}
+                      className="customAvatar-img"
+                      alt="Avatar"
+                      size={32}
+                    />
                     <p>{user.displayName}</p>
                     {selectedUsers.includes(user.id) && (
                       <img

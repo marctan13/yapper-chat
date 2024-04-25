@@ -4,7 +4,9 @@ import { useState, useRef, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
-// import { Bluetooth } from "react-bootstrap-icons";
+import { storage, db } from "../firebase";
+import { addDoc, collection, getDocs, query, where, updateDoc, doc } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 function Setting() {
   const navigate = useNavigate();
@@ -23,10 +25,11 @@ function Setting() {
     changePassword,
     logOut,
     changeDisplayName,
-    // userDocId,
     sendVerificationEmail,
   } = useAuth();
   const [currentUser, setCurrentUser] = useState(user);
+  const [avatar, setAvatar] = useState(null);
+  const [customAvatar, setCustomAvatar] = useState(null);
 
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -115,6 +118,66 @@ function Setting() {
     }
   };
 
+  const handleAvatarUpload = (e) => {
+    const file = e.target.files[0];
+    setAvatar(file); // Previews the selected Photo
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!avatar) {
+      // If no file is selected when they click "Save Avatar" show error message 
+      console.error("No avatar selected");
+      return;
+    }
+  
+    // Uploads the photo to our Firebase Storage inside "/avatars/"
+    const storageRef = ref(storage, `avatars/${user.uid}/${avatar.name}`);
+    await uploadBytes(storageRef, avatar);
+  
+    // Get the download URL of the uploaded photo
+    const downloadURL = await getDownloadURL(storageRef);
+  
+    // Update the "customAvatar" field in the user document with our "downloadURL"
+    const userUid = user.uid;
+    const userQuery = query(
+      collection(db, "users"),
+      where("uid", "==", userUid)
+    );
+    const userQuerySnapshot = await getDocs(userQuery);
+    const userDocId = userQuerySnapshot.docs.find((doc) => doc.exists())?.id;
+  
+    await updateDoc(doc(db, "users", userDocId), {
+      customAvatar: downloadURL,
+    });
+  
+    setAvatar(null);
+  };
+
+  const fetchCustomAvatar = async () => {
+    // Fetch customAvatar from Firestore
+    const userUid = user.uid;
+    const userQuery = query(
+      collection(db, "users"),
+      where("uid", "==", userUid)
+    );
+    const userQuerySnapshot = await getDocs(userQuery);
+    const userData = userQuerySnapshot.docs.find((doc) => doc.exists())?.data();
+    
+    console.log("userData:", userData); // Log userData if customAvatar field exists
+    
+    // Try to update our customAvatar state if it does exists in users data
+    if (userData && userData.customAvatar) {
+      setCustomAvatar(userData.customAvatar);
+      console.log("Custom Avatar:", userData.customAvatar); // Log customAvatar to verify URL
+    }
+  };
+
+  useEffect(() => {
+    fetchCustomAvatar();
+  }, []);
+
   return (
     <div className="rightSection">
       <div className="header">
@@ -123,7 +186,14 @@ function Setting() {
       <div className="chatWrapper">
         <p onClick={() => navigate("/")}>&lt; Back</p>
         <div className="username">
-          <img src={user.photoURL ? user.photoURL : "avatar.png"} />
+        <img 
+          onClick={() => navigate("/settings")}
+          src={customAvatar ? 
+            customAvatar : (currentUser && currentUser.photoURL ? currentUser.photoURL : "avatar.png")}
+          className="customAvatar-img"
+          alt="Avatar" 
+          size={32} 
+         />
           <div className="username">
             <div>
               <div style={{ display: "flex" }}>
@@ -168,6 +238,22 @@ function Setting() {
                 </form>
               )}
             </div>
+            <form onSubmit={handleSubmit}>
+              <div className="uploadAvatarContainer">
+                <input
+                  type="file"
+                  accept="image/jpeg, image/png"
+                  onChange={handleAvatarUpload}
+                  style={{ display: "none" }}
+                  id="avatarUploadInput"
+                />
+                <label htmlFor="avatarUploadInput" className="uploadAvatar">
+                  Upload Avatar
+                </label>
+                {avatar && <img src={URL.createObjectURL(avatar)} alt="Selected Avatar" />}
+              </div>
+              <button type="submit">Save Avatar</button>
+            </form>
             {/* Doesnt render this section if user signs in with Google */}
             {user.providerData[0].providerId === "google.com" ? null : (
               <div style={{ display: "flex" }}>

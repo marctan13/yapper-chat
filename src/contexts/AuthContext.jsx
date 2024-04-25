@@ -25,6 +25,7 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [channels, setChannels] = useState([]);
   const [users, setUsers] = useState([]);
   const usersRef = collection(db, "users");
@@ -164,8 +165,26 @@ const fetchChannels = async () => {
     };
   }, []);
 
+  const updateCustomAvatar = async (downloadURL) => {
+    try {
+      const userRef = db.collection('users').doc(user.uid);
+  
+      if (user.customAvatar) {
+        await userRef.update({ customAvatar: downloadURL });
+      } else if (user.photoURL) {
+        await userRef.update({ photoURL: downloadURL });
+      } else {
+        await userRef.update({ photoURL: 'Avatar.png' });
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   const value = {
     user,
+    loading,
+    error,
     signIn,
     signUp,
     signInWithGoogle,
@@ -178,6 +197,7 @@ const fetchChannels = async () => {
     changeDisplayName,
     channels,
     fetchChannels,
+    updateCustomAvatar,
   };
 
   return (
