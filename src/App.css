@@ -511,6 +511,15 @@ form {
   /* z-index: 1; */
   padding: 50px !important;
 }
+.user .username {
+  margin-right: 2em;
+}
+
+.username-link{
+  margin-top: 2em;
+  color: #4a4a4a;
+}
+
 
 .user {
   display: flex;
@@ -520,9 +529,9 @@ form {
   cursor: pointer;
 
   img {
-    height: 3.5em;
-    width: 3.5em;
-    margin: 2em 7em 2em 1em;
+    height: 4em;
+    width: 4em;
+    margin: 2em 1em 0 1em;
     border-radius: 50%;
     object-fit: cover;
   }
