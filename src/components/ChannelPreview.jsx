@@ -61,13 +61,20 @@ function ChannelPreview(props) {
       }`}
     >
       <div className={`userChat ${props.id === props.selectedChannel ? "selectedChannel" : ""}`}>
-        {channel.image != null && (
+        {/* Channel with Image */}
+        {channel.image && props.members.length != 2 && (
           <img src={channel.image} className="channel-icon" alt="avatar" />
         )}
-        {channel.image == null && props.isChannel && (
+        {/* DM with image */}
+        {channel.image && props.members.length === 2 && (
+          <img src={channel.image} className="channel-icon" alt="avatar"/>
+        )}
+        {/* Channel with no image */}
+        {!channel.image && props.members.length != 2 && (
           <img src="/yapper-logo.jpg" className="channel-icon" alt="avatar" />
         )}
-        {!props.isChannel && props.members.length === 2 && !channel.image && (
+        {/* DMs with no image */}
+        {props.members.length === 2 && !channel.image && (
           <img src="/avatar.png" className="channel-icon" alt="avatar" />
         )}
         <div className="name-chat">
