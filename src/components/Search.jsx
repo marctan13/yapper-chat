@@ -76,19 +76,6 @@ function Search({ selectedChannel, setSelectedChannel, toggleChannel, isChannelT
         <div className="searchUsername">
           <div className="FindUser">
             <h2>Find a user</h2>
-            {/* <div className="searchInput">
-              <input
-                className="searchInput"
-                placeholder="type a username"
-                type="text"
-                onKeyDown={handleKey}
-                onChange={(e) => setUsername(e.target.value)}
-                value={username}
-              />
-              <button className="search-btn" onClick={handleSearch}>
-                Search
-              </button>
-            </div>  */}
             <input
               className="searchInput"
               placeholder="type a username"
@@ -96,7 +83,6 @@ function Search({ selectedChannel, setSelectedChannel, toggleChannel, isChannelT
               onChange={(e) => setUsername(e.target.value)}
               value={username}
             />
-            {/* <button className = "search-btn" onClick={handleSearch}>Search</button> */}
           </div>
           {err && <p className="error-msg">User not found!</p>}
           {addUser.map((users) => (

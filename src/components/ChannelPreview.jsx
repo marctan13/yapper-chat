@@ -1,8 +1,15 @@
 import { Trash } from "react-bootstrap-icons";
-import { doc, deleteDoc,getDoc } from "firebase/firestore";
+import { doc, deleteDoc, query, collection, where, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { useEffect, useState } from "react";
+import { useAuth } from "../contexts/AuthContext.jsx";
 
 function ChannelPreview(props) {
+  const [channel, setChannel] = useState({
+    image: null,
+    name: null,
+  });
+  const { user, getUserDocId } = useAuth();
 
   const handleDelete = async () => {
     try {
@@ -18,6 +25,35 @@ function ChannelPreview(props) {
     }
   };
 
+  // changes DM image and name to match other user
+  useEffect(() => {
+    console.log(props.channel)
+    if(!props.channel){// only run if channel is set to false
+      try{
+        const getMembers = async () => {
+          const member = props.members.filter((user) => user != props.docId);// find docId of other user
+          const userRef = doc(db, 'users', member[0]);// get other user's info from server
+          const userSnap = await getDoc(userRef);
+          let otherUser = userSnap.data();
+          setChannel({
+            image: otherUser.photoURL,
+            name: otherUser.displayName,
+          });
+          return;
+        }
+        getMembers()
+      } catch(err){
+        console.error('Could not find member info');
+
+      }
+    } else {
+      setChannel({
+        image: props.image,
+        name: props.name,
+      })
+    }
+  }, []);
+
   return (
     <div
       onClick={() => props.onClick(props.id)}
@@ -25,20 +61,15 @@ function ChannelPreview(props) {
         props.id === props.selectedChannel ? "selected" : ""
       }`}
     >
-      <div
-        className={`userChat ${
-          props.id === props.selectedChannel ? "selectedChannel" : ""
-        }`}
-      >
-        {props.image && (
-          <img src={props.image} className="channel-icon" alt="avatar" />
+      <div className={`userChat ${props.id === props.selectedChannel ? "selectedChannel" : ""}`}>
+        {channel.image != null && (
+          <img src={channel.image} className="channel-icon" alt="avatar" />
         )}
-        {!props.image && (
+        {channel.image == null && (
           <img src="/cup.jpg" className="channel-icon" alt="avatar" />
         )}
         <div className="name-chat">
-          {/* {props.isChannel && <h3>{props.name}</h3>} */}
-          <h3>{props.name}</h3>
+          <h3>{channel.name}</h3>
         </div>
 
         <span className="deleteContainer">

@@ -25,7 +25,6 @@ function Header({
   const [nonMembers, setNonMembers] = useState([]);
   const [channelImage, setChannelImage] = useState(null);
   const [show, setShow] = useState(false);
-  // const [isChannel, setIsChannel] = useState(true);
   const newChannelName = useRef();
   const newChannelImage = useRef();
   const { user, getUserDocId } = useAuth();
@@ -157,11 +156,14 @@ function Header({
   return (
     <div className="header">
       <div className="chatAvatar">
-        {channelImage && (
-          <img className="chatLogo" src={channelImage} alt="Channel Image" />
-        )}
         {!channelImage && selectedChannelName && (
           <img className="chatLogo" src="/cup.jpg" alt="Placeholder Image" />
+        )}
+        {!isChannel && members.length === 2 && (
+          <img className="chatLogo" src={members.find((member) => member.uid !== user.uid)?.photoURL} alt="Member image" />
+        )}
+        {isChannel && channelImage && (
+          <img className="chatLogo" src={channelImage} alt="Channel Image" />
         )}
       </div>
       <div className="teamInfo">
@@ -171,11 +173,6 @@ function Header({
         {!selectedChannelName && (
           <h1>Select or Create a Channel</h1>
         )}
-        {/* {selectedChannelName ? (
-          <h1 onClick={handleShow}>{selectedChannelName}</h1>
-        ) : (
-          <h1>Select or Create a Channel</h1>
-        )} */}
         {!isChannel && members.length === 2 && (
           <h1 onClick={handleShow}>
             {members.find((member) => member.uid !== user.uid)?.displayName}

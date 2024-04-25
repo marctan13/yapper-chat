@@ -6,7 +6,6 @@ import { useChat } from "../contexts/ChatContext";
 function Chatroom() {
   const [selectedChannelName, setSelectedChannelName] = useState("");
   const [isChannel, setIsChannel] = useState(true);
-  // const [friendName, setFriendName] = useState("");
   const{selectedChannel, setSelectedChannel, toggleChannel, isChannelToggle, setIsChannelToggle} = useChat();
 
   return (
