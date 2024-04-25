@@ -15,7 +15,7 @@ function Input({ selectedChannel, formValue, setFormValue, messageEndRef }) {
 
   const handleFileChange = (e) => {
     if (e.target.files[0]) {
-      console.log("Selected file:", e.target.files[0]); // Verify it contains file data
+      
       setImage(e.target.files[0]); 
     }
   };
@@ -29,11 +29,11 @@ function Input({ selectedChannel, formValue, setFormValue, messageEndRef }) {
   const sendMessage = async (e) => {
     e.preventDefault();
     try {
-      console.log("Attempting to send message...");
+
       if (formValue.trim() !== "" || image) {
         console.log("Message or image detected, proceeding...");
         if (image) {
-          console.log("Image detected, uploading to Firebase Storage...");
+         
           const storageRef = ref(storage, `images/${image.name}`);
           const uploadTask = uploadBytesResumable(storageRef, image);
   
@@ -62,7 +62,6 @@ function Input({ selectedChannel, formValue, setFormValue, messageEndRef }) {
                   setFormValue("");
                   setImage(null); // Reset image state after sending message
                   resetFileInput(); // Reset file input after sending message
-                  console.log("Image uploaded successfully.");
                 })
                 .catch((error) => {
                   console.error("Error getting download URL:", error);
@@ -70,7 +69,6 @@ function Input({ selectedChannel, formValue, setFormValue, messageEndRef }) {
             }
           );
         } else {
-          console.log("No image detected, sending text message");
           await addDoc(collection(db, "channels", selectedChannel, "messages"), {
             sender_id: user.uid,
             text: formValue,
@@ -84,10 +82,7 @@ function Input({ selectedChannel, formValue, setFormValue, messageEndRef }) {
             messageEndRef.current.scrollIntoView({ behavior: "smooth" });
           }, 100);
           resetFileInput(); // Reset file input after sending message
-          console.log("Text message sent successfully.");
         }
-      } else {
-        console.log("No message or image to send.");
       }
     } catch (error) {
       console.error("Error sending message:", error);

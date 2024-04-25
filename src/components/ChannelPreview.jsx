@@ -13,7 +13,6 @@ function ChannelPreview(props) {
 
   const handleDelete = async () => {
     try {
-      console.log("deleting channel: ", props.id);
       if (confirm("Do you want to delete this channel?")) {
         const docRef = doc(db, "channels", props.id);
         await deleteDoc(docRef);
@@ -65,10 +64,6 @@ function ChannelPreview(props) {
         {channel.image && props.members.length != 2 && (
           <img src={channel.image} className="channel-icon" alt="avatar" />
         )}
-<<<<<<< HEAD
-        {channel.image == null && (
-          <img src="/cup.jpg" className="channel-icon" alt="avatar" />
-=======
         {/* DM with image */}
         {channel.image && props.members.length === 2 && (
           <img src={channel.image} className="channel-icon" alt="avatar"/>
@@ -80,7 +75,6 @@ function ChannelPreview(props) {
         {/* DMs with no image */}
         {props.members.length === 2 && !channel.image && (
           <img src="/avatar.png" className="channel-icon" alt="avatar" />
->>>>>>> b096799d0a317bf90c16f3aeb7e54d2afd7a5430
         )}
         <div className="name-chat">
           <h3>{channel.name}</h3>

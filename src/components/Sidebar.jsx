@@ -119,10 +119,6 @@ function Sidebar({
             lastAccessed={channel.lastAccessed}
             selectedChannel={selectedChannel}
             isChannel={isChannel}
-<<<<<<< HEAD
-            dmMembers={channel.members}
-=======
->>>>>>> b096799d0a317bf90c16f3aeb7e54d2afd7a5430
           />
         ))}
       </div>
