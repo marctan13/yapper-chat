@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { db } from "../firebase.js";
+import React, { useState } from "react";
+import { db, storage } from "../firebase.js";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { CloudLightning } from "react-bootstrap-icons";
+import { getStorage, ref, deleteObject } from "firebase/storage";
 
 function Message({
   sender_id,
@@ -12,13 +13,14 @@ function Message({
   selectedChannel,
   messageId,
   sender_name,
+  image, 
 }) {
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [editedText, setEditedText] = useState(text);
   const [isEdited, setIsEdited] = useState(false);
+  const storage = getStorage(); 
 
-  // Function to convert timestamp to string
   const formatTimestamp = (timestamp) => {
     if (!timestamp) return "";
     const date = timestamp.toDate(); // Convert Firebase timestamp to Date object
@@ -29,7 +31,6 @@ function Message({
     setIsEditing(true);
   };
 
-  //changes saved during edit
   const handleSave = async () => {
     try {
       const messageDocRef = doc(
@@ -54,7 +55,6 @@ function Message({
     setIsEditing(false);
   };
 
-  //delete message
   async function handleDelete(
     parentCollection,
     parentDocId,
@@ -95,6 +95,7 @@ function Message({
         ) : (
           <>
             <p>{text}</p>
+            {image && <img src={image} alt="Attached Image" />}
             {isEdited && <span className="edited-text">(edited)</span>}
             {/* Render "edited" text if message is edited */}
           </>
@@ -129,4 +130,5 @@ function Message({
     </div>
   );
 }
+
 export default Message;

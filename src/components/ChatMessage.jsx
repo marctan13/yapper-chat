@@ -54,15 +54,21 @@
       <>
         <div className="chatMessages">
           <div className="messageBlock">
-            {selectedChannel &&
-              messages.map((message) => (
-                <Message
-                  key={message.id}
-                  {...message}
-                  messageId={message.id}
-                  selectedChannel={selectedChannel}
-                />
-              ))}
+          {selectedChannel &&
+  messages.map((message) => {
+
+    return (
+      <Message
+        key={message.id}
+        {...message}
+        messageId={message.id}
+        selectedChannel={selectedChannel}
+        className={message.image ? "user-uploaded-image" : ""}
+        image={message.image} 
+      />
+    );
+  })
+}
             {/* Create a div at the end of messages to scroll into view */}
             <div ref={messageEndRef}></div>
           </div>
