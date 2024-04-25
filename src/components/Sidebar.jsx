@@ -25,7 +25,6 @@ function Sidebar({
   isChannelToggle,
   toggleChannel,
   isChannel,
-  // members,
 }) {
   const navigate = useNavigate();
 
@@ -88,13 +87,6 @@ function Sidebar({
   const filteredChannels = isChannelToggle
     ? channels.filter((channel) => channel.channel === true)
     : channels.filter((channel) => channel.channel === false);
-
-  // console.log("Members" + members)
-  // console.log("Filtered Channels" + filteredChannels);
-  // filteredChannels.map((channel) => {
-  //   console.log(channel.members);
-  //   console.log(channel)
-  // });
 
   return (
     <div className="sidebar">

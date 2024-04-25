@@ -20,10 +20,8 @@ function Header({
   setSelectedChannel,
   isChannel,
   setIsChannel,
-  members,
-  setMembers
 }) {
-  // const [members, setMembers] = useState([]);
+  const [members, setMembers] = useState([]);
   const [nonMembers, setNonMembers] = useState([]);
   const [channelImage, setChannelImage] = useState(null);
   const [show, setShow] = useState(false);

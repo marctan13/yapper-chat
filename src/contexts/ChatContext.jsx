@@ -7,7 +7,7 @@ export const useChat = () => {
   return useContext(ChatContext);
 }
 
-export const ChatContextProvider = ({ children, selectedChannel, setSelectedChannel, isChannelToggle, setIsChannelToggle, members, setMembers }) => {
+export const ChatContextProvider = ({ children, selectedChannel, setSelectedChannel, isChannelToggle, setIsChannelToggle}) => {
   const { user: currentUser } = useAuth(); // Fix useContext usage here
   const INITIAL_STATE = {
     chatId: "null",
@@ -38,7 +38,7 @@ export const ChatContextProvider = ({ children, selectedChannel, setSelectedChan
   const [state, dispatch] = useReducer(chatReducer, INITIAL_STATE);
 
   return (
-    <ChatContext.Provider value={{ data: state, dispatch, selectedChannel, setSelectedChannel, toggleChannel, isChannelToggle, setIsChannelToggle, members, setMembers }}>
+    <ChatContext.Provider value={{ data: state, dispatch, selectedChannel, setSelectedChannel, toggleChannel, isChannelToggle, setIsChannelToggle}}>
       {children}
     </ChatContext.Provider>
   );
