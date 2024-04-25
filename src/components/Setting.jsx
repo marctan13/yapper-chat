@@ -9,7 +9,6 @@ import { db } from "../firebase.js";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
-// import { Bluetooth } from "react-bootstrap-icons";
 
 function Setting() {
   const navigate = useNavigate();
