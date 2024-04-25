@@ -162,7 +162,7 @@ function Header({
         )}
         {/* DM Header */}
         {!isChannel && members.length === 2 && (
-          <img className="chatLogo" src={members.find((member) => member.uid !== user.uid)?.photoURL ? members.find((member) => member.uid !== user.uid)?.photoURL : "/avatar.png"} alt="Member image" />
+          <img className="chatLogo" src={members.find((member) => member.uid !== user.uid)?.photoURL ? members.find((member) => member.uid !== user.uid)?.photoURL : "/yapper-logo.jpg"} alt="Member image" />
         )}
         {/* Channel Header with Image */}
         {isChannel && channelImage && (
