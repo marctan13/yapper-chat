@@ -4,7 +4,7 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_API_KEY,
+  apiKey: "AIzaSyAkCDXQdHEhy3v4VTshG0jZGTJF6vVk4B0",
   authDomain: "yapperchat-2c0f0.firebaseapp.com",
   projectId: "yapperchat-2c0f0",
   storageBucket: "yapperchat-2c0f0.appspot.com",
