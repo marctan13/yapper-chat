@@ -16,7 +16,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../contexts/AuthContext.jsx";
-import { useChat } from "../contexts/ChatContext.jsx";
+import { Link } from "react-router-dom";
 
 function Sidebar({
   selectedChannel,
@@ -25,15 +25,11 @@ function Sidebar({
   isChannelToggle,
   toggleChannel,
   isChannel,
-  members
 }) {
   const navigate = useNavigate();
 
   const { channels, fetchChannels } = useAuth();
-  // const{isChannel, setIsChannel} = useState(false);
   const [channelPreviews, setChannelPreviews] = useState([]);
-  // const {selectedChannel, setSelectedChannel} = useChat();
-
 
   useEffect(() => {
     fetchChannels();
@@ -90,12 +86,13 @@ function Sidebar({
     ? channels.filter((channel) => channel.channel === true)
     : channels.filter((channel) => channel.channel === false);
 
-    // console.log("Members" + members)
-    // console.log("Filtered Channels" + filteredChannels)
-
   return (
     <div className="sidebar">
-      <Navbar isChannelToggle={isChannelToggle} toggleChannel={toggleChannel} selectedChannel={selectedChannel}/>
+      <Navbar
+        isChannelToggle={isChannelToggle}
+        toggleChannel={toggleChannel}
+        selectedChannel={selectedChannel}
+      />
       <div className="previews">
         {filteredChannels.map((channel) => (
           <ChannelPreview
@@ -108,12 +105,13 @@ function Sidebar({
             lastAccessed={channel.lastAccessed}
             selectedChannel={selectedChannel}
             isChannel={isChannel}
-            members={members}
+            dmMembers={channel.members}
           />
         ))}
       </div>
       <div className="footer">
         <div className="user">
+        
           <img
             onClick={() => navigate("/settings")}
             src={
@@ -122,6 +120,9 @@ function Sidebar({
                 : "avatar.png"
             }
           />
+          <Link to="/settings" className="username-link">
+          <span className="username">{auth.currentUser.displayName}</span>
+          </Link>
           <SignOut />
         </div>
       </div>

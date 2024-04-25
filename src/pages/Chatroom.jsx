@@ -7,7 +7,7 @@ function Chatroom() {
   const [selectedChannelName, setSelectedChannelName] = useState("");
   const [isChannel, setIsChannel] = useState(true);
   // const [friendName, setFriendName] = useState("");
-  const{selectedChannel, setSelectedChannel, toggleChannel, isChannelToggle, setIsChannelToggle, members, setMembers} = useChat();
+  const{selectedChannel, setSelectedChannel, toggleChannel, isChannelToggle, setIsChannelToggle} = useChat();
 
   return (
     <div className="chatroom">
@@ -21,7 +21,6 @@ function Chatroom() {
           setIsChannelToggle={setIsChannelToggle}
           toggleChannel={toggleChannel} 
           isChannel={isChannel}
-          members={members}
         />
         <Chats
           selectedChannel={selectedChannel}
@@ -30,8 +29,6 @@ function Chatroom() {
           setSelectedChannelName={setSelectedChannelName}
           isChannel={isChannel}
           setIsChannel={setIsChannel}
-          members={members}
-          setMembers={setMembers}
         />
       </div>
     </div>

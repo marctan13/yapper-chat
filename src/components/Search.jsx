@@ -7,7 +7,7 @@ import { db } from "../firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage } from "@fortawesome/free-regular-svg-icons";
 
-function Search({ selectedChannel, setSelectedChannel }) {
+function Search({ selectedChannel, setSelectedChannel, toggleChannel, isChannelToggle, setIsChannelToggle }) {
   const navigate = useNavigate();
   const { user, getUserDocId } = useAuth();
 
@@ -22,7 +22,7 @@ function Search({ selectedChannel, setSelectedChannel }) {
     } else {
       handleSearch();
     }
-    // console.log(username);
+    console.log(username);
   }, [username])
 
   const handleSearch = async () => {
@@ -60,6 +60,9 @@ function Search({ selectedChannel, setSelectedChannel }) {
     if (!selectedChannel) {
       //setSelectedChannel(newChannelRef.id);
     }
+    if(isChannelToggle){
+      toggleChannel();
+    }
     navigate("/");
   };
 
@@ -73,6 +76,19 @@ function Search({ selectedChannel, setSelectedChannel }) {
         <div className="searchUsername">
           <div className="FindUser">
             <h2>Find a user</h2>
+            {/* <div className="searchInput">
+              <input
+                className="searchInput"
+                placeholder="type a username"
+                type="text"
+                onKeyDown={handleKey}
+                onChange={(e) => setUsername(e.target.value)}
+                value={username}
+              />
+              <button className="search-btn" onClick={handleSearch}>
+                Search
+              </button>
+            </div>  */}
             <input
               className="searchInput"
               placeholder="type a username"
@@ -85,10 +101,8 @@ function Search({ selectedChannel, setSelectedChannel }) {
           {err && <p className="error-msg">User not found!</p>}
           {addUser.map((users) => (
             <div key={users.uid} className="addNewDm">
-              <div className="userInfo">
-                <img src ={users.photoURL ? users.photoURL : "avatar.png"} alt={users.displayName}/>
-                <span className="addNewDmName">{users.displayName}</span>
-              </div>
+              <img src ={users.photoURL ? users.photoURL : "avatar.png"} alt={users.displayName}/>
+              <span>{users.displayName}</span>
               <button
                 className="addBtn"
                 onClick={() => handleAdd(users.uid)}
