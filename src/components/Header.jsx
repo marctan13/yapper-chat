@@ -156,12 +156,15 @@ function Header({
   return (
     <div className="header">
       <div className="chatAvatar">
+        {/* Channel header with no Image */}
         {!channelImage && selectedChannelName && (
           <img className="chatLogo" src="/yapper-logo.jpg" alt="Placeholder Image" />
         )}
+        {/* DM Header */}
         {!isChannel && members.length === 2 && (
-          <img className="chatLogo" src={members.find((member) => member.uid !== user.uid)?.photoURL} alt="Member image" />
+          <img className="chatLogo" src={members.find((member) => member.uid !== user.uid)?.photoURL ? members.find((member) => member.uid !== user.uid)?.photoURL : "/avatar.png"} alt="Member image" />
         )}
+        {/* Channel Header with Image */}
         {isChannel && channelImage && (
           <img className="chatLogo" src={channelImage} alt="Channel Image" />
         )}

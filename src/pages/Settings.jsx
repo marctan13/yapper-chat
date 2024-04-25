@@ -18,7 +18,6 @@ function Settings() {
           setSelectedChannelName={setSelectedChannelName}
           isChannelToggle={isChannelToggle}
           toggleChannel={toggleChannel}
-          members={members}
         />
         <Setting />
       </div>

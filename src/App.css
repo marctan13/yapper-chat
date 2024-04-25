@@ -338,7 +338,7 @@ form {
             width: 26px;
             left: 4px;
             bottom: 4px;
-            background-color: white; 
+            background-color: white;
           }
 
           input:checked + .slider {
@@ -465,12 +465,18 @@ form {
     flex: 1;
   }
 
-  img {
+  /*code below will make the user image they send to look like the avatars*/
+  /* img {
     height: 3em;
     width: 3em;
     border-radius: 50% !important;
     object-fit: cover;
+  } */
+  .user-image {
+    max-width: auto;
+    height: auto;
   }
+  
 
   .channel-icon {
     margin-top: 16px;
@@ -1191,4 +1197,37 @@ form {
     color: red;
     font-size: 25px;
   }
+<<<<<<< HEAD
   }}
+=======
+
+  .addNewDm {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    width: 250px;
+
+    .userInfo {
+      display: flex;
+      align-items: center;
+    }
+
+    .addNewDmName {
+      display: flex;
+      align-items: flex-start;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      margin-top: 1rem;
+    }
+
+    .addBtn {
+      margin-top: 0.5rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      cursor: pointer;
+    }
+  }
+}
+}
+>>>>>>> b096799d0a317bf90c16f3aeb7e54d2afd7a5430
