@@ -22,7 +22,6 @@ function Search({ selectedChannel, setSelectedChannel, toggleChannel, isChannelT
     } else {
       handleSearch();
     }
-    console.log(username);
   }, [username])
 
   const handleSearch = async () => {

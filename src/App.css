@@ -2,6 +2,14 @@
   font-family: "Inter", "Karla", "Space Grotesk", "Lato", "Roboto", system-ui, -apple-system, sans-serif;
 }
 
+button {
+  border: none;
+}
+
+input {
+  border: none;
+}
+
 .signin-formContainer {
   background: url("signin-background.jpg");
   background: cover;
@@ -330,7 +338,7 @@ form {
             width: 26px;
             left: 4px;
             bottom: 4px;
-            /* background-color: white; */
+            background-color: white;
           }
 
           input:checked + .slider {
@@ -406,6 +414,7 @@ form {
 
         .title {
           font-size: 1.5rem;
+          font-weight: 500;
         }
 
         .logo {
@@ -510,7 +519,8 @@ form {
   display: flex;
   align-items: flex-end;
   position: static;
-  background-color: #7a7a7a !important;
+  background-color: #888888 !important;
+  border-top: 1px white solid;
   align-items: center;
   height: 80px;
   /* z-index: 1; */
@@ -926,38 +936,63 @@ form {
         margin-right: 5em;
       }
 
-      .chatName {
+      .createChatTop {
         display: flex;
-        flex-direction: column;
-        margin: 0.5rem;
 
-        .chatNameBox {
-          width: 325px;
-          border-radius: 5px;
-          height: 20px;
-          margin-top: 10px;
+        .chatName {
+          display: flex;
+          flex-direction: column;
+          margin: 0.5rem;
+
+          .chatNameBox {
+            width: 250px;
+            border-radius: 5px;
+            height: 20px;
+            margin-top: 10px;
+          }
+        }
+
+        .setChatImg {
+          display: flex;
+          flex-direction: column;
+          padding-left: 1rem;
+          padding-top: 0.5rem;
+
+          input {
+            background-color: #282D35;
+            color: white;
+            margin: 10px 0 0 0;
+            padding: 10px 0 0 0;
+          }
         }
       }
 
-      .setChatImg {
-        display: flex;
-        flex-direction: column;
+      .addMemberSection {
         padding-left: 0.5rem;
+      }
 
-        input {
-          background-color: #282D35;
-          color: white;
-          margin: 10px 0 0 0;
-          padding: 10px 0 0 0;
-        }
+      .addMembersTitle {
+        padding-bottom: 1rem;
+      }
+
+      .addInfo {
+        padding-bottom: 0.5rem;
       }
 
       .addMembers {
         display: flex;
         flex-direction: column;
-        margin: 0.5rem;
-        height: 225px;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin: 0;
+        padding: 0;
+        height: 300px;
+        width: 400px;
         overflow-y: auto;
+      }
+
+      .invited {
+        padding-left: 17.5rem;
       }
 
       .userItem-wrapper {
@@ -966,15 +1001,15 @@ form {
         justify-content: space-between;
         cursor: pointer;
         padding: 10px;
-        padding-right: 10rem;
+        width: 365px;
 
         .userItem-wrapper.selected {
           background-color: #f0f0f0;
         }
 
         .selectedImage {
-          width: 20px;
-          height: 10px;
+          width: 30px;
+          height: 30px;
         }
 
         .userInfo {
@@ -983,12 +1018,12 @@ form {
           gap: 10px;
         }
 
-        img {
+        img.user-avatar {
           width: 50px;
           border-radius: 50%;
         }
-
-        p {
+        
+        p.user-display-name {
           margin-right: 20px;
         }
       }
@@ -996,6 +1031,8 @@ form {
 
     .createChatBtn {
       display: block;
+      height: 30px;
+      border-radius: 5px;
       margin-bottom: 1.5em;
       margin-left: 0.4rem;
     }
@@ -1154,4 +1191,33 @@ form {
     color: red;
     font-size: 25px;
   }
-  }}
+
+  .addNewDm {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    width: 250px;
+
+    .userInfo {
+      display: flex;
+      align-items: center;
+    }
+
+    .addNewDmName {
+      display: flex;
+      align-items: flex-start;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      margin-top: 1rem;
+    }
+
+    .addBtn {
+      margin-top: 0.5rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      cursor: pointer;
+    }
+  }
+}
+}

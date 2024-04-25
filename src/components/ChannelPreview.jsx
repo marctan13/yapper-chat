@@ -27,7 +27,6 @@ function ChannelPreview(props) {
 
   // changes DM image and name to match other user
   useEffect(() => {
-    console.log(props.channel)
     if(!props.channel){// only run if channel is set to false
       try{
         const getMembers = async () => {
@@ -66,7 +65,7 @@ function ChannelPreview(props) {
           <img src={channel.image} className="channel-icon" alt="avatar" />
         )}
         {channel.image == null && (
-          <img src="/cup.jpg" className="channel-icon" alt="avatar" />
+          <img src="/yapper-logo.jpg" className="channel-icon" alt="avatar" />
         )}
         <div className="name-chat">
           <h3>{channel.name}</h3>
@@ -74,7 +73,7 @@ function ChannelPreview(props) {
 
         <span className="deleteContainer">
           <Trash
-            onClick={handleDelete} // Use handleDelete directly
+            onClick={handleDelete} 
             style={{ height: "100%" }}
             size={35}
           />
