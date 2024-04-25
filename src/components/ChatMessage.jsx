@@ -9,7 +9,7 @@
     const [formValue, setFormValue] = useState("");
     const messageEndRef = useRef(null);
 
-<<<<<<< HEAD
+<<<<<<<<< Temporary merge branch 1
     console.log(selectedChannel)
 
     useEffect(() => {
@@ -53,7 +53,7 @@
       return () => unsubscribe();
     }, [selectedChannel]);
 
-=======
+=========
     useEffect(() => {
         if (!selectedChannel) return; // Exit if no channel is selected
 
@@ -95,7 +95,7 @@
       return () => unsubscribe();
     }, [selectedChannel]);
 
->>>>>>> 9615777b8a8383d4fc74de123b8532519b197ff9
+>>>>>>>>> Temporary merge branch 2
     return (
       <>
         <div className="chatMessages">

@@ -71,54 +71,65 @@ function CreateNewChat({ path }) {
       <div className="chatWrapper">
         <p onClick={() => navigate("/")}>&lt; Back</p>
         <form className="createChatDetails" onSubmit={handleSubmit}>
-          <div className="chatName">
-            <h2>Channel Name</h2>
-            <input
-              className="chatNameBox"
-              placeholder="Type in Chat Name"
-              type="text"
-              onChange={handleChange}
-              value={chatName}
-              required
-            />
+          <div className="createChatTop">
+              <div className="chatName">
+              <h2>Channel Name</h2>
+              <input
+                className="chatNameBox"
+                placeholder="Type in Chat Name"
+                type="text"
+                onChange={handleChange}
+                value={chatName}
+                required
+              />
+            </div>
+            <div className="setChatImg">
+              <h2>Add Channel Image</h2>
+              <input
+                type="file"
+                id="file"
+                onChange={handleImg}
+                className="imageFile"
+                src="image.png"
+              />
+            </div>
           </div>
-          <div className="setChatImg">
-            <h2>Add Channel Image</h2>
-            <input
-              type="file"
-              id="file"
-              onChange={handleImg}
-              className="imageFile"
-              src="image.png"
-            />
+          <div className="addMemberSection">
+              <h2 className="addMembersTitle">Add Members</h2>
+            <div className="addInfo">
+                <span>User</span>
+                <span className="invited">Invited</span>
+              </div>
+            <div className="addMembers">
+              {users
+                .filter((u) => u.uid !== user.uid)
+                .map((user) => {
+                  return (
+                    <div
+                      className={`userItem-wrapper ${
+                        selectedUsers.includes(user.uid) ? "selected" : ""
+                      }`}
+                      key={user.uid}
+                      onClick={() => handleSelect(user.id)}
+                    >
+                      <div className="userInfo">
+                        <img src={user.photoURL || "avatar.png"} alt="" className="user-avatar" />
+                        <p className="user-display-name">{user.displayName}</p>
+                      </div>
+                      {selectedUsers.includes(user.id) && (
+                        <img
+                          src="checked.png"
+                          alt="Selected"
+                          className="selectedImage"
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+            </div>
           </div>
+          
           <button className="createChatBtn">Create New Chat</button>
-            <h2>Add Members</h2>
-          <div className="addMembers">
-            {users
-              .filter((u) => u.uid !== user.uid)
-              .map((user) => {
-                return (
-                  <div
-                    className={`userItem-wrapper ${
-                      selectedUsers.includes(user.uid) ? "selected" : ""
-                    }`}
-                    key={user.uid}
-                    onClick={() => handleSelect(user.id)}
-                  >
-                    <img src={user.photoURL || "avatar.png"} alt="" size={32} />
-                    <p>{user.displayName}</p>
-                    {selectedUsers.includes(user.id) && (
-                      <img
-                        src="selected.png"
-                        alt="Selected"
-                        className="selectedImage"
-                      />
-                    )}
-                  </div>
-                );
-              })}
-          </div>
           {/* <button className="createChatBtn">Create New Chat</button> */}
         </form>
       </div>
