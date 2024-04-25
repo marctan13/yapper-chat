@@ -465,12 +465,18 @@ form {
     flex: 1;
   }
 
-  img {
+  /*code below will make the user image they send to look like the avatars*/
+  /* img {
     height: 3em;
     width: 3em;
     border-radius: 50% !important;
     object-fit: cover;
+  } */
+  .user-image {
+    max-width: auto;
+    height: auto;
   }
+  
 
   .channel-icon {
     margin-top: 16px;
