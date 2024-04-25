@@ -3,6 +3,7 @@
 }
 
 button {
+  /* border: 0.1px rgb(165, 165, 165) solid; */
   border: none;
 }
 
@@ -891,6 +892,35 @@ form {
         background-color: white;
         color: black;
       }
+    }
+
+.customAvatar-img {
+  width: 10em;
+  height: 100em;
+}
+
+    .uploadAvatar {
+      display: inline-block;
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .uploadAvatar:hover {
+      background-color: #0056b3;
+    }
+    
+    .uploadAvatarContainer {
+      margin-top: 20px;
+    }
+    
+    .uploadAvatarContainer img {
+      margin-top: 10px;
+      max-width: 200px;
     }
 
     .createChatDetails {

@@ -1,4 +1,3 @@
-//work on layout of users on css
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +5,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { db } from "../firebase";
 import { useChat } from "../contexts/ChatContext";
 
-function CreateNewChat({ path }) {
+function CreateNewChat({ customAvatar, currentUser }) { // Try passing customAvatar and currentUser as props
   const navigate = useNavigate();
   const { users, user, getUserDocId } = useAuth();
   const{selectedChannel, setSelectedChannel} = useChat();

@@ -33,6 +33,7 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [channels, setChannels] = useState([]);
   const [users, setUsers] = useState([]);
   const usersRef = collection(db, "users");
@@ -172,24 +173,39 @@ export function AuthProvider({ children }) {
   }, []);
 
   //fetch user docid
-  const getUserDocId = async () => {
+  // const getUserDocId = async () => {
+  //   try {
+  //     const userUid = auth.currentUser.uid;
+  //     const userQuery = query(
+  //       collection(db, "users"),
+  //       where("uid", "==", userUid)
+  //     );
+  //     const userQuerySnapshot = await getDocs(userQuery);
+  //     const userDocId = userQuerySnapshot.docs.find((doc) => doc.exists())?.id;
+  //     return userDocId;
+  //   } catch (error) {
+  //     console.error("Error fetching user document ID: ", error);
+  //     throw error;
+  const updateCustomAvatar = async (downloadURL) => {
     try {
-      const userUid = auth.currentUser.uid;
-      const userQuery = query(
-        collection(db, "users"),
-        where("uid", "==", userUid)
-      );
-      const userQuerySnapshot = await getDocs(userQuery);
-      const userDocId = userQuerySnapshot.docs.find((doc) => doc.exists())?.id;
-      return userDocId;
+      const userRef = db.collection('users').doc(user.uid);
+  
+      if (user.customAvatar) {
+        await userRef.update({ customAvatar: downloadURL });
+      } else if (user.photoURL) {
+        await userRef.update({ photoURL: downloadURL });
+      } else {
+        await userRef.update({ photoURL: 'Avatar.png' });
+      }
     } catch (error) {
-      console.error("Error fetching user document ID: ", error);
-      throw error;
+      console.error(error.message);
     }
   };
 
   const value = {
     user,
+    loading,
+    error,
     signIn,
     signUp,
     signInWithGoogle,
@@ -202,7 +218,8 @@ export function AuthProvider({ children }) {
     changeDisplayName,
     channels,
     fetchChannels,
-    getUserDocId
+    // getUserDocId
+    updateCustomAvatar,
   };
 
   return (

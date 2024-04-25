@@ -13,6 +13,7 @@ import {
   orderBy,
   limit,
   getDocs,
+  where
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../contexts/AuthContext.jsx";
@@ -28,16 +29,37 @@ function Sidebar({
   members
 }) {
   const navigate = useNavigate();
-
   const { channels, fetchChannels } = useAuth();
-  // const{isChannel, setIsChannel} = useState(false);
   const [channelPreviews, setChannelPreviews] = useState([]);
-  // const {selectedChannel, setSelectedChannel} = useChat();
-
+  // const [customAvatar, setCustomAvatar] = useState(null);
 
   useEffect(() => {
     fetchChannels();
   }, []);
+
+  // useEffect(() => {
+  //   const fetchCustomAvatar = async () => {
+  //     // Fetch customAvatar from Firestore
+  //     const userUid = auth.currentUser.uid;
+  //     const userQuery = query(
+  //       collection(db, "users"),
+  //       where("uid", "==", userUid)
+  //     );
+  //     const userQuerySnapshot = await getDocs(userQuery);
+  //     const userData = userQuerySnapshot.docs.find((doc) => doc.exists())?.data();
+      
+  //     // Try to update our customAvatar state if it does exist in user's data
+  //     if (userData && userData.customAvatar) {
+  //       console.log("Custom Avatar URL from Firestore:", userData.customAvatar);
+  //       setCustomAvatar(userData.customAvatar);
+  //     } else {
+  //       console.log("Custom Avatar URL not found in Firestore");
+  //     }
+  //   };
+  
+  //   fetchCustomAvatar();
+  // }, []);
+  
 
   useEffect(() => {
     const bumpRecentChannels = async () => {
@@ -90,8 +112,6 @@ function Sidebar({
     ? channels.filter((channel) => channel.channel === true)
     : channels.filter((channel) => channel.channel === false);
 
-    // console.log("Members" + members)
-    // console.log("Filtered Channels" + filteredChannels)
 
   return (
     <div className="sidebar">
@@ -121,6 +141,7 @@ function Sidebar({
                 ? auth.currentUser.photoURL
                 : "avatar.png"
             }
+            // src={customAvatar ? customAvatar : (auth.currentUser.photoURL ? auth.currentUser.photoURL : "avatar.png")}
           />
           <SignOut />
         </div>
