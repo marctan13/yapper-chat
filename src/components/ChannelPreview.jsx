@@ -65,13 +65,8 @@ function ChannelPreview(props) {
         {channel.image != null && (
           <img src={channel.image} className="channel-icon" alt="avatar" />
         )}
-<<<<<<< HEAD
-        {!props.image && (
-          <img src="/yapper-logo.jpg" className="channel-icon" alt="avatar" />
-=======
         {channel.image == null && (
           <img src="/cup.jpg" className="channel-icon" alt="avatar" />
->>>>>>> d4becce915b2405b7b485de72e39914d292ca881
         )}
         <div className="name-chat">
           <h3>{channel.name}</h3>

@@ -338,7 +338,7 @@ form {
             width: 26px;
             left: 4px;
             bottom: 4px;
-            /* background-color: white; */
+            background-color: white; 
           }
 
           input:checked + .slider {
