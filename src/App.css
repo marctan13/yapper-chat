@@ -533,11 +533,10 @@ form {
   padding: 50px !important;
 }
 .user .username {
-  margin-right: 2em;
+  margin: 0;
 }
 
 .username-link{
-  margin-top: 2em;
   color: #4a4a4a;
 }
 
@@ -550,9 +549,9 @@ form {
   cursor: pointer;
 
   img {
-    height: 4em;
-    width: 4em;
-    margin: 2em 1em 0 1em;
+    height: 3.5em;
+    width: 3.5em;
+    margin: 1em 1em 1em 1em;
     border-radius: 50%;
     object-fit: cover;
   }
