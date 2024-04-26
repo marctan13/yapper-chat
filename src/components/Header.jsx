@@ -147,6 +147,8 @@ function Header({
       const channelDocSnapshot = await getDoc(channelDocRef);
       const currentMembers = channelDocSnapshot.data().members || []; //gets snapshot of members of selected channel
       const updatedMembers = [...currentMembers, userId];
+      const currentChannelName = channelDocSnapshot.data().name
+      console.log(currentChannelName)
       await updateDoc(channelDocRef, { members: updatedMembers });
     } catch (error) {
       console.error("Failed to add member to channel", error);

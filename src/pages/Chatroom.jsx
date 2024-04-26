@@ -4,9 +4,9 @@ import Chats from "../components/Chats";
 import { useChat } from "../contexts/ChatContext";
 
 function Chatroom() {
-  const [selectedChannelName, setSelectedChannelName] = useState("");
+  // const [selectedChannelName, setSelectedChannelName] = useState("");
   const [isChannel, setIsChannel] = useState(true);
-  const{selectedChannel, setSelectedChannel, toggleChannel, isChannelToggle, setIsChannelToggle} = useChat();
+  const{selectedChannel, setSelectedChannel, toggleChannel, isChannelToggle, setIsChannelToggle, selectedChannelName, setSelectedChannelName} = useChat();
 
   return (
     <div className="chatroom">

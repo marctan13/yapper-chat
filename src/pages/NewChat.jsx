@@ -5,8 +5,8 @@ import { useChat } from "../contexts/ChatContext";
 
 
 function NewChat() {
-    const [selectedChannelName, setSelectedChannelName] = useState("");
-    const{selectedChannel, setSelectedChannel, toggleChannel, isChannelToggle, setIsChannelToggle} = useChat();
+    // const [selectedChannelName, setSelectedChannelName] = useState("");
+    const{selectedChannel, setSelectedChannel, toggleChannel, isChannelToggle, setIsChannelToggle, selectedChannelName, setSelectedChannelName} = useChat();
     
     return (
       <div className='chatroom'>
@@ -17,6 +17,7 @@ function NewChat() {
                 selectedChannelName={selectedChannelName}
                 setSelectedChannelName={setSelectedChannelName}
                 isChannelToggle={isChannelToggle}
+                setIsChannelToggle={setIsChannelToggle}
                 toggleChannel={toggleChannel}
             />
             <CreateNewChat />
