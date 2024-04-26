@@ -1179,3 +1179,6 @@ form {
     }
   }
 }
+.addDmPic {
+  border-radius: 50%;
+}
