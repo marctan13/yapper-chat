@@ -24,6 +24,7 @@ function Header({
   const [members, setMembers] = useState([]);
   const [nonMembers, setNonMembers] = useState([]);
   const [channelImage, setChannelImage] = useState(null);
+  const [err, setErr] = useState("");
   const [show, setShow] = useState(false);
   const newChannelName = useRef();
   const newChannelImage = useRef();
@@ -95,16 +96,23 @@ function Header({
     }
   };
 
+  // Updating Channel Name
   const handleClick = async (e) => {
     e.preventDefault();
     try {
+      setErr("");
       if (!selectedChannel) return;
       const channelDocRef = doc(db, "channels", selectedChannel);
-      await updateDoc(channelDocRef, {
-        name: newChannelName.current.value,
-        // image: newChannelImage.current.value,
-      });
-      handleClose();
+      if (newChannelName.current.value != "") {
+        await updateDoc(channelDocRef, {
+          name: newChannelName.current.value,
+          // image: newChannelImage.current.value,
+        });
+        handleClose();
+      } else {
+        setErr("Please enter channel name");
+        console.log("Please enter channel name");
+      }
     } catch (error) {
       console.error("Failed to change name", error);
       throw error;
@@ -146,8 +154,8 @@ function Header({
       const channelDocSnapshot = await getDoc(channelDocRef);
       const currentMembers = channelDocSnapshot.data().members || []; //gets snapshot of members of selected channel
       const updatedMembers = [...currentMembers, userId];
-      const currentChannelName = channelDocSnapshot.data().name
-      console.log(currentChannelName)
+      const currentChannelName = channelDocSnapshot.data().name;
+      console.log(currentChannelName);
       await updateDoc(channelDocRef, { members: updatedMembers });
     } catch (error) {
       console.error("Failed to add member to channel", error);
@@ -159,11 +167,23 @@ function Header({
       <div className="chatAvatar">
         {/* Channel header with no Image */}
         {!channelImage && selectedChannelName && (
-          <img className="chatLogo" src="/yapper-logo.jpg" alt="Placeholder Image" />
+          <img
+            className="chatLogo"
+            src="/yapper-logo.jpg"
+            alt="Placeholder Image"
+          />
         )}
         {/* DM Header */}
         {!isChannel && members.length === 2 && (
-          <img className="chatLogo" src={members.find((member) => member.uid !== user.uid)?.photoURL ? members.find((member) => member.uid !== user.uid)?.photoURL : "/avatar.png"} alt="Member image" />
+          <img
+            className="chatLogo"
+            src={
+              members.find((member) => member.uid !== user.uid)?.photoURL
+                ? members.find((member) => member.uid !== user.uid)?.photoURL
+                : "/avatar.png"
+            }
+            alt="Member image"
+          />
         )}
         {/* Channel Header with Image */}
         {isChannel && channelImage && (
@@ -288,6 +308,7 @@ function Header({
               }}
             />
             <div>
+              {err && <div><strong>{err}</strong></div>}
               <Button
                 variant="primary"
                 onClick={handleClick}
