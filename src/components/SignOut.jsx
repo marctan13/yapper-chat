@@ -8,7 +8,6 @@ function SignOut() {
     try {
       await logOut();
       navigate("/signin");
-      console.log("signed out successfully")
     } catch (error) {
       console.log("failed to sign out");
     }
