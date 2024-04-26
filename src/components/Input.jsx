@@ -1,22 +1,62 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { useAuth } from "../contexts/AuthContext";
 import { db, storage } from "../firebase";
 import EmojiSelection from "./EmojiSelection";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { useChat } from "../contexts/ChatContext";
 
-function Input({ selectedChannel, formValue, setFormValue, messageEndRef }) {
+function Input({ formValue, setFormValue, messageEndRef }) {
   const messageRef = useRef();
-  const fileInputRef = useRef(null); 
+  const fileInputRef = useRef(null);
   const { user } = useAuth();
   const [showEmojis, setShowEmojis] = useState(false);
   const [timeoutId, setTimeoutId] = useState(null);
-  const [image, setImage] = useState(null); 
+  const [image, setImage] = useState(null);
+  const { selectedChannel } = useChat();
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     if (e.target.files[0]) {
-      console.log("Selected file:", e.target.files[0]); // Verify it contains file data
-      setImage(e.target.files[0]); 
+      setImage(e.target.files[0]);
+      try {
+        const storageRef = ref(storage, `images/${e.target.files[0].name}`);
+        const uploadTask = uploadBytesResumable(storageRef, e.target.files[0]);
+
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          },
+          (error) => {
+            console.error("Error uploading image:", error);
+          },
+          async () => {
+            try {
+              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+              // image URL to Firestore
+              await addDoc(
+                collection(db, "channels", selectedChannel, "messages"),
+                {
+                  sender_id: user.uid,
+                  text: "",
+                  photoURL: user.photoURL ? user.photoURL : "/avatar.png",
+                  createdAt: serverTimestamp(),
+                  sender_name: user.displayName,
+                  image: downloadURL,
+                  imageClass: "user-image",
+                }
+              );
+              setFormValue("");
+              setImage(null); // Reset image state after sending message
+              resetFileInput(); // Reset file input after sending message
+            } catch (error) {
+              console.error("Error getting download URL:", error);
+            }
+          }
+        );
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
     }
   };
 
@@ -29,73 +69,31 @@ function Input({ selectedChannel, formValue, setFormValue, messageEndRef }) {
   const sendMessage = async (e) => {
     e.preventDefault();
     try {
-      console.log("Attempting to send message...");
       if (formValue.trim() !== "" || image) {
-        console.log("Message or image detected, proceeding...");
-        if (image) {
-          console.log("Image detected, uploading to Firebase Storage...");
-          const storageRef = ref(storage, `images/${image.name}`);
-          const uploadTask = uploadBytesResumable(storageRef, image);
-  
-          uploadTask.on(
-            "state_changed",
-            (snapshot) => {
-              const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-              console.log(`Upload is ${progress}% complete`);
-            },
-            (error) => {
-              console.error("Error uploading image:", error);
-            },
-            () => {
-              getDownloadURL(uploadTask.snapshot.ref)
-                .then(async (downloadURL) => {
-                  // image URL to Firestore
-                  await addDoc(collection(db, "channels", selectedChannel, "messages"), {
-                    sender_id: user.uid,
-                    text: "", 
-                    photoURL: user.photoURL ? user.photoURL : "/avatar.png",
-                    createdAt: serverTimestamp(),
-                    sender_name: user.displayName,
-                    image: downloadURL,
-                    imageClass: "user-image",
-                  });
-                  setFormValue("");
-                  setImage(null); // Reset image state after sending message
-                  resetFileInput(); // Reset file input after sending message
-                  console.log("Image uploaded successfully.");
-                })
-                .catch((error) => {
-                  console.error("Error getting download URL:", error);
-                });
+        if (!image) {
+          await addDoc(
+            collection(db, "channels", selectedChannel, "messages"),
+            {
+              sender_id: user.uid,
+              text: formValue,
+              photoURL: user.photoURL ? user.photoURL : "/avatar.png",
+              createdAt: serverTimestamp(),
+              sender_name: user.displayName,
             }
           );
-        } else {
-          console.log("No image detected, sending text message");
-          await addDoc(collection(db, "channels", selectedChannel, "messages"), {
-            sender_id: user.uid,
-            text: formValue,
-            photoURL: user.photoURL ? user.photoURL : "/avatar.png",
-            createdAt: serverTimestamp(),
-            sender_name: user.displayName,
-          });
           setFormValue("");
           // Scroll to bottom after input
           setTimeout(() => {
             messageEndRef.current.scrollIntoView({ behavior: "smooth" });
           }, 100);
           resetFileInput(); // Reset file input after sending message
-          console.log("Text message sent successfully.");
         }
-      } else {
-        console.log("No message or image to send.");
       }
     } catch (error) {
       console.error("Error sending message:", error);
     }
   };
-  
 
-  // Sometimes it would glitch and stay on the screen, this is a fail safe.
   const startTimer = () => {
     const id = setTimeout(() => {
       setShowEmojis(false);
@@ -140,14 +138,18 @@ function Input({ selectedChannel, formValue, setFormValue, messageEndRef }) {
         />
         <input
           type="file"
-          accept="image/*" 
+          accept="image/*"
           onChange={handleFileChange}
-          style={{ display: "none" }} 
+          style={{ display: "none" }}
           id="fileInput"
           ref={fileInputRef}
         />
-         <label htmlFor="fileInput">
-          <img src={"/addimg.png"} alt="Add Image" style={{ width: "10em", height: "4em" }} /> 
+        <label htmlFor="fileInput">
+          <img
+            src={"/addimg.png"}
+            alt="Add Image"
+            style={{ width: "10em", height: "4em" }}
+          />
         </label>
         <button className="send">Send</button>
         <div className="emojiButton" onClick={() => setShowEmojis(!showEmojis)}>

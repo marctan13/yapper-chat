@@ -12,15 +12,16 @@ import Protected from "./components/Protected.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import { ChatContextProvider } from "./contexts/ChatContext.jsx";
 
-
 function App() {
 
   const [selectedChannel, setSelectedChannel] = useState(null);
+  const [selectedChannelName, setSelectedChannelName] = useState("")
+  const [isChannelToggle, setIsChannelToggle] = useState(true);
 
   return (
     <div>
       <AuthProvider>
-        <ChatContextProvider selectedChannel={selectedChannel} setSelectedChannel={setSelectedChannel}>
+        <ChatContextProvider selectedChannel={selectedChannel} setSelectedChannel={setSelectedChannel} isChannelToggle={isChannelToggle} setIsChannelToggle={setIsChannelToggle} selectedChannelName={selectedChannelName} setSelectedChannelName={setSelectedChannelName}>
           <Routes>
             <Route exact path="/">
               <Route

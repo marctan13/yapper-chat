@@ -1,15 +1,13 @@
 #root {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  /* -ms-overflow-style: none; */
+  font-family: "Inter", "Karla", "Space Grotesk", "Lato", "Roboto", system-ui, -apple-system, sans-serif;
 }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  /* hides it on the body */
-  overflow-y: hidden;
+button {
+  border: none;
+}
+
+input {
+  border: none;
 }
 
 .signin-formContainer {
@@ -151,15 +149,15 @@ form {
 }
 
 .register-weak {
-  color: red;
+  color: #e63946;
 }
 
 .register-strong {
-  color: green;
+  color: #38b000;
 }
 
 .register-error {
-  color: red;
+  color: #e63946;
   margin-top: 5px;
 }
 
@@ -246,26 +244,29 @@ form {
   background-color: #21222a;
   height: 100vh;
   display: flex;
-  width: 100%;
+  width: 100vw;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 
   .container {
-    background-color: #4f4d4d;
+    background-color: #282D35;
     border: 1px solid white;
     border-radius: 10px;
     height: 85%;
     width: 90%;
     display: flex;
-    overflow-y: hidden;
+    overflow: hidden;
 
     /* Sidebar */
     .sidebar {
-      background-color: #979494;
+      background-color: #888888;
       flex: 1;
       display: flex;
       justify-content: flex-start;
       flex-direction: column;
+      width: 10%;
+      min-width: 400px;
       width: 10%;
       min-width: 400px;
 
@@ -287,14 +288,14 @@ form {
       }
 
       .navbar {
-        background-color: #979494;
+        background-color: #888888;
         display: flex;
+        position: static;
         flex-direction: column;
         width: 100%;
         height: 200px;
-        padding: 10px;
+        /* padding-top: 10px; */
         box-sizing: border-box;
-        margin-bottom: 5em;
 
         .toggle {
           display: flex;
@@ -303,7 +304,7 @@ form {
           margin-top: 10px;
 
           .toggle-label {
-            font-weight: 900;
+            font-weight: 700;
           }
 
           .switch {
@@ -367,10 +368,10 @@ form {
       .addBtns {
         display: flex;
         justify-content: space-around;
+        margin-top: 10px;
 
         .newMsg {
           margin-top: 10px;
-          /* margin-left: 100px; */
           background-color: #6c757d;
           color: white;
           width: 12em;
@@ -385,7 +386,6 @@ form {
         }
         .AddFriend {
           margin-top: 10px;
-          /* margin-left: 100px; */
           background-color: #6c757d;
           color: white;
           width: 12em;
@@ -399,6 +399,8 @@ form {
           }
         } 
       }
+        } 
+      }
       
       .nav-title {
         display: flex;
@@ -407,14 +409,23 @@ form {
         height: auto;
 
         .logo {
+          font-size: 3rem;
+        }
+
+        .title {
+          font-size: 1.5rem;
+          font-weight: 500;
+        }
+
+        .logo {
           cursor: pointer;
         }
       }
     }
-  }
+  
 
   .previews {
-    height: 75%;
+    height: 65%;
     overflow-y: auto;
   }
 
@@ -423,6 +434,11 @@ form {
     padding: 5px 5px 30px 5px;
     max-width: 500px;
     overflow: hidden;
+    gap: 15px;
+
+    &.selected {
+      background-color: #21222a;
+    }
   }
 
   .chatPreview:hover {
@@ -440,6 +456,7 @@ form {
     align-items: center;
     padding-left: 0.5rem;
   }
+
 
   .name-chat {
     overflow: hidden;
@@ -490,7 +507,7 @@ form {
     font-size: 20px;
     font-weight: 500;
   }
-}
+
 
 .newChat {
   background-color: #9a9a9a;
@@ -503,35 +520,38 @@ form {
   background-color: #4f4d4d;
 }
 
-.chatPreview {
-  padding: 3em;
-  gap: 15px;
-
-  &.selected {
-    background-color: #21222a;
-  }
-}
 /* User Info in Sidebar/ FOOTER */
 .footer {
   display: flex;
+  align-items: flex-end;
   position: static;
-  background-color: #7a7a7a !important;
+  background-color: #888888 !important;
+  border-top: 1px white solid;
   align-items: center;
-  height: 100px;
-  padding: 0;
+  height: 80px;
+  /* z-index: 1; */
+  padding: 50px !important;
 }
+.user .username {
+  margin: 0;
+}
+
+.username-link{
+  color: #4a4a4a;
+}
+
 
 .user {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   height: 20%;
   cursor: pointer;
 
   img {
-    height: 4em;
-    width: 4em;
-    margin: 2em 7em 0 1em;
+    height: 3.5em;
+    width: 3.5em;
+    margin: 1em 1em 1em 1em;
     border-radius: 50%;
     object-fit: cover;
   }
@@ -540,9 +560,9 @@ form {
     border-radius: 15px;
     background-color: #6c757d;
     color: white;
-    margin: 2em 0 0 5em;
-    height: 4em;
-    width: 8em;
+    margin: 2em 0 2em 5em;
+    height: 3.75em;
+    width: 7em;
   }
 
   .sign-out:hover {
@@ -556,18 +576,19 @@ form {
 .rightSection {
   flex: 2;
   overflow-y: auto;
-  width: 500px;
+  width: 90%;
+  min-width: 600px;
 
   ::-webkit-scrollbar {
     width: 15px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #4f4d4d;
+    background: #41424A;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #242424;
+    background: #21222A;
     border-radius: 50px;
   }
 
@@ -578,8 +599,8 @@ form {
   .chatMessages {
     display: flex;
     flex-direction: column;
-    max-height: 82%;
-    padding-bottom: 1.5rem;
+    max-height: 80%;
+    padding-bottom: 2rem;
 
     .scroll {
       overflow-y: scroll;
@@ -588,6 +609,7 @@ form {
     .messageBlock {
       max-height: 55%;
       overflow-y: auto;
+      padding-bottom: 20px;
       padding-bottom: 20px;
 
       .chatMessage {
@@ -616,6 +638,8 @@ form {
           background-color: #7c91ff;
           display: flex;
           flex-direction: column;
+          min-width: 90px;
+          /* max-width: 100%; */
           min-width: 90px;
           /* max-width: 100%; */
           margin: 3em 1em 3em 0.5em;
@@ -675,12 +699,16 @@ form {
     .inputMessage {
       position: fixed;
       bottom: 72px;
+      bottom: 72px;
       width: 45%;
       /* min-width: 30vw;
       max-width: 50vw; */
       height: 8%;
+      /* min-width: 30vw;
+      max-width: 50vw; */
+      height: 8%;
       padding: 5px;
-      background-color: #4f4d4d;
+      background-color: #282D35;
 
       .inputBox {
         display: flex;
@@ -688,15 +716,21 @@ form {
         /* min-width: 45vw;
         max-width: 53vw; */
         padding-left: 1rem;
+        /* min-width: 45vw;
+        max-width: 53vw; */
+        padding-left: 1rem;
         justify-self: flex-start;
         flex-direction: row;
-        background-color: #4f4d4d;
+        background-color: #282D35;
 
         .textBox {
           display: flex;
           width: 75vw;
           border-radius: 15px;
+          width: 75vw;
+          border-radius: 15px;
           color: black;
+          height: 50px;
           height: 50px;
         }
       }
@@ -704,6 +738,10 @@ form {
       .send {
         background-color: #6c757d;
         color: white;
+        max-width: 100px;
+        width: 500px;
+        height: 50px;
+        border-radius: 15px;
         max-width: 100px;
         width: 500px;
         height: 50px;
@@ -719,11 +757,11 @@ form {
   
   /* Header Panel in Chat Page */
   .header {
-    background-color: #21222a;
+    background-color: #21222A;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 15vh;
+    height: 16vh;
     box-sizing: border-box;
     padding: 0 20px;
 
@@ -741,8 +779,9 @@ form {
       gap: 10px;
 
       .chatLogo {
-        border-radius: 50%;
+        border-radius: 50% !important;
         height: 6em;
+        min-height: 5em;
         width: 50%;
       }
     }
@@ -775,6 +814,11 @@ form {
 
       .menuUserImg {
         display: flex;
+      }
+
+      .modal-content {
+        background-color: #7a7a7a;
+        height: 50%;
       }
     }
   }
@@ -893,42 +937,67 @@ form {
 
       h2 {
         color: white;
-        font-size: 2em;
+        font-size: 1.5em;
         margin-right: 5em;
       }
 
-      .chatName {
+      .createChatTop {
         display: flex;
-        flex-direction: column;
-        margin: 0.5rem;
 
-        .chatNameBox {
-          width: 325px;
-          border-radius: 5px;
-          height: 20px;
-          margin-top: 10px;
+        .chatName {
+          display: flex;
+          flex-direction: column;
+          margin: 0.5rem;
+
+          .chatNameBox {
+            width: 250px;
+            border-radius: 5px;
+            height: 20px;
+            margin-top: 10px;
+          }
+        }
+
+        .setChatImg {
+          display: flex;
+          flex-direction: column;
+          padding-left: 1rem;
+          padding-top: 0.5rem;
+
+          input {
+            background-color: #282D35;
+            color: white;
+            margin: 10px 0 0 0;
+            padding: 10px 0 0 0;
+          }
         }
       }
 
-      .setChatImg {
-        display: flex;
-        flex-direction: column;
-        margin: 0.5rem;
+      .addMemberSection {
+        padding-left: 0.5rem;
+      }
 
-        input {
-          background-color: #4f4d4d;
-          color: white;
-          margin: 10px 0 0 0;
-          padding: 10px 0 0 0;
-        }
+      .addMembersTitle {
+        padding-bottom: 1rem;
+      }
+
+      .addInfo {
+        padding-bottom: 0.5rem;
       }
 
       .addMembers {
         display: flex;
         flex-direction: column;
-        /* margin: 0.5rem; */
+        align-items: flex-start;
+        justify-content: space-between;
+        margin: 0;
+        padding: 0;
         height: 300px;
+        width: 400px;
         overflow-y: auto;
+      }
+
+      .invited {
+        padding-left: 17.5rem;
       }
 
       .userItem-wrapper {
@@ -937,15 +1006,15 @@ form {
         justify-content: space-between;
         cursor: pointer;
         padding: 10px;
-        padding-right: 10rem;
+        width: 365px;
 
         .userItem-wrapper.selected {
           background-color: #f0f0f0;
         }
 
         .selectedImage {
-          width: 20px;
-          height: 10px;
+          width: 30px;
+          height: 30px;
         }
 
         .userInfo {
@@ -954,12 +1023,12 @@ form {
           gap: 10px;
         }
 
-        img {
+        img.user-avatar {
           width: 50px;
           border-radius: 50%;
         }
-
-        p {
+        
+        p.user-display-name {
           margin-right: 20px;
         }
       }
@@ -967,7 +1036,10 @@ form {
 
     .createChatBtn {
       display: block;
+      height: 30px;
+      border-radius: 5px;
       margin-bottom: 1.5em;
+      margin-left: 0.4rem;
     }
   }
 }
@@ -979,6 +1051,42 @@ form {
   align-items: flex-start;
   padding-left: 5rem;
 
+  .addNewDm {
+    display: grid;
+    width: 22.5em;
+    align-items: center;
+    margin-top: 1em;
+    grid-template-columns: 1fr 0.75em 4fr 0.75em 1fr;
+
+    img {
+      grid-column: 1 / 2;
+    }
+
+    span {
+      font-size: large;
+      grid-column: 3 / 8;
+    }
+
+    .addBtn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: white;
+      color: #6c757d;
+      width: 2.5em;
+      height: 66%;
+      margin-top: 0;
+      grid-column: 9 / 10;
+      border-radius: 5px;
+
+      &:hover {
+        background-color: #6c757d;
+        color: white;	
+        cursor: pointer;
+      }
+    }
+  }
+
   h2 {
     color: white;
     font-size: 2em;
@@ -988,13 +1096,18 @@ form {
   .FindUser {
     display: flex;
     flex-direction: column;
+    justify-content: space-around;
     margin: 0.5rem;
 
     .searchInput{
       display: flex;
       flex-direction: row;
+    .searchInput{
+      display: flex;
+      flex-direction: row;
       width: 325px;
       border-radius: 5px;
+      height: 40px;
       height: 40px;
       margin-top: 10px;
       font-size: 20px;
@@ -1002,13 +1115,22 @@ form {
 
     .search-btn {
       height: 40px;
+      margin-top: 0.75em;
+      margin-left: 0.5em;
       width: 100px;
     }
   }
 
-  .addNewFriend {
+  .error-msg {
+    padding-top: 0.75em;
+    padding-left: 0.5rem;
+  }
+
+  .addNewDm {
     display: flex;
     flex-direction: row;
+    padding-left: 0.5rem;
+    padding-top: 1rem;
 
     span {
       padding-top: 0.75rem;
@@ -1060,6 +1182,7 @@ form {
       margin-right: 20px;
     }
   }
+  
   .add-user-btn {
     transition-duration: 0.4s;
     margin-left: 2em;
@@ -1073,4 +1196,40 @@ form {
     color: red;
     font-size: 25px;
   }
+
+  input {
+    border-radius: 5px;
+    height: 35px;
+    padding: 0.5rem;
+    font-size: 16px;
+  }
+
+  .addNewDm {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    width: 250px;
+
+    .userInfo {
+      display: flex;
+      align-items: center;
+    }
+
+    .addNewDmName {
+      display: flex;
+      align-items: flex-start;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      margin-top: 1rem;
+    }
+
+    .addBtn {
+      margin-top: 0.5rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      cursor: pointer;
+    }
+  }
+}
 }

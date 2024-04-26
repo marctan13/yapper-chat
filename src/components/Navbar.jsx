@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import { useChat } from "../contexts/ChatContext";
 
-function SideNavbar({isChannelToggle, toggleChannel}) {
+function Navbar({toggleChannel}) {
   const navigate = useNavigate();
-  const {channels} = useAuth();
+  const {isChannelToggle} = useChat()
 
   return (
     <div className="navbar">
@@ -14,7 +14,9 @@ function SideNavbar({isChannelToggle, toggleChannel}) {
       <div className="toggle">
         <span className="toggle-label">DMs</span>
         <label className="switch">
-          <input type="checkbox" checked={isChannelToggle} onChange={toggleChannel}/>
+          <input type="checkbox" 
+          checked={isChannelToggle}
+          onChange={toggleChannel}/>
           <span className="slider round"></span>
         </label>
         <span className="toggle-label">Channel</span>
@@ -22,19 +24,17 @@ function SideNavbar({isChannelToggle, toggleChannel}) {
       <div className="addBtns">
         <div className="newFriend">
           <button className="AddFriend" onClick={() => navigate("/SearchUser")}>
-            + Add Friend
+            + Search a User
           </button>
         </div>
         <div className="newMsgContainer">
           <button className="newMsg" onClick={() => navigate("/NewChat")}>
             + Create New Channel
           </button>
-        </div>
-        
-      </div>
-      
+        </div>   
+      </div>  
     </div>
   );
 }
 
-export default SideNavbar;
+export default Navbar;

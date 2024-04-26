@@ -8,27 +8,27 @@ import {
   collection,
   getDocs,
 } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useAuth } from "../contexts/AuthContext";
 import { PersonAdd } from "react-bootstrap-icons";
-// import { useAuth } from "../contexts/AuthContext";
+import { useChat } from "../contexts/ChatContext";
 
-function Header({
-  selectedChannel,
-  selectedChannelName,
-  setSelectedChannelName,
-  setSelectedChannel,
-}) {
+function Header({ isChannel, setIsChannel }) {
   const [members, setMembers] = useState([]);
   const [nonMembers, setNonMembers] = useState([]);
   const [channelImage, setChannelImage] = useState(null);
+  const [err, setErr] = useState("");
   const [show, setShow] = useState(false);
-  const [isChannel, setIsChannel] = useState(true);
   const newChannelName = useRef();
   const newChannelImage = useRef();
   const { user, getUserDocId } = useAuth();
+  const {
+    selectedChannel,
+    setSelectedChannel,
+    selectedChannelName,
+    setSelectedChannelName,
+  } = useChat();
 
   //get document of selected channel
   const handleClose = () => setShow(false);
@@ -39,33 +39,32 @@ function Header({
       try {
         if (!selectedChannel) return;
         const channelDocRef = doc(db, "channels", selectedChannel);
-        const unsubscribe = selectedChannel ? onSnapshot(
-          channelDocRef,
-          async (channelDocSnap) => {
-            const memberIds = channelDocSnap.data().members;
-            const isChannel = channelDocSnap.data().channel;
-            const channelName = channelDocSnap.data().name;
-            setSelectedChannelName(channelName);
-            setIsChannel(isChannel);
-            const memberProfiles = await Promise.all(
-              memberIds.map(async (memberId) => {
-                const userDocRef = doc(db, "users", memberId);
-                const userDocSnap = await getDoc(userDocRef);
-                if (userDocSnap.exists()) {
-                  return userDocSnap.data();
-                } else {
-                  console.error(
-                    `User document for ID ${memberId} does not exist`
-                  );
-                  return null;
-                }
-              })
-            );
-            setMembers(memberProfiles.filter((profile) => profile !== null));
-            const imageUrl = channelDocSnap.data().image;
-            setChannelImage(imageUrl);
-          }
-        ) : "";
+        const unsubscribe = selectedChannel
+          ? onSnapshot(channelDocRef, async (channelDocSnap) => {
+              const memberIds = channelDocSnap.data().members;
+              const isChannel = channelDocSnap.data().channel;
+              const channelName = channelDocSnap.data().name;
+              setSelectedChannelName(channelName);
+              setIsChannel(isChannel);
+              const memberProfiles = await Promise.all(
+                memberIds.map(async (memberId) => {
+                  const userDocRef = doc(db, "users", memberId);
+                  const userDocSnap = await getDoc(userDocRef);
+                  if (userDocSnap.exists()) {
+                    return userDocSnap.data();
+                  } else {
+                    console.error(
+                      `User document for ID ${memberId} does not exist`
+                    );
+                    return null;
+                  }
+                })
+              );
+              setMembers(memberProfiles.filter((profile) => profile !== null));
+              const imageUrl = channelDocSnap.data().image;
+              setChannelImage(imageUrl);
+            })
+          : "";
 
         // Fetch all users from the database
         const usersQuerySnapshot = await getDocs(collection(db, "users"));
@@ -97,16 +96,22 @@ function Header({
     }
   };
 
+  // Updating Channel Name
   const handleClick = async (e) => {
     e.preventDefault();
     try {
+      setErr("");
       if (!selectedChannel) return;
       const channelDocRef = doc(db, "channels", selectedChannel);
-      await updateDoc(channelDocRef, {
-        name: newChannelName.current.value,
-        // image: newChannelImage.current.value,
-      });
-      handleClose();
+      if (newChannelName.current.value != "") {
+        await updateDoc(channelDocRef, {
+          name: newChannelName.current.value,
+          // image: newChannelImage.current.value,
+        });
+        handleClose();
+      } else {
+        setErr("Please enter channel name");
+      }
     } catch (error) {
       console.error("Failed to change name", error);
       throw error;
@@ -157,18 +162,41 @@ function Header({
   return (
     <div className="header">
       <div className="chatAvatar">
-        {channelImage && (
-          <img className="chatLogo" src={channelImage} alt="Channel Image" />
-        )}
+        {/* Channel header with no Image */}
         {!channelImage && selectedChannelName && (
-          <img className="chatLogo" src="/cup.jpg" alt="Placeholder Image" />
+          <img
+            className="chatLogo"
+            src="/yapper-logo.jpg"
+            alt="Placeholder Image"
+          />
+        )}
+        {/* DM Header */}
+        {!isChannel && members.length === 2 && (
+          <img
+            className="chatLogo"
+            src={
+              members.find((member) => member.uid !== user.uid)?.photoURL
+                ? members.find((member) => member.uid !== user.uid)?.photoURL
+                : "/avatar.png"
+            }
+            alt="Member image"
+          />
+        )}
+        {/* Channel Header with Image */}
+        {isChannel && channelImage && (
+          <img className="chatLogo" src={channelImage} alt="Channel Image" />
         )}
       </div>
       <div className="teamInfo">
-        {selectedChannelName ? (
+        {selectedChannelName && isChannel && (
           <h1 onClick={handleShow}>{selectedChannelName}</h1>
-        ) : (
-          <h1>Select or Create a Channel</h1>
+        )}
+        {/* No Channel Selected / First to show upon loading home page */}
+        {!selectedChannelName && <h1>Select or Create a Channel</h1>}
+        {!isChannel && members.length === 2 && (
+          <h1 onClick={handleShow}>
+            {members.find((member) => member.uid !== user.uid)?.displayName}
+          </h1>
         )}
 
         {/* **CHAT MENU** */}
@@ -181,18 +209,21 @@ function Header({
             color: "white",
             backgroundColor: "#7a7a7a",
             height: "50%",
-            width: "20%",
+            width: "400px",
             top: "25%",
             left: "40%",
             borderRadius: "10px",
             // overflowY: "auto",
             overflow: "auto",
-            padding: "1.5rem"
+            padding: "1.5rem",
           }}
         >
-        <style> {`
+          <style>
+            {" "}
+            {`
             .popup::-webkit-scrollbar {
               width: 15px;
+              height: 15px;
             }
             .popup::-webkit-scrollbar-track {
               background: #979494;
@@ -206,7 +237,7 @@ function Header({
               background: #555;
             }
           `}
-        </style>
+          </style>
           <Modal.Header
             style={{
               display: "flex",
@@ -239,7 +270,8 @@ function Header({
                 src={channelImage}
                 alt="Channel Image"
                 style={{
-                  width: "75px",
+                  width: "50px",
+                  height: "50px",
                   borderRadius: "50%",
                   marginRight: "10px",
                 }}
@@ -248,7 +280,7 @@ function Header({
             {!channelImage && selectedChannelName && (
               <img
                 className="chatLogo"
-                src="/cup.jpg"
+                src="/yapper-logo.jpg"
                 alt="Placeholder Image"
                 style={{
                   width: "75px",
@@ -261,6 +293,7 @@ function Header({
             <input type="file" id="file" onChange={handleImg} />
             <h3>Change Channel Name</h3>
             <input
+              required
               type="text"
               placeholder="Edit Channel Name"
               ref={newChannelName}
@@ -273,15 +306,20 @@ function Header({
               }}
             />
             <div>
+              {err && (
+                <div>
+                  <strong>{err}</strong>
+                </div>
+              )}
               <Button
                 variant="primary"
                 onClick={handleClick}
                 style={{
                   borderRadius: "5px",
-                  marginBottom: "1rem"
+                  marginBottom: "1rem",
                 }}
               >
-                Save Changes
+                Update Channel Name
               </Button>
               {/* Displays Members in Channel */}
               <h5>Members</h5>
@@ -343,9 +381,9 @@ function Header({
                         style={{
                           display: "flex",
                           alignItems: "center",
-                          justifyContent: "space-between", // Align items and button
+                          justifyContent: "space-between",
                           marginBottom: "10px",
-                          width: "40%",
+                          width: "30%",
                         }}
                       >
                         <div
@@ -397,8 +435,10 @@ function Header({
           </Modal.Footer>
         </Modal>
 
+        {/* Member Avatars */}
         <div className="teamImg">
-          {isChannel && members &&
+          {isChannel &&
+            members &&
             members
               .slice(0, 4)
               .map((member, index) => (

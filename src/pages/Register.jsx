@@ -50,6 +50,7 @@ function Register() {
       }); //updates displayName of authenticated user upon registration
       const res = await addDoc(collection(db, "users"), {
         displayName: displayNameRef.current.value,
+        searchName: displayNameRef.current.value.toLowerCase(),
         email: emailRef.current.value,
         photoURL: null,
         created: serverTimestamp(),
@@ -137,7 +138,7 @@ function Register() {
               type="submit" 
               disabled={loading}
             >
-              {loading ? 'Signing up...' : 'Sign up'} {/* Prevents the button from being spam clicked */}
+              {loading ? 'Signing up...' : 'Sign up'}
             </button>
           </form>
           <p className="register-login-link">

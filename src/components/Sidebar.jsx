@@ -11,30 +11,31 @@ import {
   collection,
   query,
   orderBy,
-  onSnapshot,
   limit,
   getDocs,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import { Link } from "react-router-dom";
 import { useChat } from "../contexts/ChatContext.jsx";
 
-function Sidebar({
-  selectedChannel,
-  setSelectedChannel,
-  setSelectedChannelName,
-  isChannelToggle,
-  toggleChannel,
-}) {
+function Sidebar({ isChannel }) {
   const navigate = useNavigate();
 
-  const { channels, fetchChannels } = useAuth();
+  const { channels, fetchChannels, getUserDocId } = useAuth();
+  const {
+    selectedChannel,
+    setSelectedChannel,
+    setSelectedChannelName,
+    isChannelToggle,
+    toggleChannel,
+  } = useChat();
   const [channelPreviews, setChannelPreviews] = useState([]);
-  // const {selectedChannel, setSelectedChannel} = useChat();
-
+  const [docId, setDocId] = useState("");
 
   useEffect(() => {
     fetchChannels();
+    changeDM();
   }, []);
 
   useEffect(() => {
@@ -83,6 +84,13 @@ function Sidebar({
     }
   };
 
+  // retrieve user's docId for comparison
+  const changeDM = async () => {
+    await getUserDocId().then((res) => {
+      setDocId(res);
+    });
+  };
+
   // Filter channels based on the toggle state
   const filteredChannels = isChannelToggle
     ? channels.filter((channel) => channel.channel === true)
@@ -100,8 +108,11 @@ function Sidebar({
             name={channel.name}
             id={channel.id}
             image={channel.image}
+            channel={channel.channel}
+            members={channel.members}
+            docId={docId}
             lastAccessed={channel.lastAccessed}
-            selectedChannel={selectedChannel}
+            isChannel={isChannel}
           />
         ))}
       </div>
@@ -115,6 +126,9 @@ function Sidebar({
                 : "avatar.png"
             }
           />
+          <Link to="/settings" className="username-link">
+            <span className="username">{auth.currentUser.displayName}</span>
+          </Link>
           <SignOut />
         </div>
       </div>
