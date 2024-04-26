@@ -12,15 +12,9 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useAuth } from "../contexts/AuthContext";
 import { PersonAdd } from "react-bootstrap-icons";
+import { useChat } from "../contexts/ChatContext";
 
-function Header({
-  selectedChannel,
-  selectedChannelName,
-  setSelectedChannelName,
-  setSelectedChannel,
-  isChannel,
-  setIsChannel,
-}) {
+function Header({ isChannel, setIsChannel }) {
   const [members, setMembers] = useState([]);
   const [nonMembers, setNonMembers] = useState([]);
   const [channelImage, setChannelImage] = useState(null);
@@ -29,6 +23,12 @@ function Header({
   const newChannelName = useRef();
   const newChannelImage = useRef();
   const { user, getUserDocId } = useAuth();
+  const {
+    selectedChannel,
+    setSelectedChannel,
+    selectedChannelName,
+    setSelectedChannelName,
+  } = useChat();
 
   //get document of selected channel
   const handleClose = () => setShow(false);
@@ -111,7 +111,6 @@ function Header({
         handleClose();
       } else {
         setErr("Please enter channel name");
-        console.log("Please enter channel name");
       }
     } catch (error) {
       console.error("Failed to change name", error);
@@ -154,8 +153,6 @@ function Header({
       const channelDocSnapshot = await getDoc(channelDocRef);
       const currentMembers = channelDocSnapshot.data().members || []; //gets snapshot of members of selected channel
       const updatedMembers = [...currentMembers, userId];
-      const currentChannelName = channelDocSnapshot.data().name;
-      console.log(currentChannelName);
       await updateDoc(channelDocRef, { members: updatedMembers });
     } catch (error) {
       console.error("Failed to add member to channel", error);
@@ -296,6 +293,7 @@ function Header({
             <input type="file" id="file" onChange={handleImg} />
             <h3>Change Channel Name</h3>
             <input
+              required
               type="text"
               placeholder="Edit Channel Name"
               ref={newChannelName}
@@ -308,7 +306,11 @@ function Header({
               }}
             />
             <div>
-              {err && <div><strong>{err}</strong></div>}
+              {err && (
+                <div>
+                  <strong>{err}</strong>
+                </div>
+              )}
               <Button
                 variant="primary"
                 onClick={handleClick}
@@ -317,7 +319,7 @@ function Header({
                   marginBottom: "1rem",
                 }}
               >
-                Save Changes
+                Update Channel Name
               </Button>
               {/* Displays Members in Channel */}
               <h5>Members</h5>

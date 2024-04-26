@@ -4,13 +4,13 @@ import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { CloudLightning } from "react-bootstrap-icons";
 import { getStorage, ref, deleteObject } from "firebase/storage";
+import { useChat } from "../contexts/ChatContext.jsx";
 
 function Message({
   sender_id,
   photoURL,
   createdAt,
   text,
-  selectedChannel,
   messageId,
   sender_name,
   image, 
@@ -19,6 +19,7 @@ function Message({
   const [isEditing, setIsEditing] = useState(false);
   const [editedText, setEditedText] = useState(text);
   const [isEdited, setIsEdited] = useState(false);
+  const{selectedChannel} = useChat();
   const storage = getStorage(); 
 
   const formatTimestamp = (timestamp) => {

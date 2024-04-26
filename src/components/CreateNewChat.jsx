@@ -9,7 +9,7 @@ import { useChat } from "../contexts/ChatContext";
 function CreateNewChat({ path }) {
   const navigate = useNavigate();
   const { users, user, getUserDocId } = useAuth();
-  const{selectedChannel, setSelectedChannel} = useChat();
+  const { selectedChannel, setSelectedChannel } = useChat();
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [selected, setSelected] = useState("");
   const [chatName, setChatName] = useState("");
@@ -61,8 +61,6 @@ function CreateNewChat({ path }) {
     navigate("/");
   }
 
-  
-
   return (
     <div className="rightSection">
       <div className="header">
@@ -72,7 +70,7 @@ function CreateNewChat({ path }) {
         <p onClick={() => navigate("/")}>&lt; Back</p>
         <form className="createChatDetails" onSubmit={handleSubmit}>
           <div className="createChatTop">
-              <div className="chatName">
+            <div className="chatName">
               <h2>Channel Name</h2>
               <input
                 className="chatNameBox"
@@ -95,11 +93,11 @@ function CreateNewChat({ path }) {
             </div>
           </div>
           <div className="addMemberSection">
-              <h2 className="addMembersTitle">Add Members</h2>
+            <h2 className="addMembersTitle">Add Members</h2>
             <div className="addInfo">
-                <span>User</span>
-                <span className="invited">Invited</span>
-              </div>
+              <span>User</span>
+              <span className="invited">Invited</span>
+            </div>
             <div className="addMembers">
               {users
                 .filter((u) => u.uid !== user.uid)
@@ -113,7 +111,11 @@ function CreateNewChat({ path }) {
                       onClick={() => handleSelect(user.id)}
                     >
                       <div className="userInfo">
-                        <img src={user.photoURL || "avatar.png"} alt="" className="user-avatar" />
+                        <img
+                          src={user.photoURL || "avatar.png"}
+                          alt=""
+                          className="user-avatar"
+                        />
                         <p className="user-display-name">{user.displayName}</p>
                       </div>
                       {selectedUsers.includes(user.id) && (
@@ -128,7 +130,7 @@ function CreateNewChat({ path }) {
                 })}
             </div>
           </div>
-          
+
           <button className="createChatBtn">Create New Chat</button>
           {/* <button className="createChatBtn">Create New Chat</button> */}
         </form>

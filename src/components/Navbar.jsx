@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router-dom";
+import { useChat } from "../contexts/ChatContext";
 
-function Navbar({isChannelToggle, toggleChannel}) {
+function Navbar({toggleChannel}) {
   const navigate = useNavigate();
+  const {isChannelToggle} = useChat()
 
   return (
     <div className="navbar">
@@ -22,7 +24,7 @@ function Navbar({isChannelToggle, toggleChannel}) {
       <div className="addBtns">
         <div className="newFriend">
           <button className="AddFriend" onClick={() => navigate("/SearchUser")}>
-            + Add Friend
+            + Search a User
           </button>
         </div>
         <div className="newMsgContainer">
