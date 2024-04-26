@@ -38,33 +38,32 @@ function Header({
       try {
         if (!selectedChannel) return;
         const channelDocRef = doc(db, "channels", selectedChannel);
-        const unsubscribe = selectedChannel ? onSnapshot(
-          channelDocRef,
-          async (channelDocSnap) => {
-            const memberIds = channelDocSnap.data().members;
-            const isChannel = channelDocSnap.data().channel;
-            const channelName = channelDocSnap.data().name;
-            setSelectedChannelName(channelName);
-            setIsChannel(isChannel);
-            const memberProfiles = await Promise.all(
-              memberIds.map(async (memberId) => {
-                const userDocRef = doc(db, "users", memberId);
-                const userDocSnap = await getDoc(userDocRef);
-                if (userDocSnap.exists()) {
-                  return userDocSnap.data();
-                } else {
-                  console.error(
-                    `User document for ID ${memberId} does not exist`
-                  );
-                  return null;
-                }
-              })
-            );
-            setMembers(memberProfiles.filter((profile) => profile !== null));
-            const imageUrl = channelDocSnap.data().image;
-            setChannelImage(imageUrl);
-          }
-        ) : "";
+        const unsubscribe = selectedChannel
+          ? onSnapshot(channelDocRef, async (channelDocSnap) => {
+              const memberIds = channelDocSnap.data().members;
+              const isChannel = channelDocSnap.data().channel;
+              const channelName = channelDocSnap.data().name;
+              setSelectedChannelName(channelName);
+              setIsChannel(isChannel);
+              const memberProfiles = await Promise.all(
+                memberIds.map(async (memberId) => {
+                  const userDocRef = doc(db, "users", memberId);
+                  const userDocSnap = await getDoc(userDocRef);
+                  if (userDocSnap.exists()) {
+                    return userDocSnap.data();
+                  } else {
+                    console.error(
+                      `User document for ID ${memberId} does not exist`
+                    );
+                    return null;
+                  }
+                })
+              );
+              setMembers(memberProfiles.filter((profile) => profile !== null));
+              const imageUrl = channelDocSnap.data().image;
+              setChannelImage(imageUrl);
+            })
+          : "";
 
         // Fetch all users from the database
         const usersQuerySnapshot = await getDocs(collection(db, "users"));
@@ -175,9 +174,8 @@ function Header({
         {selectedChannelName && isChannel && (
           <h1 onClick={handleShow}>{selectedChannelName}</h1>
         )}
-        {!selectedChannelName && (
-          <h1>Select or Create a Channel</h1>
-        )}
+        {/* No Channel Selected / First to show upon loading home page */}
+        {!selectedChannelName && <h1>Select or Create a Channel</h1>}
         {!isChannel && members.length === 2 && (
           <h1 onClick={handleShow}>
             {members.find((member) => member.uid !== user.uid)?.displayName}
@@ -200,10 +198,12 @@ function Header({
             borderRadius: "10px",
             // overflowY: "auto",
             overflow: "auto",
-            padding: "1.5rem"
+            padding: "1.5rem",
           }}
         >
-        <style> {`
+          <style>
+            {" "}
+            {`
             .popup::-webkit-scrollbar {
               width: 15px;
               height: 15px;
@@ -220,7 +220,7 @@ function Header({
               background: #555;
             }
           `}
-        </style>
+          </style>
           <Modal.Header
             style={{
               display: "flex",
@@ -293,7 +293,7 @@ function Header({
                 onClick={handleClick}
                 style={{
                   borderRadius: "5px",
-                  marginBottom: "1rem"
+                  marginBottom: "1rem",
                 }}
               >
                 Save Changes
@@ -412,8 +412,10 @@ function Header({
           </Modal.Footer>
         </Modal>
 
+        {/* Member Avatars */}
         <div className="teamImg">
-          {isChannel && members &&
+          {isChannel &&
+            members &&
             members
               .slice(0, 4)
               .map((member, index) => (

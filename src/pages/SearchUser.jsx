@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Search from "../components/Search";
 import { useChat } from "../contexts/ChatContext";
@@ -6,7 +5,6 @@ import { useChat } from "../contexts/ChatContext";
 
 function SearchUser() {
   const{selectedChannel, setSelectedChannel, toggleChannel, isChannelToggle, setIsChannelToggle, selectedChannelName, setSelectedChannelName} = useChat();
-  // const [selectedChannelName, setSelectedChannelName] = useState("");
   return (
     <div className="chatroom">
       <div className="container">
