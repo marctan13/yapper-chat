@@ -3,11 +3,9 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import {
-  QuerySnapshot,
   collection,
   getDocs,
   query,
-  where,
   startAt,
   endAt,
   orderBy,
@@ -25,13 +23,7 @@ function Search() {
   const [username, setUsername] = useState("");
   const [addUser, setAddUser] = useState([]);
   const [err, setErr] = useState(false);
-  const {
-    selectedChannel,
-    setSelectedChannel,
-    toggleChannel,
-    isChannelToggle,
-    setIsChannelToggle,
-  } = useChat();
+  const { selectedChannel, setSelectedChannel, toggleChannel, isChannelToggle } = useChat();
 
   useEffect(() => {
     if (username == "") {
@@ -75,7 +67,7 @@ function Search() {
     });
 
     if (!selectedChannel) {
-      //setSelectedChannel(newChannelRef.id);
+      setSelectedChannel(newChannelRef.id);
     }
     if (isChannelToggle) {
       toggleChannel();
