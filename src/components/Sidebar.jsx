@@ -17,21 +17,21 @@ import {
 import { db } from "../firebase";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { Link } from "react-router-dom";
+import { useChat } from "../contexts/ChatContext.jsx";
 
-function Sidebar({
-  selectedChannel,
-  setSelectedChannel,
-  setSelectedChannelName,
-  isChannelToggle,
-  toggleChannel,
-  isChannel,
-}) {
+function Sidebar({ isChannel }) {
   const navigate = useNavigate();
 
   const { channels, fetchChannels, getUserDocId } = useAuth();
+  const {
+    selectedChannel,
+    setSelectedChannel,
+    setSelectedChannelName,
+    isChannelToggle,
+    toggleChannel,
+  } = useChat();
   const [channelPreviews, setChannelPreviews] = useState([]);
-  const [docId, setDocId] = useState('');
-
+  const [docId, setDocId] = useState("");
 
   useEffect(() => {
     fetchChannels();
@@ -86,11 +86,10 @@ function Sidebar({
 
   // retrieve user's docId for comparison
   const changeDM = async () => {
-    await getUserDocId()
-    .then((res) => {
+    await getUserDocId().then((res) => {
       setDocId(res);
     });
-  }
+  };
 
   // Filter channels based on the toggle state
   const filteredChannels = isChannelToggle
@@ -99,11 +98,7 @@ function Sidebar({
 
   return (
     <div className="sidebar">
-      <Navbar
-        isChannelToggle={isChannelToggle}
-        toggleChannel={toggleChannel}
-        selectedChannel={selectedChannel}
-      />
+      <Navbar isChannelToggle={isChannelToggle} toggleChannel={toggleChannel} />
       <div className="previews">
         {filteredChannels.map((channel) => (
           <ChannelPreview
@@ -117,14 +112,12 @@ function Sidebar({
             members={channel.members}
             docId={docId}
             lastAccessed={channel.lastAccessed}
-            selectedChannel={selectedChannel}
             isChannel={isChannel}
           />
         ))}
       </div>
       <div className="footer">
         <div className="user">
-        
           <img
             onClick={() => navigate("/settings")}
             src={
@@ -134,7 +127,7 @@ function Sidebar({
             }
           />
           <Link to="/settings" className="username-link">
-          <span className="username">{auth.currentUser.displayName}</span>
+            <span className="username">{auth.currentUser.displayName}</span>
           </Link>
           <SignOut />
         </div>

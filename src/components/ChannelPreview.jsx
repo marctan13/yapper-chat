@@ -3,6 +3,7 @@ import { doc, deleteDoc, query, collection, where, getDoc } from "firebase/fires
 import { db } from "../firebase";
 import { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import { useChat } from "../contexts/ChatContext.jsx";
 
 function ChannelPreview(props) {
   const [channel, setChannel] = useState({
@@ -10,6 +11,7 @@ function ChannelPreview(props) {
     name: null,
   });
   const { user, getUserDocId } = useAuth();
+  const {selectedChannel} = useChat();
 
   const handleDelete = async () => {
     try {
@@ -56,10 +58,10 @@ function ChannelPreview(props) {
     <div
       onClick={() => props.onClick(props.id)}
       className={`chatPreview ${
-        props.id === props.selectedChannel ? "selected" : ""
+        props.id === selectedChannel ? "selected" : ""
       }`}
     >
-      <div className={`userChat ${props.id === props.selectedChannel ? "selectedChannel" : ""}`}>
+      <div className={`userChat ${props.id === selectedChannel ? "selectedChannel" : ""}`}>
         {/* Channel with Image */}
         {channel.image && props.members.length != 2 && (
           <img src={channel.image} className="channel-icon" alt="avatar" />
