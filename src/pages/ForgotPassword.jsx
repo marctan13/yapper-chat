@@ -13,7 +13,9 @@ function ForgotPassword() {
     try {
       setLoading(true);
       await resetPassword(emailRef.current.value);
-      window.alert("Check the email provided for further instructions to reset your password.");
+      window.alert(
+        "Check the email provided for further instructions to reset your password."
+      );
       navigate("/signin");
     } catch (error) {
       window.alert("Failed to Reset Password");
@@ -34,9 +36,6 @@ function ForgotPassword() {
             <strong>Reset Password</strong>
           </h1>
           <input type="email" placeholder="Email..." ref={emailRef} required />
-          <button type="submit" className="sign-in" disabled={loading}>
-            {loading ? "Resetting..." : "Reset Password"}
-          </button>
           <button type="submit" className="sign-in" disabled={loading}>
             {loading ? "Resetting..." : "Reset Password"}
           </button>
